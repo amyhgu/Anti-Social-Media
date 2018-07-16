@@ -2,11 +2,12 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/ivPropic"
+        android:id="@+id/ivCoverPhoto"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
@@ -14,19 +15,12 @@
         app:srcCompat="@android:color/background_dark" />
 
     <TextView
-        android:id="@+id/tvFullname"
+        android:id="@+id/tvGroupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/ivPropic"
-        android:text="Firstname Lastname" />
-
-    <TextView
-        android:id="@+id/tvPostBody"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivPropic"
-        android:text="This is the body of a post" />
-
+        android:layout_toEndOf="@+id/ivCoverPhoto"
+        android:text="Rad Squad"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 </RelativeLayout>
