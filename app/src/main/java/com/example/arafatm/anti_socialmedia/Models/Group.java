@@ -9,11 +9,11 @@ import java.util.List;
 
 @ParseClassName("Group")
 public class Group extends ParseObject {
-    private static final String KEY_USERS = "users";
-    private static final String KEY_POSTS = "post";
-    private static final String KEY_NAME = "groupName";
-    private static final String KEY_IMAGE = "groupImage";
-    
+    private static final String KEY_USERS = "users"; //Name of user column in parse
+    private static final String KEY_POSTS = "post"; //Name of post column in parse
+    private static final String KEY_NAME = "groupName"; //Name of group name column in parse
+    private static final String KEY_IMAGE = "groupImage"; //Name of group image column in parse
+
     public String getGroupName() {
         return getString(KEY_NAME);
     }
@@ -30,20 +30,24 @@ public class Group extends ParseObject {
         put(KEY_IMAGE, image);
     }
 
+    //gets list all users
     public List<ParseUser> getUsers() {
         return getList(KEY_USERS);
     }
 
+    /*Gets the Array of users from Parse, updates it, and save it back to parse*/
     public void addUsers(ParseUser user) {
         List<ParseUser> users = getList(KEY_USERS);
         users.add(user);
         put(KEY_USERS, users);
     }
 
+    //gets list all posts
     public List<ParseObject> getPosts() {
         return getList(KEY_POSTS);
     }
 
+    /*Gets the Array of posts from Parse, updates it, and save it back to parse*/
     public void addPosts(Post post) {
         List<ParseObject> users = getList(KEY_POSTS);
         users.add(post);

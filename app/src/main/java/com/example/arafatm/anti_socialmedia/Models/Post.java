@@ -16,7 +16,6 @@ public class Post extends ParseObject {
     private static final String KEY_CREATEDAT = "createdAt";
     private static final String KEY_MEDIA = "media";
     private static final String KEY_COMMENTS = "comments";
-    private List<ParseObject> comments;
 
     public String getMessage() {
         return getString(KEY_MESSAGE);
@@ -54,12 +53,14 @@ public class Post extends ParseObject {
         return getDate(KEY_CREATEDAT);
     }
 
+    //Gets the list of comments from Parse
     public List<ParseObject> getComments() {
         return getList(KEY_COMMENTS);
     }
 
+    /*Gets the Array of comments from Parse, updates it, and save it back to parse*/
     public void addComments(Post comment) {
-        comments.addAll(this.<ParseObject>getList(KEY_COMMENTS)); //more efficient way???
+        List<ParseObject> comments = getList(KEY_COMMENTS);
         comments.add(comment);
         put(KEY_COMMENTS, comments);
     }

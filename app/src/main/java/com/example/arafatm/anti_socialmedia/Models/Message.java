@@ -37,6 +37,7 @@ public class Message extends ParseObject {
         put(KEY_RECIPIENT, recipient);
     }
 
+    /*gets time maessage was created*/
     public Date getCreatedAt() {
         return getDate(KEY_CREATEDAT);
     }

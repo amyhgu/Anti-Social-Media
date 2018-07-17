@@ -25,15 +25,18 @@ public class ParseApp extends Application {
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.networkInterceptors().add(httpLoggingInterceptor);
 
+        /*register each of the model classes*/
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Group.class);
+
+        /*Setting up parse*/
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)
-                .applicationId("triple_as_lovely_app")
-                .clientKey("amy_alison_arafat_are_triple_as")
-                .server("http://anti-social-media.herokuapp.com/parse")
+                .applicationId("triple_as_lovely_app") // takes in App ID
+                .clientKey("amy_alison_arafat_are_triple_as") //takes in App Master Key
+                .server("http://anti-social-media.herokuapp.com/parse") // takes in Parse URL
                 .build();
 
-        Parse.initialize(configuration);
+        Parse.initialize(configuration); //initializing parse
     }
 }
