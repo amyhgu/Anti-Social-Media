@@ -30,6 +30,16 @@
         android:layout_centerHorizontal="true"
         android:text="Log in" />
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btLogin"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp" />
+
     <Button
         android:id="@+id/btSwitchToSignup"
         android:layout_width="wrap_content"
