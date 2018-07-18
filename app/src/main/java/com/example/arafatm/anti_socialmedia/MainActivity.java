@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         final FragmentManager fragmentManager = getSupportFragmentManager(); //Initiates FragmentManager
 
         /*gets instance of all fragments here*/
-        final Fragment chatFagment = new ChatFragment();
+        final Fragment chatFragment = new ChatFragment();
         final Fragment groupFragment = new GroupFragment();
         final Fragment gameFragment = new GameFragment();
         final Fragment settingsFragment = new SettingsFragment();
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                         switch (item.getItemId()) {
                             case R.id.ic_chat_empty:
                                 FragmentTransaction fragmentTransactionOne = fragmentManager.beginTransaction(); //creates new transaction
-                                fragmentTransactionOne.replace(R.id.fragment_container, chatFagment).commit(); //replace the current page with the specified fragment
+                                fragmentTransactionOne.replace(R.id.fragment_container, chatFragment).commit(); //replace the current page with the specified fragment
                                 return true;
                             case R.id.ic_group_empty:
                                 FragmentTransaction fragmentTransactionTwo = fragmentManager.beginTransaction();
