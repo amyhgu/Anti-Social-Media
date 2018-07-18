@@ -17,6 +17,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // for applozic chat
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/ECLIPSE_.SF'
+        exclude 'META-INF/ECLIPSE_.RSA'
+    }
 }
 
 ext {
@@ -45,7 +56,9 @@ dependencies {
 
     /*for Navigation bar support for RecyclerView*/
     implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
-
     implementation 'com.android.support:recyclerview-v7:28.0.0-alpha3'
+
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)' // facebook login
+
+    implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.8.8' // applozic chat client
 }
