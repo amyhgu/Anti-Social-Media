@@ -5,25 +5,25 @@
     <item
         android:id="@+id/ic_chat_empty"
         android:enabled="true"
-        android:icon="@drawable/ic_favorite_white_24dp"
+        android:icon="@drawable/ic_chat_empty"
         android:title=""
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/ic_group_empty"
         android:enabled="true"
-        android:icon="@drawable/ic_access_time_white_24dp"
+        android:icon="@drawable/ic_group_empty"
         android:title=""
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/ic_game_empty"
         android:enabled="true"
-        android:icon="@drawable/ic_audiotrack_white_24dp"
+        android:icon="@drawable/ic_game_empty"
         android:title=""
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/ic_menu_thin"
         android:enabled="true"
-        android:icon="@drawable/ic_audiotrack_white_24dp"
+        android:icon="@drawable/ic_menu_thin"
         android:title=""
         app:showAsAction="ifRoom" />
 </menu>
