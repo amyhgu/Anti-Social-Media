@@ -6,9 +6,30 @@
     tools:context=".Fragments.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="HELLO!, I AM YOUR SETTINGS FRAGMENT" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvSettingsPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="HELLO!, I AM YOUR SETTINGS FRAGMENT" />
+
+        <Button
+            android:id="@+id/log_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="109dp"
+            android:text="Log out" />
+
+
+    </RelativeLayout>
+
 
 </FrameLayout>
