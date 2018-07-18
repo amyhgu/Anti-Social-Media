@@ -3,6 +3,7 @@ package com.example.arafatm.anti_socialmedia;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton loginButton;
+    private static final String FRIENDS = "user_friends";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,22 +25,21 @@ public class LoginActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
 
-        private static final String EMAIL = "email";
-
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        loginButton.setReadPermissions(Arrays.asList(FRIENDS));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // App code
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
             }
 
             @Override
             public void onCancel() {
-                // App code
+                Log.d("LoginActivity", "Login cancelled");
             }
 
             @Override
