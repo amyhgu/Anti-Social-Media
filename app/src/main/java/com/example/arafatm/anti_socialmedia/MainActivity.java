@@ -11,10 +11,16 @@ import android.view.MenuItem;
 
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GameFragment;
-import com.example.arafatm.anti_socialmedia.Fragments.GroupFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener, GroupFragment.OnFragmentInteractionListener, GameFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
+        GroupManagerFragment.OnFragmentInteractionListener,
+        GameFragment.OnFragmentInteractionListener,
+        SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
+        GroupFeedFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
 
         /*gets instance of all fragments here*/
         final Fragment chatFagment = new ChatFragment();
-        final Fragment groupFragment = new GroupFragment();
+        final Fragment groupFragment = new GroupManagerFragment();
         final Fragment gameFragment = new GameFragment();
         final Fragment settingsFragment = new SettingsFragment();
 
