@@ -1,4 +1,4 @@
-package com.example.arafatm.anti_socialmedia;
+package com.example.arafatm.anti_socialmedia.Home;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
+import com.example.arafatm.anti_socialmedia.R;
 
 public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
         GroupManagerFragment.OnFragmentInteractionListener,

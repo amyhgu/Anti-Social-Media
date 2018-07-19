@@ -1,10 +1,12 @@
-package com.example.arafatm.anti_socialmedia;
+package com.example.arafatm.anti_socialmedia.Authentification;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.arafatm.anti_socialmedia.Home.MainActivity;
+import com.example.arafatm.anti_socialmedia.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
