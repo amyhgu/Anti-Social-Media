@@ -14,8 +14,15 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.GroupAdapter;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GroupManagerFragment extends Fragment {
@@ -23,6 +30,8 @@ public class GroupManagerFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    GroupAdapter groupAdapter;
+    ArrayList<ParseObject> groupList;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -119,6 +128,7 @@ public class GroupManagerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        groupList = new ArrayList<>();
         ImageView add_group = (ImageView) view.findViewById(R.id.ic_add_icon);
 
         add_group.setOnClickListener(new View.OnClickListener() {
@@ -133,24 +143,65 @@ public class GroupManagerFragment extends Fragment {
             }
         });
 
-        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
-        gridview.setAdapter(new GroupAdapter(getContext()));
+//        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
+//        gridview.setAdapter(new GroupAdapter(getContext()));
+//
+//        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> parent, View v,
+//                                    int position, long id) {
+//                Toast.makeText(getContext(), "" + position,
+//                        Toast.LENGTH_SHORT).show();
+//
+//
+//                Fragment fragment = new GroupFeedFragment();
+//                Bundle args = new Bundle();
+//                args.putInt(ARG_PARAM1,position); //TO BE CHANGED LATER
+//                fragment.setArguments(args);
+//
+//                /*Navigates to the groupManagerFragment*/
+//                mListener.navigate_to_fragment(fragment);
+//            }
+//        });
+        loadAllGroups(view);
+    }
 
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(getContext(), "" + position,
-                        Toast.LENGTH_SHORT).show();
 
 
-                Fragment fragment = new GroupFeedFragment();
-                Bundle args = new Bundle();
-                args.putInt(ARG_PARAM1,position); //TO BE CHANGED LATER
-                fragment.setArguments(args);
+    private void loadAllGroups(final View view) {
+        final Group.Query postQuery = new Group.Query();
+        postQuery.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(final List<Group> objects, ParseException e) {
+                if (e == null) {
+                    groupList.addAll(objects);
 
-                /*Navigates to the groupManagerFragment*/
-                mListener.navigate_to_fragment(fragment);
+                    groupAdapter = new GroupAdapter(getContext(), groupList);
+                    GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
+                    gridview.setAdapter(groupAdapter);
+
+                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View v,
+                                                int position, long id) {
+                            Toast.makeText(getContext(), "" + position,
+                                    Toast.LENGTH_SHORT).show();
+                            Fragment fragment = new GroupFeedFragment();
+                            Bundle args = new Bundle();
+                            args.putInt(ARG_PARAM1,position); //TO BE CHANGED LATER
+                            fragment.setArguments(args);
+
+                            /*Navigates to the groupManagerFragment*/
+                            mListener.navigate_to_fragment(fragment);
+                        }
+                    });
+
+                } else {
+                    e.printStackTrace();
+                }
             }
         });
     }
+
+
+
+
 }

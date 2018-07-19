@@ -6,18 +6,25 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.R;
+import com.parse.ParseObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupAdapter extends BaseAdapter {
     private Context mContext;
+    private ArrayList<ParseObject> groupList;
 
-    public GroupAdapter(Context context) {
+    public GroupAdapter(Context context, ArrayList<ParseObject> List) {
         mContext = context;
+        this.groupList = List;
     }
 
     @Override
     public int getCount() {
-        return mThumbIds.length;
+        return groupList.size();
     }
 
     @Override
@@ -48,21 +55,16 @@ public class GroupAdapter extends BaseAdapter {
 
         imageView.setBackgroundResource(R.drawable.round_coner_of_each_image);
 
-        imageView.setImageResource(mThumbIds[position]);
+        // imageView.setImageResource(mThumbIds[position]);
+        Glide.with(viewGroup.getContext())
+                .load(groupList.get(position).getParseFile("groupImage").getUrl())
+                .into(imageView);
         return imageView;
     }
 
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-            R.drawable.ic_group_default, R.drawable.ic_group_default,
-    };
+    // Add a list of items -- change to type used
+    public void addAll(List<ParseObject> list) {
+        groupList.addAll(list);
+        notifyDataSetChanged();
+    }
 }
