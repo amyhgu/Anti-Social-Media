@@ -16,19 +16,24 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
+import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
@@ -96,7 +101,37 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void signup(final String userId, String fullname, String email) {
+
+    private void requestFBInfo(final LoginResult loginResult) {
+        // define request for Facebook user's information
+        GraphRequest meRequest = GraphRequest.newMeRequest(
+                loginResult.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.d("GraphRequest", object.toString());
+                        // Application code
+                        try {
+                            final String userId = object.getString("id");
+                            final String email = object.getString("email");
+                            final String fullname = object.getString("name");
+                            signup(userId, fullname, email, loginResult);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+        // execute request asynchronously
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email");
+        meRequest.setParameters(parameters);
+        meRequest.executeAsync();
+
+        Toast.makeText(LoginActivity.this, "Logging you in...", Toast.LENGTH_LONG).show();
+    }
+
+    private void signup(final String userId, String fullname, String email, final LoginResult loginResult) {
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             ParseUser.logOut();
@@ -114,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent i = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(i);
+                    getFriends(loginResult);
                     finish();
                 } else {
                     // try logging user in rather than signing up
@@ -125,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
+                                getFriends(loginResult);
                                 finish();
                             } else {
                                 Log.e("LoginActivity", "Login failure");
@@ -137,31 +174,34 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void requestFBInfo(LoginResult loginResult) {
-        // define request for Facebook user's information
-        GraphRequest request = GraphRequest.newMeRequest(
+
+    private void getFriends(LoginResult loginResult) {
+        GraphRequest friendsRequest = GraphRequest.newMyFriendsRequest(
                 loginResult.getAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
+                new GraphRequest.GraphJSONArrayCallback() {
                     @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.d("GraphRequest", object.toString());
-                        // Application code
-                        try {
-                            final String userId = object.getString("id");
-                            final String email = object.getString("email");
-                            final String fullname = object.getString("name");
-                            signup(userId, fullname, email);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    public void onCompleted(
+                            JSONArray jsonArray,
+                            GraphResponse response) {
+                        Log.d("weird", jsonArray.toString());
+                        addFriends(jsonArray);
                     }
                 });
+        friendsRequest.executeAsync();
+    }
 
-        // execute request asynchronously
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email");
-        request.setParameters(parameters);
-        request.executeAsync();
-        Toast.makeText(LoginActivity.this, "Logging you in...", Toast.LENGTH_LONG).show();
+    private void addFriends(JSONArray jsonArray) {
+        ParseUser user = ParseUser.getCurrentUser();
+        ArrayList<String> friends = new ArrayList<>();
+        for(int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject object = jsonArray.getJSONObject(i);
+                friends.add(object.getString("id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        user.put("friendList", friends);
+        user.saveInBackground();
     }
 }
