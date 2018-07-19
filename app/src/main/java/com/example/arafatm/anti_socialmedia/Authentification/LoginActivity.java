@@ -45,15 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-        if (isLoggedIn && ParseUser.getCurrentUser() != null) {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_friends", "public_profile", "email"));
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
-            finish();
-        }
+        persistLogin();
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -84,10 +76,8 @@ public class LoginActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(intent);
-
             }
         });
 
@@ -101,6 +91,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void persistLogin() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        if (isLoggedIn && ParseUser.getCurrentUser() != null) {
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_friends", "public_profile", "email"));
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
 
     private void requestFBInfo(final LoginResult loginResult) {
         // define request for Facebook user's information
@@ -115,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                             final String userId = object.getString("id");
                             final String email = object.getString("email");
                             final String fullname = object.getString("name");
-                            signup(userId, fullname, email, loginResult);
+                            loginOrSignup(userId, fullname, email, loginResult);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -131,40 +132,33 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(LoginActivity.this, "Logging you in...", Toast.LENGTH_LONG).show();
     }
 
-    private void signup(final String userId, String fullname, String email, final LoginResult loginResult) {
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-            ParseUser.logOut();
-        }
-        ParseUser parseUser = new ParseUser();
-        // Set core properties
-        parseUser.setUsername(userId);
-        parseUser.setPassword(userId);
-        parseUser.put("fullName", fullname);
-        parseUser.setEmail(email);
-        // Invoke signUpInBackground
-        parseUser.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
+    private void loginOrSignup(final String userId, final String fullname, final String email, final LoginResult loginResult) {
+        ParseUser.logInInBackground(userId, userId, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
                 if (e == null) {
-
-                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(i);
-                    getFriends(loginResult);
+                    Log.d("LoginActivity", "Login successful");
+                    final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+//                    getFriends(loginResult);
                     finish();
                 } else {
-                    // try logging user in rather than signing up
-                    ParseUser.logInInBackground(userId, userId, new LogInCallback() {
-                        @Override
-                        public void done(ParseUser user, ParseException e) {
+                    ParseUser parseUser = new ParseUser();
+                    // Set core properties
+                    parseUser.setUsername(userId);
+                    parseUser.setPassword(userId);
+                    parseUser.put("fullName", fullname);
+                    parseUser.setEmail(email);
+                    // Invoke signUpInBackground
+                    parseUser.signUpInBackground(new SignUpCallback() {
+                        public void done(ParseException e) {
                             if (e == null) {
-                                Log.d("LoginActivity", "Login successful");
-
-                                final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(i);
                                 getFriends(loginResult);
                                 finish();
                             } else {
-                                Log.e("LoginActivity", "Login failure");
+                                Log.e("LoginActivity","Login failure");
                                 e.printStackTrace();
                             }
                         }
@@ -174,7 +168,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
     private void getFriends(LoginResult loginResult) {
         GraphRequest friendsRequest = GraphRequest.newMyFriendsRequest(
                 loginResult.getAccessToken(),
@@ -183,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onCompleted(
                             JSONArray jsonArray,
                             GraphResponse response) {
-                        Log.d("weird", jsonArray.toString());
+                        Log.d("FriendList", jsonArray.toString());
                         addFriends(jsonArray);
                     }
                 });
