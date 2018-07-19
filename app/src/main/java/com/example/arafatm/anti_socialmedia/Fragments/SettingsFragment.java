@@ -2,6 +2,7 @@ package com.example.arafatm.anti_socialmedia.Fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.arafatm.anti_socialmedia.LoginActivity;
 import com.example.arafatm.anti_socialmedia.R;
+import com.parse.ParseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -110,11 +113,10 @@ public class SettingsFragment extends Fragment {
 
                                 // TODO: Log out for FB
                                 // This will log out for Parse
-
-//                                ParseUser currentUser = ParseUser.getCurrentUser();
-//                                currentUser.logOut();
-//                                Intent intent = new Intent(SettingsFragment.this.getContext(), LoginActivity.class);
-//                                startActivity(intent);
+                                ParseUser currentUser = ParseUser.getCurrentUser();
+                                currentUser.logOut();
+                                Intent intent = new Intent(SettingsFragment.this.getContext(), LoginActivity.class);
+                                startActivity(intent);
 
                                 //close the dialog
                                 dialogInterface.dismiss();
