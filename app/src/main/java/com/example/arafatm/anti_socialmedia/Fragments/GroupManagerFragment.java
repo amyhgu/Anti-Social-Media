@@ -128,6 +128,7 @@ public class GroupManagerFragment extends Fragment {
 
                 /*Navigates to the groupManagerFragment*/
                 Fragment fragment = new GroupCreationFragment();
+
                 mListener.navigate_to_fragment(fragment);
             }
         });
