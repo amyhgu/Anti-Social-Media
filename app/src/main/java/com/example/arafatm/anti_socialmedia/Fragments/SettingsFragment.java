@@ -16,6 +16,8 @@ import android.widget.Button;
 
 import com.example.arafatm.anti_socialmedia.LoginActivity;
 import com.example.arafatm.anti_socialmedia.R;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.parse.ParseUser;
 
 /**
@@ -110,13 +112,7 @@ public class SettingsFragment extends Fragment {
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
-                                // TODO: Log out for FB
-                                // This will log out for Parse
-                                ParseUser currentUser = ParseUser.getCurrentUser();
-                                currentUser.logOut();
-                                Intent intent = new Intent(SettingsFragment.this.getContext(), LoginActivity.class);
-                                startActivity(intent);
+                                logout();
 
                                 //close the dialog
                                 dialogInterface.dismiss();
@@ -131,6 +127,21 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+    }
+
+    private void logout() {
+        //Check if user is currently logged in
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        if (isLoggedIn){
+            LoginManager.getInstance().logOut();
+        }
+
+        // This will log out for Parse
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUser.logOut();
+        Intent intent = new Intent(SettingsFragment.this.getContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
