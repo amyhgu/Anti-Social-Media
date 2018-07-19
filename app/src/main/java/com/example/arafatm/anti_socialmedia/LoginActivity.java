@@ -1,9 +1,11 @@
 package com.example.arafatm.anti_socialmedia;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -28,6 +30,7 @@ import java.util.Arrays;
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton loginButton;
+    private Button signupButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,20 @@ public class LoginActivity extends AppCompatActivity {
                 exception.printStackTrace();
             }
         });
+
+
+        signupButton = findViewById(R.id.btSwitchToSignup);
+        signupButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
     }
 
     // Every activity/fragment with FacebookSDK Login should forward onActivityResult to the callbackManager.
@@ -91,7 +108,6 @@ public class LoginActivity extends AppCompatActivity {
         parseUser.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("SignupActivity", "Signup successful");
 
                     Intent i = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(i);

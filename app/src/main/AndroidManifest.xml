@@ -181,7 +181,7 @@
             android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTop"
             android:parentActivityName="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
-            android:theme="@style/ApplozicTheme"></activity>
+            android:theme="@style/ApplozicTheme" />
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ChannelInfoActivity"
             android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
@@ -208,7 +208,7 @@
             android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
             android:parentActivityName="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:theme="@style/ApplozicTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
@@ -251,6 +251,7 @@
         </receiver>
 
         <!-- Applozic end -->
+        <activity android:name=".SignupActivity"></activity>
     </application>
 
 </manifest>
