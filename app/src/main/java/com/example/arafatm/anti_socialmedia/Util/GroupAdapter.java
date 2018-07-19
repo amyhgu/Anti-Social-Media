@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.example.arafatm.anti_socialmedia.R;
+import com.bumptech.glide.request.RequestOptions;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -46,19 +46,20 @@ public class GroupAdapter extends BaseAdapter {
             imageView.setLayoutParams(new ViewGroup.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(200, 200);
+            imageView.setLayoutParams(params);
         } else {
             imageView = (ImageView) view;
         }
 
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(200, 200);
-        imageView.setLayoutParams(params);
+        String groupImageURL = groupList.get(position).getParseFile("groupImage").getUrl();
 
-        imageView.setBackgroundResource(R.drawable.round_coner_of_each_image);
-
-        // imageView.setImageResource(mThumbIds[position]);
+        /*shows group image on gridView*/
         Glide.with(viewGroup.getContext())
-                .load(groupList.get(position).getParseFile("groupImage").getUrl())
+                .load(groupImageURL)
+                .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
+
         return imageView;
     }
 

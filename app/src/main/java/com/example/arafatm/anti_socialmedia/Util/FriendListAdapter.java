@@ -11,16 +11,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
     public List<ParseUser> allFriends;
     private Context context;
-
+    private ArrayList<String> newGroupMembers;
     // Pass in the contact array into the constructor
     public FriendListAdapter(List<ParseUser> allFriends) {
         this.allFriends = allFriends;
@@ -32,26 +34,27 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.item_friend, viewGroup, false);
+        View friendListView = inflater.inflate(R.layout.item_friend, viewGroup, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
+        ViewHolder viewHolder = new ViewHolder(friendListView);
         return viewHolder;
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         // Get the data model based on position
         final ParseUser friend = allFriends.get(position);
 
         // Set item views based on your views and data model
-       viewHolder.friendName.setText(friend.getUsername());
+       viewHolder.friendName.setText(friend.getString("fullName"));
 
-        ParseFile file = friend.getParseFile("image"); //verify this
+        ParseFile file = friend.getParseFile("profileImage"); //verify this
         if (file != null) {
             Glide.with(context)
                     .load(file.getUrl())
+                    .apply(RequestOptions.circleCropTransform())
                     .into(viewHolder.friendPic);
         }
 
@@ -63,7 +66,12 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                 Toast.makeText(context,friend.getUsername()+" added", Toast.LENGTH_SHORT).show();
                 addFriendButton.setImageResource(R.drawable.ic_check_mark);
 
-                //update the database
+                //get the just added user
+                newGroupMembers = new ArrayList<>();
+                ParseUser userAdded = allFriends.get(position);
+
+                //add that user's ObjectId to the newGroupMembers list to be accessed later
+                newGroupMembers.add(userAdded.getObjectId());
             }
         });
     }

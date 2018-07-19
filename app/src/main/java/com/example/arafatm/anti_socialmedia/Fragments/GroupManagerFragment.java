@@ -79,7 +79,7 @@ public class GroupManagerFragment extends Fragment {
         // Find the toolbar view inside the fragment layout
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.tb_toolbar);
         // Sets the Toolbar to act as the ActionBar for this fragment window.
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         return view;
     }
@@ -121,6 +121,7 @@ public class GroupManagerFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+
         void navigate_to_fragment(Fragment fragment);
     }
 
@@ -135,38 +136,17 @@ public class GroupManagerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Adding a new group", Toast.LENGTH_SHORT).show();
-
                 /*Navigates to the groupManagerFragment*/
                 Fragment fragment = new GroupCreationFragment();
-
                 mListener.navigate_to_fragment(fragment);
             }
         });
 
-//        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
-//        gridview.setAdapter(new GroupAdapter(getContext()));
-//
-//        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View v,
-//                                    int position, long id) {
-//                Toast.makeText(getContext(), "" + position,
-//                        Toast.LENGTH_SHORT).show();
-//
-//
-//                Fragment fragment = new GroupFeedFragment();
-//                Bundle args = new Bundle();
-//                args.putInt(ARG_PARAM1,position); //TO BE CHANGED LATER
-//                fragment.setArguments(args);
-//
-//                /*Navigates to the groupManagerFragment*/
-//                mListener.navigate_to_fragment(fragment);
-//            }
-//        });
         loadAllGroups(view);
     }
 
 
-
+    /*loads all groups from parse and display it*/
     private void loadAllGroups(final View view) {
         final Group.Query postQuery = new Group.Query();
         postQuery.findInBackground(new FindCallback<Group>() {
@@ -174,26 +154,7 @@ public class GroupManagerFragment extends Fragment {
             public void done(final List<Group> objects, ParseException e) {
                 if (e == null) {
                     groupList.addAll(objects);
-
-                    groupAdapter = new GroupAdapter(getContext(), groupList);
-                    GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
-                    gridview.setAdapter(groupAdapter);
-
-                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        public void onItemClick(AdapterView<?> parent, View v,
-                                                int position, long id) {
-                            Toast.makeText(getContext(), "" + position,
-                                    Toast.LENGTH_SHORT).show();
-                            Fragment fragment = new GroupFeedFragment();
-                            Bundle args = new Bundle();
-                            args.putInt(ARG_PARAM1,position); //TO BE CHANGED LATER
-                            fragment.setArguments(args);
-
-                            /*Navigates to the groupManagerFragment*/
-                            mListener.navigate_to_fragment(fragment);
-                        }
-                    });
-
+                    displayOnGridView(objects, view);
                 } else {
                     e.printStackTrace();
                 }
@@ -201,7 +162,25 @@ public class GroupManagerFragment extends Fragment {
         });
     }
 
+    /*this initializes the adapter, and pass the groupList into it and navigates to GroupFeed fragment*/
+    private void displayOnGridView(List<Group> objects, View view) {
+        groupAdapter = new GroupAdapter(getContext(), groupList);
+        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
+        gridview.setAdapter(groupAdapter);
 
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                Toast.makeText(getContext(), "" + position,
+                        Toast.LENGTH_SHORT).show();
+                Fragment fragment = new GroupFeedFragment();
+                Bundle args = new Bundle();
+                args.putInt(ARG_PARAM1, position); //TO BE CHANGED LATER
+                fragment.setArguments(args);
 
-
+                /*Navigates to the groupManagerFragment*/
+                mListener.navigate_to_fragment(fragment);
+            }
+        });
+    }
 }

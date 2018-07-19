@@ -253,7 +253,7 @@
         </receiver>
 
         <!-- Applozic end -->
-        <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".Authentification.SignupActivity"></activity>
     </application>
 
 </manifest>
