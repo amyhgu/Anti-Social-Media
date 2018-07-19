@@ -71,4 +71,15 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    /*Navigates to the groupManagerFragment*/
+    public void navigate_to_fragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 }

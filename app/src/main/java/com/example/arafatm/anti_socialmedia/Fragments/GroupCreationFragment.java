@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +108,7 @@ public class GroupCreationFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void navigate_to_fragment(Fragment fragment);
     }
 
     @Override
@@ -121,16 +120,11 @@ public class GroupCreationFragment extends Fragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Naviagting to Group Feed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Navigating to Group Feed", Toast.LENGTH_SHORT).show();
 
                 /*Navigates to the GroupFeedFragment*/
                 Fragment fragment = new GroupFeedFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.groupCreationFragment, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
+                mListener.navigate_to_fragment(fragment);
             }
         });
     }

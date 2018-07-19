@@ -4,17 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.GroupAdapter;
 
 
 public class GroupManagerFragment extends Fragment {
@@ -111,6 +112,7 @@ public class GroupManagerFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void navigate_to_fragment(Fragment fragment);
     }
 
     @Override
@@ -126,11 +128,27 @@ public class GroupManagerFragment extends Fragment {
 
                 /*Navigates to the groupManagerFragment*/
                 Fragment fragment = new GroupCreationFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.groupManagerFragament, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                mListener.navigate_to_fragment(fragment);
+            }
+        });
+
+        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
+        gridview.setAdapter(new GroupAdapter(getContext()));
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                Toast.makeText(getContext(), "" + position,
+                        Toast.LENGTH_SHORT).show();
+
+
+                Fragment fragment = new GroupFeedFragment();
+                Bundle args = new Bundle();
+                args.putInt(ARG_PARAM1,position); //TO BE CHANGED LATER
+                fragment.setArguments(args);
+
+                /*Navigates to the groupManagerFragment*/
+                mListener.navigate_to_fragment(fragment);
             }
         });
     }
