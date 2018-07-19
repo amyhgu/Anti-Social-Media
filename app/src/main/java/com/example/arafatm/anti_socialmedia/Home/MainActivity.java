@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                 intent.putExtra(ConversationUIService.USER_ID, "receiveruserid123");
                 intent.putExtra(ConversationUIService.DISPLAY_NAME, "Friend McFrienderson"); //put it for displaying the title.
                 intent.putExtra(ConversationUIService.TAKE_ORDER,false); //Skip chat list for showing on back press
-                startActivity(intent);
+//                startActivity(intent);
             }
 
             @Override
