@@ -60,4 +60,10 @@
         android:text="Create Post" />
 
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btAddPostImage"  />
+
 </RelativeLayout>
