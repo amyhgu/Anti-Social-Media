@@ -113,6 +113,7 @@ public class SettingsFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 logout();
+
                                 //close the dialog
                                 dialogInterface.dismiss();
                             }
