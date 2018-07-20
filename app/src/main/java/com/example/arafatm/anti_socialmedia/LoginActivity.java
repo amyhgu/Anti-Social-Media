@@ -1,4 +1,4 @@
-package com.example.arafatm.anti_socialmedia.Authentification;
+package com.example.arafatm.anti_socialmedia;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.arafatm.anti_socialmedia.Home.MainActivity;
-import com.example.arafatm.anti_socialmedia.R;
-import com.example.arafatm.anti_socialmedia.SignupActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

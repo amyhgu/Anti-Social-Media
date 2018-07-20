@@ -12,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
-import com.applozic.mobicomkit.api.account.user.MobiComUserPreference;
-import com.applozic.mobicomkit.api.account.user.PushNotificationTask;
 import com.applozic.mobicomkit.api.account.user.User;
 import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                 intent.putExtra(ConversationUIService.USER_ID, "receiveruserid123");
                 intent.putExtra(ConversationUIService.DISPLAY_NAME, "Friend McFrienderson"); //put it for displaying the title.
                 intent.putExtra(ConversationUIService.TAKE_ORDER,false); //Skip chat list for showing on back press
-                startActivity(intent);
+//                startActivity(intent);
             }
 
             @Override

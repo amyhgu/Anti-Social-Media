@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.R;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -56,8 +57,12 @@ public class GroupAdapter extends BaseAdapter {
         imageView.setBackgroundResource(R.drawable.round_coner_of_each_image);
 
         // imageView.setImageResource(mThumbIds[position]);
+        ParseFile groupImage = groupList.get(position).getParseFile("groupImage");
+
+
+        if(groupImage != null)
         Glide.with(viewGroup.getContext())
-                .load(groupList.get(position).getParseFile("groupImage").getUrl())
+                .load(groupImage.getUrl())
                 .into(imageView);
         return imageView;
     }
