@@ -50,7 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("user_friends", "public_profile", "email"));
+        loginButton.setReadPermissions(Arrays.asList(
+                "user_friends", "public_profile", "email"));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
         // Callback registration
