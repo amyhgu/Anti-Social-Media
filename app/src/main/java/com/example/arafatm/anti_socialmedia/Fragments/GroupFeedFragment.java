@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -37,6 +38,10 @@ public class GroupFeedFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private String groupObjectId;
+    private EditText groupName;
+    private ImageView groupPic;
+    //posts
+    //list of users
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,11 +71,15 @@ public class GroupFeedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //  mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-            groupObjectId = getArguments().getString(ARG_PARAM1);
-        }
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+             mParam2 = getArguments().getString(ARG_PARAM2);
+             groupObjectId = getArguments().getString(ARG_PARAM1);
+//            ParseQuery<ParseObject> gameQuery = ParseQuery.getQuery("Group");
+//            gameQuery.whereEqualTo("objectId", ParseUser.getCurrentUser());
+//
+//            ParseUser.getQuery().get();  // how to get the "User"'s "objectId"
 
+        }
 
     }
 
@@ -78,6 +87,7 @@ public class GroupFeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        // Equivalent to setContentView
         return inflater.inflate(R.layout.fragment_group_feed, container, false);
     }
 
@@ -149,7 +159,5 @@ public class GroupFeedFragment extends Fragment {
                 }
             }
         });
-
-
     }
 }

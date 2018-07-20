@@ -13,8 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.example.arafatm.anti_socialmedia.Authentification.LoginActivity;
+import com.example.arafatm.anti_socialmedia.LoginActivity;
 import com.example.arafatm.anti_socialmedia.R;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
@@ -38,11 +41,30 @@ public class SettingsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button logOutBtn;
+    private ImageView ivPropic;
+    private TextView tvFullName;
+    private TextView tvViewProfile;
+    private RelativeLayout rlViewProfile;
 
     private OnFragmentInteractionListener mListener;
 
     public SettingsFragment() {
         // Required empty public constructor
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onViewProfileSelected();
     }
 
     /**
@@ -101,6 +123,10 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         logOutBtn = view.findViewById(R.id.log_out_button);
+        ivPropic = view.findViewById(R.id.ivPropic);
+        tvFullName = view.findViewById(R.id.tvFullName);
+        tvViewProfile = view.findViewById(R.id.tvViewProfile);
+        rlViewProfile = view.findViewById(R.id.rlViewProfile);
 
 
         logOutBtn.setOnClickListener( new View.OnClickListener(){
@@ -127,6 +153,13 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        rlViewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onViewProfileSelected();
+            }
+        });
+
     }
 
     private void logout() {
@@ -144,12 +177,12 @@ public class SettingsFragment extends Fragment {
         startActivity(intent);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    // TODO: Rename method, update argument and hook method into UI event
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+//    }
 
 
 
@@ -157,20 +190,5 @@ public class SettingsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

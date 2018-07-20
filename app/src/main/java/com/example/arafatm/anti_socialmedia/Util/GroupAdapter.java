@@ -66,7 +66,6 @@ public class GroupAdapter extends BaseAdapter {
         } else {
             imageView.setImageResource(R.drawable.ic_group_default);
         }
-
         return imageView;
     }
 

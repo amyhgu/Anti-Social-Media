@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,6 +37,11 @@ public class GroupManagerFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private EditText groupName;
+    private ImageView groupPic;
+    //posts
+    //list of users
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,6 +74,7 @@ public class GroupManagerFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -155,6 +162,28 @@ public class GroupManagerFragment extends Fragment {
                 if (e == null) {
                     groupList.addAll(objects);
                     displayOnGridView(objects, view);
+                    groupAdapter = new GroupAdapter(getContext(), groupList);
+                    GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
+                    gridview.setAdapter(groupAdapter);
+
+                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View v,
+                                                int position, long id) {
+                            Toast.makeText(getContext(), "" + position,
+                                    Toast.LENGTH_SHORT).show();
+                            Fragment fragment = new GroupFeedFragment();
+                            Bundle args = new Bundle();
+                            ParseObject selectedGroup = groupList.get(position);
+                            args.putString(ARG_PARAM1,selectedGroup.getObjectId()); //pass group objectId
+
+                            fragment.setArguments(args);
+
+                            // TODO: Figure out a way to pass the selected group to the next fragment (feed)
+
+                            /*Navigates to the groupFeedFragment*/
+                            mListener.navigate_to_fragment(fragment);
+                        }
+                    });
                 } else {
                     e.printStackTrace();
                 }

@@ -21,6 +21,7 @@ import com.example.arafatm.anti_socialmedia.Fragments.GameFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseUser;
@@ -85,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                 Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
                 intent.putExtra(ConversationUIService.USER_ID, "receiveruserid123");
                 intent.putExtra(ConversationUIService.DISPLAY_NAME, "Friend McFrienderson"); //put it for displaying the title.
-                intent.putExtra(ConversationUIService.TAKE_ORDER, false); //Skip chat list for showing on back press
-                startActivity(intent);
+                intent.putExtra(ConversationUIService.TAKE_ORDER,false); //Skip chat list for showing on back press
+//                startActivity(intent);
             }
 
             @Override
@@ -118,6 +119,11 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public void onViewProfileSelected() {
+        ProfileFragment profileFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser());
+        navigate_to_fragment(profileFragment);
     }
 
     @Override
