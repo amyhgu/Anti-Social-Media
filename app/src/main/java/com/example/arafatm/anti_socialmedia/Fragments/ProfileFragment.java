@@ -55,10 +55,12 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ivPropic = view.findViewById(R.id.ivPropic);
         tvFullName = view.findViewById(R.id.tvFullName);
-
         tvFullName.setText(user.getString("fullName"));
-        Glide.with(mContext).load(user.getString("propicUrl")).into(ivPropic);
+
+        ivPropic = view.findViewById(R.id.ivPropic);
+        String propicUrl = user.getString("propicUrl");
+        propicUrl = (propicUrl == null) ? user.getParseFile("profileImage").getUrl() : propicUrl;
+        Glide.with(mContext).load(propicUrl).into(ivPropic);
     }
 }
