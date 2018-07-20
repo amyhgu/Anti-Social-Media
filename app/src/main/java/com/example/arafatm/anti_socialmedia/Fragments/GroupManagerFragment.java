@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,6 +37,11 @@ public class GroupManagerFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private EditText groupName;
+    private ImageView groupPic;
+    //posts
+    //list of users
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,6 +74,7 @@ public class GroupManagerFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -186,10 +193,14 @@ public class GroupManagerFragment extends Fragment {
                                     Toast.LENGTH_SHORT).show();
                             Fragment fragment = new GroupFeedFragment();
                             Bundle args = new Bundle();
-                            args.putInt(ARG_PARAM1,position); //TO BE CHANGED LATER
+                            ParseObject selectedGroup = groupList.get(position);
+                            args.putString(ARG_PARAM1,selectedGroup.getObjectId()); //pass group objectId
+
                             fragment.setArguments(args);
 
-                            /*Navigates to the groupManagerFragment*/
+                            // TODO: Figure out a way to pass the selected group to the next fragment (feed)
+
+                            /*Navigates to the groupFeedFragment*/
                             mListener.navigate_to_fragment(fragment);
                         }
                     });
