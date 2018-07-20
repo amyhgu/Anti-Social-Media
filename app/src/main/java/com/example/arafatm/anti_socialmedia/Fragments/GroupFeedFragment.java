@@ -4,21 +4,28 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,12 +42,16 @@ public class GroupFeedFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    //general feed setup
     private String mParam1;
     private String mParam2;
     private String groupObjectId;
-    private EditText groupName;
-    private ImageView groupPic;
-    //posts
+
+    //for posting
+    private EditText messageInput;
+    private Button createButton;
+    File textPost;
+
     //list of users
 
     private OnFragmentInteractionListener mListener;
@@ -135,12 +146,14 @@ public class GroupFeedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
+        messageInput = view.findViewById(R.id.etNewPost);
+        createButton = view.findViewById(R.id.btCreatePost);
+
         query.getInBackground(groupObjectId, new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
 
-                    //for testing sake
                     TextView name = (TextView) view.findViewById(R.id.tvGroupName);
                     name.setText(object.getString("groupName"));
 
@@ -156,6 +169,55 @@ public class GroupFeedFragment extends Fragment {
 
                 } else {
                     // something went wrong
+                }
+            }
+        });
+
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String message = messageInput.getText().toString();
+                final ParseUser user = ParseUser.getCurrentUser();
+
+                createPost(message, user);
+
+//                final ParseFile parseFile = new ParseFile(textPost);
+                //debugger says that there's something wrong around here
+                //ParseObject Post that we created
+
+                //save file to parse
+                //this is code from Parsetagram, but probably don't need a Parsefile because we aren't posting with an image
+//                parseFile.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        if(e == null){
+//                            createPost(message, user);
+//                        }
+//                        else{
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                });
+            }
+        });
+    }
+
+    private void createPost(String message, ParseUser user){    // +param -> Parsefile imageFile
+        final Post newPost = new Post();
+        newPost.setMessage(message);
+//        newPost.setImage(imageFile);          <== figure out image posting later
+        newPost.setUser(user);
+
+        newPost.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null) {
+                    Log.d("PostActivity", "Create post success!");
+                    Toast.makeText(GroupFeedFragment.this.getContext(), "Posted!", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    e.printStackTrace();
                 }
             }
         });
