@@ -138,12 +138,12 @@ public class GroupFeedFragment extends Fragment {
             @Override
             public void done(ParseObject object, com.parse.ParseException e) {
                 Toast.makeText(getContext(), object.get("groupName").toString(), Toast.LENGTH_SHORT ).show();
-
             }
-
 
         });
 
+
+        //groupName.setText(object.get("groupName").toString());
 
     }
 }
