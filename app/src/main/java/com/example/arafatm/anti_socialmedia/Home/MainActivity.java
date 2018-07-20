@@ -23,6 +23,7 @@ import com.example.arafatm.anti_socialmedia.Fragments.GameFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseUser;
@@ -119,6 +120,11 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public void onViewProfileSelected() {
+        ProfileFragment profileFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser());
+        navigate_to_fragment(profileFragment);
     }
 
     @Override
