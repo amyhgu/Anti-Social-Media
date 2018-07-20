@@ -141,7 +141,7 @@ public class GroupManagerFragment extends Fragment {
                 mListener.navigate_to_fragment(fragment);
             }
         });
-        
+
         loadAllGroups(view);
     }
 
@@ -183,4 +183,8 @@ public class GroupManagerFragment extends Fragment {
             }
         });
     }
+
+
+    //TODO
+    //Enable group deletion
 }

@@ -1,6 +1,7 @@
 package com.example.arafatm.anti_socialmedia.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -13,6 +14,8 @@ import android.view.MenuItem;
 import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
 import com.applozic.mobicomkit.api.account.user.User;
 import com.applozic.mobicomkit.api.account.user.UserLoginTask;
+import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GameFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
@@ -27,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         GroupManagerFragment.OnFragmentInteractionListener,
         GameFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
-        GroupFeedFragment.OnFragmentInteractionListener{
+        GroupFeedFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +82,18 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
 
             @Override
             public void onSuccess(RegistrationResponse registrationResponse, Context context) {
-//                Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
-//                intent.putExtra(ConversationUIService.USER_ID, "receiveruserid123");
-//                intent.putExtra(ConversationUIService.DISPLAY_NAME, "Friend McFrienderson"); //put it for displaying the title.
-//                intent.putExtra(ConversationUIService.TAKE_ORDER,false); //Skip chat list for showing on back press
-//                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
+                intent.putExtra(ConversationUIService.USER_ID, "receiveruserid123");
+                intent.putExtra(ConversationUIService.DISPLAY_NAME, "Friend McFrienderson"); //put it for displaying the title.
+                intent.putExtra(ConversationUIService.TAKE_ORDER, false); //Skip chat list for showing on back press
+                startActivity(intent);
             }
 
             @Override
             public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
                 // If any failure in registration the callback  will come here
-            }};
+            }
+        };
 
         ParseUser parseUser = ParseUser.getCurrentUser();
         String userId = parseUser.getObjectId();

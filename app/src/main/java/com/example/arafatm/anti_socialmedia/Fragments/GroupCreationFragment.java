@@ -89,7 +89,7 @@ public class GroupCreationFragment extends Fragment {
         ParseUser currentUser = null;
         //get current user
         try {
-             currentUser = ParseUser.getQuery().get("mK88SMmv6C"); //ParseUser.getCurrentUser(); //Change this!
+            currentUser = ParseUser.getQuery().get("mK88SMmv6C"); //ParseUser.getCurrentUser(); //Change this!
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -99,7 +99,7 @@ public class GroupCreationFragment extends Fragment {
         //TODO
         //Change this way to Amy way of finding facebook friends
 
-       // use Ids to find usres
+        // use Ids to find usres
         for (int i = 0; i < friendListIds.size(); i++) {
             //   for each id, find corresponding use
             try {
@@ -109,8 +109,8 @@ public class GroupCreationFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-            //done!
-     //   }
+        //done!
+        //   }
         // Create adapter passing in the sample user data
         friendListAdapter = new FriendListAdapter(friendList);
         // Attach the adapter to the recyclerview to populate items
@@ -171,7 +171,7 @@ public class GroupCreationFragment extends Fragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Toast.makeText(getContext(), "Navigating to Group Feed", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getContext(), "Navigating to Group Feed", Toast.LENGTH_SHORT).show();
 
                 //gets list of new members
                 List<String> newMembers = friendListAdapter.getNewGroupMembers();
@@ -192,7 +192,12 @@ public class GroupCreationFragment extends Fragment {
                 mListener.navigate_to_fragment(fragment);
             }
         });
-
-
     }
+
+
+    //TODO
+    //Enable searching friends by name!
+    //View friends profile
+    //Send message to friend
+
 }

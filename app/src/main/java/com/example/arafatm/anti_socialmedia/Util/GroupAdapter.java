@@ -48,7 +48,7 @@ public class GroupAdapter extends BaseAdapter {
             imageView.setLayoutParams(new ViewGroup.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(200, 200);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(250, 250);
             imageView.setLayoutParams(params);
         } else {
             imageView = (ImageView) view;

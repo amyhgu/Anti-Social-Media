@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -142,7 +141,6 @@ public class GroupFeedFragment extends Fragment {
                         /*shows group image on gridView*/
                         Glide.with(getContext())
                                 .load(groupImage.getUrl())
-                                .apply(RequestOptions.circleCropTransform())
                                 .into(profile);
                     }
 
