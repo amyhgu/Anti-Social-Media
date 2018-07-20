@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.FriendListAdapter;
 import com.parse.ParseException;
@@ -171,9 +171,24 @@ public class GroupCreationFragment extends Fragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Navigating to Group Feed", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getContext(), "Navigating to Group Feed", Toast.LENGTH_SHORT).show();
+
+                //gets list of new members
+                List<String> newMembers = friendListAdapter.getNewGroupMembers();
+                //Create new group and initialize it
+                Group newGroup = new Group();
+                newGroup.setGroupName("No Group Name");
+                newGroup.addUsers(newMembers);
+                //save it in Parse
+                newGroup.saveInBackground();
+                //bundle the group objectId and send to groupfeed fragment for later use
+                Bundle args = new Bundle();
+                String ObjectId = newGroup.getObjectId();
+                args.putString(ARG_PARAM1, ObjectId);
+
                 /*Navigates to the GroupFeedFragment*/
                 Fragment fragment = new GroupFeedFragment();
+                fragment.setArguments(args);
                 mListener.navigate_to_fragment(fragment);
             }
         });

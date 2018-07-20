@@ -13,7 +13,7 @@
         android:layout_height="120dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        app:srcCompat="@android:color/background_dark" />
+        app:srcCompat="@color/solid_white" />
 
     <TextView
         android:id="@+id/tvGroupName"
@@ -22,7 +22,7 @@
         android:layout_alignBottom="@+id/ivCoverPhoto"
         android:layout_alignParentStart="true"
         android:text="Group Name"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <EditText

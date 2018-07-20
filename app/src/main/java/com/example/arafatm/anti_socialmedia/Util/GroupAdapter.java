@@ -8,6 +8,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.arafatm.anti_socialmedia.R;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -52,13 +54,18 @@ public class GroupAdapter extends BaseAdapter {
             imageView = (ImageView) view;
         }
 
-        String groupImageURL = groupList.get(position).getParseFile("groupImage").getUrl();
 
-        /*shows group image on gridView*/
-        Glide.with(viewGroup.getContext())
-                .load(groupImageURL)
-                .apply(RequestOptions.circleCropTransform())
-                .into(imageView);
+        ParseFile groupImage = groupList.get(position).getParseFile("groupImage");
+
+            if (groupImage != null) {
+                /*shows group image on gridView*/
+                Glide.with(viewGroup.getContext())
+                        .load(groupImage.getUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.ic_group_default);
+        }
 
         return imageView;
     }

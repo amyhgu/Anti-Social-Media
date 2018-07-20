@@ -26,6 +26,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     // Pass in the contact array into the constructor
     public FriendListAdapter(List<ParseUser> allFriends) {
         this.allFriends = allFriends;
+        newGroupMembers = new ArrayList<>();
     }
 
     @Override
@@ -67,7 +68,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                 addFriendButton.setImageResource(R.drawable.ic_check_mark);
 
                 //get the just added user
-                newGroupMembers = new ArrayList<>();
+
                 ParseUser userAdded = allFriends.get(position);
 
                 //add that user's ObjectId to the newGroupMembers list to be accessed later
@@ -79,6 +80,10 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     @Override
     public int getItemCount() {
         return allFriends.size();
+    }
+
+    public List<String> getNewGroupMembers() {
+        return newGroupMembers;
     }
 
     // Provide a direct reference to each of the views within a data item

@@ -141,7 +141,7 @@ public class GroupManagerFragment extends Fragment {
                 mListener.navigate_to_fragment(fragment);
             }
         });
-
+        
         loadAllGroups(view);
     }
 
@@ -175,7 +175,7 @@ public class GroupManagerFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
                 Fragment fragment = new GroupFeedFragment();
                 Bundle args = new Bundle();
-                args.putInt(ARG_PARAM1, position); //TO BE CHANGED LATER
+                args.putString(ARG_PARAM1, groupList.get(position).getObjectId()); //TO BE CHANGED LATER
                 fragment.setArguments(args);
 
                 /*Navigates to the groupManagerFragment*/
