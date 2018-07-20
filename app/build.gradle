@@ -75,4 +75,9 @@ dependencies {
     // parceler
     implementation 'org.parceler:parceler-api:1.1.6'
     annotationProcessor 'org.parceler:parceler:1.1.6'
+
+    implementation 'com.parse:parse-fcm-android:1.17.3' // fcm push notifications
+    implementation 'com.google.firebase:firebase-core:16.0.1' // fcm push notifications
 }
+
+apply plugin: 'com.google.gms.google-services'
