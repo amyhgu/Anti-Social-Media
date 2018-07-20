@@ -9,14 +9,24 @@
     <RelativeLayout
         android:id="@+id/rlViewProfile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="90dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/border_settings_to_profile">
+
 
         <ImageView
             android:id="@+id/ivPropic"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:src="@android:color/background_dark" />
 
         <TextView
@@ -25,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="20dp"
             android:layout_toEndOf="@+id/ivPropic"
             android:text="Firstname Lastname"
             android:textSize="18sp" />

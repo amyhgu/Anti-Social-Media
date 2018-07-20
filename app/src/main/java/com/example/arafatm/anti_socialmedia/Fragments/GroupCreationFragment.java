@@ -201,3 +201,4 @@ public class GroupCreationFragment extends Fragment {
     //Send message to friend
 
 }
+
