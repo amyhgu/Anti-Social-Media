@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         GroupManagerFragment.OnFragmentInteractionListener,
         GameFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
-        GroupFeedFragment.OnFragmentInteractionListener{
+        GroupFeedFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
             @Override
             public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
                 // If any failure in registration the callback  will come here
-            }};
+            }
+        };
 
         ParseUser parseUser = ParseUser.getCurrentUser();
         String userId = parseUser.getObjectId();

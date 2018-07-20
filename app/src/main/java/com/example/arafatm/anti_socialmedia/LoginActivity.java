@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.arafatm.anti_socialmedia.Authentification.SignupActivity;
 import com.example.arafatm.anti_socialmedia.Home.MainActivity;
+import com.example.arafatm.anti_socialmedia.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

@@ -7,12 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -34,7 +38,6 @@ public class GroupFeedFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private String groupObjectId;
-
     private EditText groupName;
     private ImageView groupPic;
     //posts
@@ -71,7 +74,6 @@ public class GroupFeedFragment extends Fragment {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
              mParam2 = getArguments().getString(ARG_PARAM2);
              groupObjectId = getArguments().getString(ARG_PARAM1);
-
 //            ParseQuery<ParseObject> gameQuery = ParseQuery.getQuery("Group");
 //            gameQuery.whereEqualTo("objectId", ParseUser.getCurrentUser());
 //
@@ -129,21 +131,33 @@ public class GroupFeedFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated( View view,  Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
         query.getInBackground(groupObjectId, new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject object, com.parse.ParseException e) {
-                Toast.makeText(getContext(), object.get("groupName").toString(), Toast.LENGTH_SHORT ).show();
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
+
+                    //for testing sake
+                    TextView name = (TextView) view.findViewById(R.id.tvGroupName);
+                    name.setText(object.getString("groupName"));
+
+                    ImageView profile = (ImageView) view.findViewById(R.id.ivCoverPhoto);
+                    ParseFile groupImage = object.getParseFile("groupImage");
+
+                    if (groupImage != null) {
+                        /*shows group image on gridView*/
+                        Glide.with(getContext())
+                                .load(groupImage.getUrl())
+                                .into(profile);
+                    }
+
+                } else {
+                    // something went wrong
+                }
             }
-
         });
-
-
-        //groupName.setText(object.get("groupName").toString());
-
     }
 }

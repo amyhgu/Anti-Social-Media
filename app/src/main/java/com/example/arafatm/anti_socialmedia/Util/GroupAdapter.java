@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -47,23 +48,24 @@ public class GroupAdapter extends BaseAdapter {
             imageView.setLayoutParams(new ViewGroup.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(250, 250);
+            imageView.setLayoutParams(params);
         } else {
             imageView = (ImageView) view;
         }
 
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(200, 200);
-        imageView.setLayoutParams(params);
 
-        imageView.setBackgroundResource(R.drawable.round_coner_of_each_image);
-
-        // imageView.setImageResource(mThumbIds[position]);
         ParseFile groupImage = groupList.get(position).getParseFile("groupImage");
 
-
-        if(groupImage != null)
-        Glide.with(viewGroup.getContext())
-                .load(groupImage.getUrl())
-                .into(imageView);
+            if (groupImage != null) {
+                /*shows group image on gridView*/
+                Glide.with(viewGroup.getContext())
+                        .load(groupImage.getUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.ic_group_default);
+        }
         return imageView;
     }
 
