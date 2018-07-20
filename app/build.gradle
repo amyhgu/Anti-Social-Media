@@ -73,6 +73,6 @@ dependencies {
     implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.8.8' // applozic chat client
 
     // parceler
-    implementation 'org.parceler:parceler-api:1.1.6'
-    annotationProcessor 'org.parceler:parceler:1.1.6'
+    implementation 'org.parceler:parceler-api:1.1.11'
+    annotationProcessor 'org.parceler:parceler:1.1.11'
 }

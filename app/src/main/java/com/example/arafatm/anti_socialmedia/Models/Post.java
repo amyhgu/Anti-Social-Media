@@ -3,6 +3,7 @@ package com.example.arafatm.anti_socialmedia.Models;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.Date;
@@ -63,5 +64,25 @@ public class Post extends ParseObject {
         List<ParseObject> comments = getList(KEY_COMMENTS);
         comments.add(comment);
         put(KEY_COMMENTS, comments);
+    }
+
+    public static class Query extends ParseQuery<Post> {
+        //Query of a post class
+
+        public Query(){
+            super(Post.class);
+        }
+
+        public Query getTop(){
+            orderByDescending("createdAt");
+            setLimit(20);
+            return this;
+        }
+
+        public Query withUser(){
+            include("User");
+            return this;
+        }
+
     }
 }

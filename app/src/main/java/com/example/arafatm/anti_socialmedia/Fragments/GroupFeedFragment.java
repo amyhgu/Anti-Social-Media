@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -25,7 +30,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,7 +56,10 @@ public class GroupFeedFragment extends Fragment {
     //for posting
     private EditText messageInput;
     private Button createButton;
-    File textPost;
+    PostAdapter postAdapter;
+    ArrayList<Post> posts;
+    RecyclerView rvPosts;
+    private SwipeRefreshLayout swipeContainer;
 
     //list of users
 
@@ -145,9 +154,33 @@ public class GroupFeedFragment extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //creating a post
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
         messageInput = view.findViewById(R.id.etNewPost);
         createButton = view.findViewById(R.id.btCreatePost);
+
+        //displaying the posts
+        posts = new ArrayList<>();
+        postAdapter = new PostAdapter(posts);
+        rvPosts = view.findViewById(R.id.rvPostsFeed);
+
+        //RecyclerView setup (layout manager, use adapter)
+        rvPosts.setLayoutManager(new LinearLayoutManager(GroupFeedFragment.this.getContext()));
+        rvPosts.setAdapter(postAdapter);
+
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                PostAdapter adapter = new PostAdapter(posts);
+
+                adapter.clear();
+                loadTopPosts();
+                rvPosts.scrollToPosition(0);
+            }
+        });
 
         query.getInBackground(groupObjectId, new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
@@ -171,7 +204,10 @@ public class GroupFeedFragment extends Fragment {
                     // something went wrong
                 }
             }
+
         });
+
+        loadTopPosts();
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,9 +237,11 @@ public class GroupFeedFragment extends Fragment {
 //                });
             }
         });
+
+
     }
 
-    private void createPost(String message, ParseUser user){    // +param -> Parsefile imageFile
+    private void createPost(final String message, ParseUser user){    // +param -> Parsefile imageFile
         final Post newPost = new Post();
         newPost.setMessage(message);
 //        newPost.setImage(imageFile);          <== figure out image posting later
@@ -215,6 +253,7 @@ public class GroupFeedFragment extends Fragment {
                 if(e == null) {
                     Log.d("PostActivity", "Create post success!");
                     Toast.makeText(GroupFeedFragment.this.getContext(), "Posted!", Toast.LENGTH_LONG).show();
+                    messageInput.setText("");
                 }
                 else{
                     e.printStackTrace();
@@ -222,4 +261,29 @@ public class GroupFeedFragment extends Fragment {
             }
         });
     }
+
+    private void loadTopPosts() {
+        final Post.Query postsQuery = new Post.Query();
+        postsQuery.getTop();       //<== this gets the post from a specific user. Won't cause harm, but don't need it rn
+        // ^ this line originally had ".withUser", so this should fix it
+
+        postsQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e == null) {
+
+                    posts.addAll(objects);
+                    postAdapter.notifyDataSetChanged();
+
+                    swipeContainer.setRefreshing(false);
+
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+
 }

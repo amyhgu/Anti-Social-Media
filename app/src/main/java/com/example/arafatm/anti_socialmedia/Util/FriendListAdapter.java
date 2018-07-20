@@ -19,7 +19,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
+public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
     public List<ParseUser> allFriends;
     private Context context;
     private ArrayList<String> newGroupMembers;
