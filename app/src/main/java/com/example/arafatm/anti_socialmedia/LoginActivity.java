@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // execute request asynchronously
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email,picture");
+        parameters.putString("fields", "id,name,email,picture.type(large)");
         meRequest.setParameters(parameters);
         meRequest.executeAsync();
 

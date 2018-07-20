@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.R;
+import com.facebook.Profile;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -21,6 +23,7 @@ public class ProfileFragment extends Fragment {
     private ParseUser user;
     private ImageView ivPropic;
     private TextView tvFullName;
+    private Context mContext;
 
     public static ProfileFragment newInstance(ParseUser user) {
         ProfileFragment profileFragment = new ProfileFragment();
@@ -33,6 +36,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext = context;
     }
 
     @Override
@@ -55,5 +59,6 @@ public class ProfileFragment extends Fragment {
         tvFullName = view.findViewById(R.id.tvFullName);
 
         tvFullName.setText(user.getString("fullName"));
+        Glide.with(mContext).load(user.getString("propicUrl")).into(ivPropic);
     }
 }
