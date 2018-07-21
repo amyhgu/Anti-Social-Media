@@ -18,11 +18,11 @@ if (process.env.FCM_API_KEY) {
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
+  databaseURI: databaseUri || 'mongodb://heroku_9t0080rg:j1liapehe4mdke4aik1n17dhor@ds119738.mlab.com:19738/heroku_9t0080rg',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
+  appId: process.env.APP_ID || 'triple_as_lovely_app',
+  masterKey: process.env.MASTER_KEY || 'amy_alison_arafat_are_triple_as', //Add your master key here. Keep it secret!
+  serverURL: process.env.SERVER_URL || 'http://anti-social-media.herokuapp.com/parse',  // Don't forget to change to https if needed
   push: pushConfig
   liveQuery: {
     classNames: ["Post"] // List of classes to support for query subscriptions
