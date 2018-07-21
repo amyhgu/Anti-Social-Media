@@ -137,6 +137,7 @@ public class GroupManagerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         groupList = new ArrayList<>();
+        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
         ImageView add_group = (ImageView) view.findViewById(R.id.ic_add_icon);
 
         add_group.setOnClickListener(new View.OnClickListener() {
@@ -149,21 +150,22 @@ public class GroupManagerFragment extends Fragment {
             }
         });
 
-        loadAllGroups(view);
+        loadAllGroups(view, gridview);
     }
 
 
     /*loads all groups from parse and display it*/
-    private void loadAllGroups(final View view) {
+    private void loadAllGroups(final View view, final GridView gridview) {
         final Group.Query postQuery = new Group.Query();
         postQuery.findInBackground(new FindCallback<Group>() {
             @Override
             public void done(final List<Group> objects, ParseException e) {
                 if (e == null) {
+
                     groupList.addAll(objects);
-                    displayOnGridView(objects, view);
+                    displayOnGridView(objects, view, gridview);
                     groupAdapter = new GroupAdapter(getContext(), groupList);
-                    GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
+//                    GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
                     gridview.setAdapter(groupAdapter);
 
                     gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -192,9 +194,9 @@ public class GroupManagerFragment extends Fragment {
     }
 
     /*this initializes the adapter, and pass the groupList into it and navigates to GroupFeed fragment*/
-    private void displayOnGridView(List<Group> objects, View view) {
+    private void displayOnGridView(List<Group> objects, View view, final GridView gridview) {
         groupAdapter = new GroupAdapter(getContext(), groupList);
-        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
+//        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
         gridview.setAdapter(groupAdapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
