@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -76,6 +77,10 @@ dependencies {
 
     implementation 'com.parse:parse-fcm-android:1.17.3' // fcm push notifications
     implementation 'com.google.firebase:firebase-core:16.0.1' // fcm push notifications
+
+    // to fix DexArchiveMergerException
+    implementation 'com.google.firebase:firebase-analytics:15.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
     
     // parceler
     implementation 'org.parceler:parceler-api:1.1.11'
