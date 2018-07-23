@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -128,6 +129,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View list = inflater.inflate(R.layout.mobicom_message_list, container, false);
+        setHasOptionsMenu(true);
 
         recyclerView = (RecyclerView) list.findViewById(R.id.messageList);
         recyclerView.setBackgroundColor(getResources().getColor(R.color.conversation_list_all_background));
@@ -147,7 +149,9 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(recyclerAdapter);
         //recyclerView.addItemDecoration(new FooterItemDecoration(getContext(), recyclerView, R.layout.mobicom_message_list_header_footer));
-//        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.tb_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        toolbar.setVisibility(View.VISIBLE);
 //        toolbar.setClickable(false);
         fabButton = (ImageButton) list.findViewById(R.id.fab_start_new);
         loading = true;
@@ -201,6 +205,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.mobicom_basic_menu_for_normal_message, menu);
 
 
 //        if (alCustomizationSettings.isStartNewButton() || ApplozicSetting.getInstance(getContext()).isStartNewButtonVisible()) {
@@ -221,9 +226,9 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
 //        if (alCustomizationSettings.isBroadcastOption()) {
 //            menu.findItem(R.id.broadcast).setVisible(true);
 //        }
-        if (alCustomizationSettings.isLogoutOption()) {
-            menu.findItem(R.id.logout).setVisible(true);
-        }
+//        if (alCustomizationSettings.isLogoutOption()) {
+//            menu.findItem(R.id.logout).setVisible(true);
+//        }
     }
 
     public void addMessage(final Message message) {
@@ -500,6 +505,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     @Override
     public void onPause() {
         super.onPause();
+        toolbar.setVisibility(View.GONE);
         listIndex = linearLayoutManager.findFirstVisibleItemPosition();
         BroadcastService.currentUserId = null;
         if (recyclerView != null) {
@@ -516,6 +522,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
         //Assigning to avoid notification in case if quick conversation fragment is opened....
 //        toolbar.setTitle(getResources().getString(R.string.chats));
 //        toolbar.setSubtitle("");
+        toolbar.setVisibility(View.VISIBLE);
         BroadcastService.selectMobiComKitAll();
         super.onResume();
         if (recyclerView != null) {

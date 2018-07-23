@@ -72,7 +72,7 @@ public class ConversationUIService {
 
     public static final int REQUEST_CODE_CONTACT_GROUP_SELECTION = 1011;
     public static final String CONVERSATION_FRAGMENT = "ConversationFragment";
-    public static final String MESSGAE_INFO_FRAGMENT = "messageInfoFagment";
+    public static final String MESSAGE_INFO_FRAGMENT = "messageInfoFagment";
     public static final String USER_PROFILE_FRAMENT = "userProfilefragment";
     public static final String PARENT_CLIENT_GROUP_ID = "parentClientGroupId";
     public static final String PARENT_GROUP_KEY = "parentGroupKey";
@@ -176,7 +176,7 @@ public class ConversationUIService {
                     ((MobiComKitActivityInterface) fragmentActivity).addFragment(conversationFragment);
                 } else {
                     UserProfileFragment userProfileFragment = (UserProfileFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.USER_PROFILE_FRAMENT);
-                    MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.MESSGAE_INFO_FRAGMENT);
+                    MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.MESSAGE_INFO_FRAGMENT);
                     if (userProfileFragment != null || messageInfoFragment != null) {
                         if (fragmentActivity.getSupportFragmentManager() != null) {
                             fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
@@ -198,7 +198,7 @@ public class ConversationUIService {
                     ((MobiComKitActivityInterface) fragmentActivity).addFragment(conversationFragment);
                 } else {
                     UserProfileFragment userProfileFragment = (UserProfileFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.USER_PROFILE_FRAMENT);
-                    MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.MESSGAE_INFO_FRAGMENT);
+                    MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.MESSAGE_INFO_FRAGMENT);
                     if (userProfileFragment != null || messageInfoFragment != null) {
                         if (fragmentActivity.getSupportFragmentManager() != null) {
                             fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
@@ -819,13 +819,13 @@ public class ConversationUIService {
 
     public void startMessageInfoFragment(String messageJson) {
 
-        MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, MESSGAE_INFO_FRAGMENT);
+        MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, MESSAGE_INFO_FRAGMENT);
         if (messageInfoFragment == null) {
             messageInfoFragment = new MessageInfoFragment();
             Bundle bundle = new Bundle();
             bundle.putString(MessageInfoFragment.MESSAGE_ARGUMENT_KEY, messageJson);
             messageInfoFragment.setArguments(bundle);
-            ConversationActivity.addFragment(fragmentActivity, messageInfoFragment, MESSGAE_INFO_FRAGMENT);
+            ConversationActivity.addFragment(fragmentActivity, messageInfoFragment, MESSAGE_INFO_FRAGMENT);
         }
     }
 

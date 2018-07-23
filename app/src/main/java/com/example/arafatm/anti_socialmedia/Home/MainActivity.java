@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);//Initiates BottomNavigationView
+        Toolbar toolbar = findViewById(R.id.tb_toolbar);
+//        setSupportActionBar(toolbar);
 
         final FragmentManager fragmentManager = getSupportFragmentManager(); //Initiates FragmentManager
 
@@ -153,6 +156,13 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         startService(lastSeenStatusIntent);
     }
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_chat_fragment, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -182,9 +192,9 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         fragmentTransaction.replace(R.id.layout_child_activity, fragmentToAdd,
                 fragmentTag);
 
-        if (supportFragmentManager.getBackStackEntryCount() > 1) {
-            supportFragmentManager.popBackStackImmediate();
-        }
+//        if (supportFragmentManager.getBackStackEntryCount() > 1) {
+//            supportFragmentManager.popBackStackImmediate();
+//        }
         fragmentTransaction.addToBackStack(fragmentTag);
         fragmentTransaction.commitAllowingStateLoss();
         supportFragmentManager.executePendingTransactions();

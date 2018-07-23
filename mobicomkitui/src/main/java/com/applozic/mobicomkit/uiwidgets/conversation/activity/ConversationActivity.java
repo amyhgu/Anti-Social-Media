@@ -191,7 +191,7 @@ public class ConversationActivity extends AppCompatActivity implements MessageCo
                 fragmentTag);
 
         if (supportFragmentManager.getBackStackEntryCount() > 1
-                && !ConversationUIService.MESSGAE_INFO_FRAGMENT.equalsIgnoreCase(fragmentTag) && !ConversationUIService.USER_PROFILE_FRAMENT.equalsIgnoreCase(fragmentTag)) {
+                && !ConversationUIService.MESSAGE_INFO_FRAGMENT.equalsIgnoreCase(fragmentTag) && !ConversationUIService.USER_PROFILE_FRAMENT.equalsIgnoreCase(fragmentTag)) {
             supportFragmentManager.popBackStackImmediate();
         }
 
