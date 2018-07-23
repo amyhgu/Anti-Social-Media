@@ -149,10 +149,12 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(recyclerAdapter);
         //recyclerView.addItemDecoration(new FooterItemDecoration(getContext(), recyclerView, R.layout.mobicom_message_list_header_footer));
-        toolbar = (Toolbar) getActivity().findViewById(R.id.tb_toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        toolbar.setVisibility(View.VISIBLE);
+
+//        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+//        toolbar.setVisibility(View.GONE);
 //        toolbar.setClickable(false);
+
         fabButton = (ImageButton) list.findViewById(R.id.fab_start_new);
         loading = true;
         LinearLayout individualMessageSendLayout = (LinearLayout) list.findViewById(R.id.individual_message_send_layout);
@@ -204,8 +206,8 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.mobicom_basic_menu_for_normal_message, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.mobicom_basic_menu_for_normal_message, menu);
 
 
 //        if (alCustomizationSettings.isStartNewButton() || ApplozicSetting.getInstance(getContext()).isStartNewButtonVisible()) {
@@ -505,7 +507,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     @Override
     public void onPause() {
         super.onPause();
-        toolbar.setVisibility(View.GONE);
+//        toolbar.setVisibility(View.GONE);
         listIndex = linearLayoutManager.findFirstVisibleItemPosition();
         BroadcastService.currentUserId = null;
         if (recyclerView != null) {
@@ -522,7 +524,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
         //Assigning to avoid notification in case if quick conversation fragment is opened....
 //        toolbar.setTitle(getResources().getString(R.string.chats));
 //        toolbar.setSubtitle("");
-        toolbar.setVisibility(View.VISIBLE);
+//        toolbar.setVisibility(View.VISIBLE);
         BroadcastService.selectMobiComKitAll();
         super.onResume();
         if (recyclerView != null) {

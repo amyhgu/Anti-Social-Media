@@ -65,8 +65,9 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);//Initiates BottomNavigationView
-        Toolbar toolbar = findViewById(R.id.tb_toolbar);
-//        setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setVisibility(View.INVISIBLE);
 
         final FragmentManager fragmentManager = getSupportFragmentManager(); //Initiates FragmentManager
 
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
 //                intent.putExtra(ConversationUIService.USER_ID, "receiveruserid123");
 //                intent.putExtra(ConversationUIService.DISPLAY_NAME, "Friend McFrienderson"); //put it for displaying the title.
 //                intent.putExtra(ConversationUIService.TAKE_ORDER,false); //Skip chat list for showing on back press
-////                startActivity(intent);
+//                startActivity(intent);
             }
 
             @Override
@@ -136,13 +137,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         user.setDisplayName(displayName); //displayName is the name of the user which will be shown in chat messages
         user.setEmail(email); //optional
         user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());
-        //User.AuthenticationType.APPLOZIC.getValue() for password verification from Applozic server
-        // and User.AuthenticationType.CLIENT.getValue() for access Token verification from your server
-        // set access token as password
         user.setPassword(""); //optional, leave it blank for testing purpose,
-        // read this if you want to add additional security by verifying password from your server
-        // https://www.applozic.com/docs/configuration.html#access-token-url
-//        user.setImageLink("");//optional,pass your image link
         new UserLoginTask(user, listener, this).execute((Void) null);
 
 
@@ -282,24 +277,5 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         intent.putExtra(ApplozicMqttIntentService.DEVICE_KEY_STRING, deviceKeyString);
         startService(intent);
     }
-
-//    public static void addChatFragment(FragmentActivity fragmentActivity, Fragment fragmentToAdd, String fragmentTag) {
-//        FragmentManager supportFragmentManager = fragmentActivity.getSupportFragmentManager();
-//
-//        // Fragment activeFragment = UIService.getActiveFragment(fragmentActivity);
-//        FragmentTransaction fragmentTransaction = supportFragmentManager
-//                .beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, fragmentToAdd, fragmentTag);
-//
-//        if (supportFragmentManager.getBackStackEntryCount() > 1
-//                && !ConversationUIService.MESSGAE_INFO_FRAGMENT.equalsIgnoreCase(fragmentTag) && !ConversationUIService.USER_PROFILE_FRAMENT.equalsIgnoreCase(fragmentTag)) {
-//            supportFragmentManager.popBackStackImmediate();
-//        }
-//
-//        fragmentTransaction.addToBackStack(fragmentTag);
-//        fragmentTransaction.commitAllowingStateLoss();
-//        supportFragmentManager.executePendingTransactions();
-//        //Log.i(TAG, "BackStackEntryCount: " + supportFragmentManager.getBackStackEntryCount());
-//    }
 
 }
