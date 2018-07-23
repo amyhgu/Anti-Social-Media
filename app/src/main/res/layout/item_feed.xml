@@ -9,24 +9,31 @@
         android:id="@+id/ivPropic"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         app:srcCompat="@android:color/background_dark" />
 
     <TextView
-        android:id="@+id/tvFullname"
+        android:id="@+id/tvFullNameFeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/ivPropic"
         android:text="Firstname Lastname" />
 
     <TextView
         android:id="@+id/tvPostBody"
-        android:layout_width="match_parent"
+        android:layout_width="324dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivPropic"
+        android:layout_below="@+id/tvFullNameFeed"
+        android:layout_toRightOf="@+id/ivPropic"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:text="This is the body of a post" />
 
 </RelativeLayout>

@@ -3,7 +3,6 @@ package com.example.arafatm.anti_socialmedia.Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -136,7 +135,6 @@ public class SettingsFragment extends Fragment {
         Glide.with(mContext).load(user.getString("propicUrl")).into(ivPropic);
         tvFullName.setText(user.getString("fullName"));
 
-
         logOutBtn.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -167,6 +165,8 @@ public class SettingsFragment extends Fragment {
                 mListener.onViewProfileSelected();
             }
         });
+
+
 
     }
 
