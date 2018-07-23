@@ -1,29 +1,29 @@
 package com.example.arafatm.anti_socialmedia.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Toast;
+        import android.content.Context;
+        import android.net.Uri;
+        import android.os.Bundle;
+        import android.support.v4.app.Fragment;
+        import android.support.v7.app.AppCompatActivity;
+        import android.support.v7.widget.Toolbar;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.AdapterView;
+        import android.widget.EditText;
+        import android.widget.GridView;
+        import android.widget.ImageView;
+        import android.widget.Toast;
 
-import com.example.arafatm.anti_socialmedia.Models.Group;
-import com.example.arafatm.anti_socialmedia.R;
-import com.example.arafatm.anti_socialmedia.Util.GroupAdapter;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
+        import com.example.arafatm.anti_socialmedia.Models.Group;
+        import com.example.arafatm.anti_socialmedia.R;
+        import com.example.arafatm.anti_socialmedia.Util.GroupAdapter;
+        import com.parse.FindCallback;
+        import com.parse.ParseException;
+        import com.parse.ParseObject;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
 
 public class GroupManagerFragment extends Fragment {
@@ -40,8 +40,6 @@ public class GroupManagerFragment extends Fragment {
 
     private EditText groupName;
     private ImageView groupPic;
-    //posts
-    //list of users
 
     private OnFragmentInteractionListener mListener;
 
@@ -128,7 +126,6 @@ public class GroupManagerFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-
         void navigate_to_fragment(Fragment fragment);
     }
 
@@ -152,7 +149,6 @@ public class GroupManagerFragment extends Fragment {
         loadAllGroups(view);
     }
 
-
     /*loads all groups from parse and display it*/
     private void loadAllGroups(final View view) {
         final Group.Query postQuery = new Group.Query();
@@ -175,11 +171,7 @@ public class GroupManagerFragment extends Fragment {
                             Bundle args = new Bundle();
                             ParseObject selectedGroup = groupList.get(position);
                             args.putString(ARG_PARAM1,selectedGroup.getObjectId()); //pass group objectId
-
                             fragment.setArguments(args);
-
-                            // TODO: Figure out a way to pass the selected group to the next fragment (feed)
-
                             /*Navigates to the groupFeedFragment*/
                             mListener.navigate_to_fragment(fragment);
                         }
@@ -212,8 +204,4 @@ public class GroupManagerFragment extends Fragment {
             }
         });
     }
-
-
-    //TODO
-    //Enable group deletion
 }

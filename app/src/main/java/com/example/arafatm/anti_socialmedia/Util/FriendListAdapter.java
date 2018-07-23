@@ -23,6 +23,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     public List<ParseUser> allFriends;
     private Context context;
     private ArrayList<String> newGroupMembers;
+    private boolean Added = false;
     // Pass in the contact array into the constructor
     public FriendListAdapter(List<ParseUser> allFriends) {
         this.allFriends = allFriends;
@@ -59,20 +60,26 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                     .into(viewHolder.friendPic);
         }
 
-
         final ImageView addFriendButton =  viewHolder.addButton;
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,friend.getUsername()+" added", Toast.LENGTH_SHORT).show();
-                addFriendButton.setImageResource(R.drawable.ic_check_mark);
-
                 //get the just added user
-
                 ParseUser userAdded = allFriends.get(position);
 
-                //add that user's ObjectId to the newGroupMembers list to be accessed later
-                newGroupMembers.add(userAdded.getObjectId());
+                if (Added == true) { //when the user unselect a friends.
+                    addFriendButton.setImageResource(R.drawable.ic_add_icon);
+                    //remove that user's ObjectId from the newGroupMembers list
+                    newGroupMembers.remove(userAdded.getObjectId());
+                    Added = false;
+                    Toast.makeText(context,friend.getUsername()+" removed", Toast.LENGTH_SHORT).show();
+                } else {
+                    addFriendButton.setImageResource(R.drawable.ic_check_mark);
+                    //add that user's ObjectId to the newGroupMembers list to be accessed later
+                    newGroupMembers.add(userAdded.getObjectId());
+                    Added = true;
+                    Toast.makeText(context,friend.getUsername()+" added", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -94,7 +101,6 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         public TextView friendName;
         public ImageView addButton;
         public ImageView friendPic;
-
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
