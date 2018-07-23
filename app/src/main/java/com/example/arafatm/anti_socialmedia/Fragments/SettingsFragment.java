@@ -3,7 +3,6 @@ package com.example.arafatm.anti_socialmedia.Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.LoginActivity;
 import com.example.arafatm.anti_socialmedia.R;
 import com.facebook.AccessToken;
@@ -38,6 +38,7 @@ public class SettingsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private Context mContext;
     private String mParam1;
     private String mParam2;
     private Button logOutBtn;
@@ -94,6 +95,7 @@ public class SettingsFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        mContext = context;
     }
 
     @Override
@@ -128,6 +130,10 @@ public class SettingsFragment extends Fragment {
         tvViewProfile = view.findViewById(R.id.tvViewProfile);
         rlViewProfile = view.findViewById(R.id.rlViewProfile);
 
+        ParseUser user = ParseUser.getCurrentUser();
+
+        Glide.with(mContext).load(user.getString("propicUrl")).into(ivPropic);
+        tvFullName.setText(user.getString("fullName"));
 
         logOutBtn.setOnClickListener( new View.OnClickListener(){
             @Override
@@ -159,6 +165,8 @@ public class SettingsFragment extends Fragment {
                 mListener.onViewProfileSelected();
             }
         });
+
+
 
     }
 

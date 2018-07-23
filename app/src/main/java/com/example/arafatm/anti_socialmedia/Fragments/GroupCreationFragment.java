@@ -256,3 +256,4 @@ public class GroupCreationFragment extends Fragment {
     //TODO
     //get empty search to fetch all users
 }
+

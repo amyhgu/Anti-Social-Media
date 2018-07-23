@@ -37,6 +37,8 @@ ext {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':mobicomkitui')
+
     implementation 'com.android.support:appcompat-v7:28.0.0-alpha3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:support-v4:28.0.0-alpha3'
@@ -70,9 +72,14 @@ dependencies {
 
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)' // facebook login
 
-    implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.8.8' // applozic chat client
+    // implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.8.8' // applozic chat client
 
+    implementation 'com.parse:parse-fcm-android:1.17.3' // fcm push notifications
+    implementation 'com.google.firebase:firebase-core:16.0.1' // fcm push notifications
+    
     // parceler
-    implementation 'org.parceler:parceler-api:1.1.6'
-    annotationProcessor 'org.parceler:parceler:1.1.6'
+    implementation 'org.parceler:parceler-api:1.1.11'
+    annotationProcessor 'org.parceler:parceler:1.1.11'
 }
+
+apply plugin: 'com.google.gms.google-services'

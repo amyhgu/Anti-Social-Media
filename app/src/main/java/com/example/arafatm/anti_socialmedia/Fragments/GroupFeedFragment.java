@@ -9,6 +9,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +23,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -48,14 +59,25 @@ public class GroupFeedFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    //general feed setup
     private String mParam1;
     private String mParam2;
     private String groupObjectId;
+
     private EditText groupName;
     private ImageView groupPic;
     private File photoFile;
     public String photoFileName = "photo.jpg";
     //posts
+
+    //for posting
+    private EditText messageInput;
+    private Button createButton;
+    PostAdapter postAdapter;
+    ArrayList<Post> posts;
+    RecyclerView rvPosts;
+    private SwipeRefreshLayout swipeContainer;
+
     //list of users
 
     private OnFragmentInteractionListener mListener;
@@ -149,13 +171,39 @@ public class GroupFeedFragment extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //creating a post
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
+        messageInput = view.findViewById(R.id.etNewPost);
+        createButton = view.findViewById(R.id.btCreatePost);
+
+        //displaying the posts
+        posts = new ArrayList<>();
+        postAdapter = new PostAdapter(posts);
+        rvPosts = view.findViewById(R.id.rvPostsFeed);
+
+        //RecyclerView setup (layout manager, use adapter)
+        rvPosts.setLayoutManager(new LinearLayoutManager(GroupFeedFragment.this.getContext()));
+        rvPosts.setAdapter(postAdapter);
+
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                PostAdapter adapter = new PostAdapter(posts);
+
+                adapter.clear();
+                loadTopPosts();
+                rvPosts.scrollToPosition(0);
+            }
+        });
+
         query.getInBackground(groupObjectId, new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
 
-                    //for testing sake
                     TextView name = (TextView) view.findViewById(R.id.tvGroupName);
                     name.setText(object.getString("groupName"));
 
@@ -182,7 +230,85 @@ public class GroupFeedFragment extends Fragment {
                     // something went wrong
                 }
             }
+
         });
+
+        loadTopPosts();
+
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String message = messageInput.getText().toString();
+                final ParseUser user = ParseUser.getCurrentUser();
+
+                createPost(message, user);
+
+//                final ParseFile parseFile = new ParseFile(textPost);
+                //debugger says that there's something wrong around here
+                //ParseObject Post that we created
+
+                //save file to parse
+                //this is code from Parsetagram, but probably don't need a Parsefile because we aren't posting with an image
+//                parseFile.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        if(e == null){
+//                            createPost(message, user);
+//                        }
+//                        else{
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                });
+            }
+        });
+
+
+    }
+
+    private void createPost(final String message, ParseUser user){    // +param -> Parsefile imageFile
+        final Post newPost = new Post();
+        newPost.setMessage(message);
+//        newPost.setImage(imageFile);          <== figure out image posting later
+        newPost.setUser(user);
+
+        newPost.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null) {
+                    Log.d("PostActivity", "Create post success!");
+                    Toast.makeText(GroupFeedFragment.this.getContext(), "Posted!", Toast.LENGTH_LONG).show();
+                    messageInput.setText("");
+                }
+                else{
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void loadTopPosts() {
+        final Post.Query postsQuery = new Post.Query();
+        postsQuery.getTop();       //<== this gets the post from a specific user. Won't cause harm, but don't need it rn
+        // ^ this line originally had ".withUser", so this should fix it
+
+        postsQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e == null) {
+
+                    posts.addAll(objects);
+                    postAdapter.notifyDataSetChanged();
+
+                    swipeContainer.setRefreshing(false);
+
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     private void takePhoto() {

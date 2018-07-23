@@ -117,7 +117,9 @@ public class LoginActivity extends AppCompatActivity {
                             final String userId = object.getString("id");
                             final String email = object.getString("email");
                             final String fullname = object.getString("name");
-                            loginOrSignup(userId, fullname, email, loginResult);
+                            final String propicUrl = object.getJSONObject("picture")
+                                    .getJSONObject("data").getString("url");
+                            loginOrSignup(userId, fullname, email, propicUrl, loginResult);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -126,14 +128,15 @@ public class LoginActivity extends AppCompatActivity {
 
         // execute request asynchronously
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email");
+        parameters.putString("fields", "id,name,email,picture.type(large)");
         meRequest.setParameters(parameters);
         meRequest.executeAsync();
 
         Toast.makeText(LoginActivity.this, "Logging you in...", Toast.LENGTH_LONG).show();
     }
 
-    private void loginOrSignup(final String userId, final String fullname, final String email, final LoginResult loginResult) {
+    private void loginOrSignup(final String userId, final String fullname, final String email,
+                               final String propicUrl, final LoginResult loginResult) {
         ParseUser.logInInBackground(userId, userId, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -150,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                     parseUser.setPassword(userId);
                     parseUser.put("fullName", fullname);
                     parseUser.setEmail(email);
+                    parseUser.put("propicUrl", propicUrl);
                     // Invoke signUpInBackground
                     parseUser.signUpInBackground(new SignUpCallback() {
                         public void done(ParseException e) {
