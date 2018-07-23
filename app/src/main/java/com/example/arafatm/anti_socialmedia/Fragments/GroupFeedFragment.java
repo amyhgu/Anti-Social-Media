@@ -191,11 +191,7 @@ public class GroupFeedFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                PostAdapter adapter = new PostAdapter(posts);
-
-                adapter.clear();
-                loadTopPosts();
-                rvPosts.scrollToPosition(0);
+                refreshFeed();
             }
         });
 
@@ -280,6 +276,7 @@ public class GroupFeedFragment extends Fragment {
                     Log.d("PostActivity", "Create post success!");
                     Toast.makeText(GroupFeedFragment.this.getContext(), "Posted!", Toast.LENGTH_LONG).show();
                     messageInput.setText("");
+                    refreshFeed();
                 }
                 else{
                     e.printStackTrace();
@@ -309,6 +306,14 @@ public class GroupFeedFragment extends Fragment {
             }
         });
 
+    }
+
+    private void refreshFeed(){
+        PostAdapter adapter = new PostAdapter(posts);
+
+        adapter.clear();
+        loadTopPosts();
+        rvPosts.scrollToPosition(0);
     }
 
     private void takePhoto() {

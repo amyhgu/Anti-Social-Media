@@ -6,24 +6,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.arafatm.anti_socialmedia.Authentification.SignupActivity;
 import com.example.arafatm.anti_socialmedia.Home.MainActivity;
-import com.example.arafatm.anti_socialmedia.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
-import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -33,11 +31,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
-    LoginButton loginButton;
+    private EditText usernameInput;
+    private EditText passwordInput;
+    private Button parseLoginButton;
+    private LoginButton loginButton;
     private Button signupButton;
 
     @Override
@@ -49,7 +49,23 @@ public class LoginActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
 
-        loginButton = (LoginButton) findViewById(R.id.login_button);
+        usernameInput = findViewById(R.id.etUsername);
+        passwordInput = findViewById(R.id.etPassword);
+        parseLoginButton = findViewById(R.id.btLogin);
+        loginButton =  findViewById(R.id.login_button);
+        signupButton = findViewById(R.id.btSwitchToSignup);
+
+        // Login via Parse
+        parseLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String username = usernameInput.getText().toString();
+                final String password = passwordInput.getText().toString();
+
+                loginParse(username, password);
+            }
+        });
+
         loginButton.setReadPermissions(Arrays.asList(
                 "user_friends", "public_profile", "email"));
         // If you are using in a fragment, call loginButton.setFragment(this);
@@ -73,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        signupButton = findViewById(R.id.btSwitchToSignup);
         signupButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -81,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
 
     }
@@ -102,6 +118,26 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(i);
             finish();
         }
+    }
+
+    private void loginParse(String username, String password){
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if(e == null ){          //if there's no errors
+                    Log.d("LoginActivity", "Login successful!");
+
+                    final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Unsuccessful", Toast.LENGTH_LONG).show();
+                    Log.e("LoginActivity", "Login failure.");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void requestFBInfo(final LoginResult loginResult) {
