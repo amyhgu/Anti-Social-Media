@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.arafatm.anti_socialmedia.R;
+import com.facebook.Profile;
 import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.GroupAdapter;
@@ -31,6 +34,7 @@ public class ProfileFragment extends Fragment {
     private ParseUser user;
     private ImageView ivPropic;
     private TextView tvFullName;
+    private Context mContext;
     private GridView profileGroups;
     private String mParam1;
     GroupAdapter groupAdapter;
@@ -57,6 +61,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext = context;
     }
 
     @Override
@@ -78,12 +83,16 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ivPropic = view.findViewById(R.id.ivPropic);
         tvFullName = view.findViewById(R.id.tvFullName);
+        tvFullName.setText(user.getString("fullName"));
+
+        ivPropic = view.findViewById(R.id.ivPropic);
+        String propicUrl = user.getString("propicUrl");
+        propicUrl = (propicUrl == null) ? user.getParseFile("profileImage").getUrl() : propicUrl;
+        Glide.with(mContext).load(propicUrl).into(ivPropic);
+
         profileGroups = view.findViewById(R.id.gvProfileGroups);
         groupList = new ArrayList<>();
-
-        tvFullName.setText(user.getString("fullName"));
 
         //loadAllGroups method from GroupManagerFragment
         final Group.Query postQuery = new Group.Query();
