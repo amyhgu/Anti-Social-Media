@@ -35,12 +35,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -71,11 +70,11 @@ public class GroupFeedFragment extends Fragment {
     //posts
 
     //for posting
-    private EditText messageInput;
-    private Button createButton;
     PostAdapter postAdapter;
     ArrayList<Post> posts;
     RecyclerView rvPosts;
+    private EditText messageInput;
+    private Button createButton;
     private SwipeRefreshLayout swipeContainer;
 
     //list of users
@@ -105,6 +104,17 @@ public class GroupFeedFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -128,29 +138,13 @@ public class GroupFeedFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_group_feed, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    // TODO: Rename method, update argument and hook method into UI event
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+//    }                                             //TODO: question- do we need this?
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -172,6 +166,7 @@ public class GroupFeedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //creating a post
+        final ParseUser postUser = ParseUser.getCurrentUser();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
         messageInput = view.findViewById(R.id.etNewPost);
         createButton = view.findViewById(R.id.btCreatePost);
@@ -185,9 +180,8 @@ public class GroupFeedFragment extends Fragment {
         rvPosts.setLayoutManager(new LinearLayoutManager(GroupFeedFragment.this.getContext()));
         rvPosts.setAdapter(postAdapter);
 
-        // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -235,9 +229,8 @@ public class GroupFeedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 final String message = messageInput.getText().toString();
-                final ParseUser user = ParseUser.getCurrentUser();
 
-                createPost(message, user);
+                createPost(message, postUser);
 
 //                final ParseFile parseFile = new ParseFile(textPost);
                 //debugger says that there's something wrong around here
@@ -260,14 +253,19 @@ public class GroupFeedFragment extends Fragment {
             }
         });
 
-
     }
 
-    private void createPost(final String message, ParseUser user){    // +param -> Parsefile imageFile
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    private void createPost(final String message, ParseUser creator){    // +param -> Parsefile imageFile
         final Post newPost = new Post();
         newPost.setMessage(message);
+        newPost.setUser(creator);
 //        newPost.setImage(imageFile);          <== figure out image posting later
-        newPost.setUser(user);
 
         newPost.saveInBackground(new SaveCallback() {
             @Override
