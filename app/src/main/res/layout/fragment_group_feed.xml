@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/groupFeedFragment"
+    tools:context=".Fragments.GroupFeedFragment">
+
+    <ImageView
+        android:id="@+id/ivCoverPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@color/solid_white" />
+
+    <TextView
+        android:id="@+id/tvGroupName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivCoverPhoto"
+        android:layout_alignParentStart="true"
+        android:text="Group Name"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/etNewPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ivCoverPhoto"
+        android:ems="10"
+        android:hint="What's been happening?"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btAddPostImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etNewPost"
+        android:text="Add Image" />
+
+    <Button
+        android:id="@+id/btShareFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etNewPost"
+        android:layout_centerHorizontal="true"
+        android:text="Share From..." />
+
+    <Button
+        android:id="@+id/btCreatePost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/etNewPost"
+        android:text="Create Post" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btAddPostImage"  />
+
+</RelativeLayout>
