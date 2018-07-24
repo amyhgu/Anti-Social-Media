@@ -11,4 +11,11 @@
         android:layout_height="match_parent"
         android:text="HELLO!, I AM YOUR CHAT FRAGMENT" />
 
+    <RelativeLayout
+        android:id="@+id/layout_child_activity"
+        android:background="@color/conversation_list_all_background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left|top" />
+
 </FrameLayout>

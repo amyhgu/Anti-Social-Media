@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.applozic.mobicomkit.api.conversation.MessageIntentService;
@@ -45,6 +49,7 @@ public class ConversationFragment extends MobiComConversationFragment implements
     private List<String> attachmentKey = new ArrayList<>();
     private List<String> attachmentText = new ArrayList<>();
     private List<String> attachmentIcon = new ArrayList<>();
+    ImageButton fabButton;
 
     public static ConversationFragment newInstance(Contact contact, Channel channel, Integer conversationId, String searchString) {
         ConversationFragment f = new ConversationFragment();
@@ -97,6 +102,8 @@ public class ConversationFragment extends MobiComConversationFragment implements
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
         populateAttachmentOptions();
+        fabButton = view.findViewById(R.id.fab_start_new);
+        fabButton.setVisibility(View.GONE);
 
         if (alCustomizationSettings.isHideAttachmentButton()) {
 
@@ -157,6 +164,11 @@ public class ConversationFragment extends MobiComConversationFragment implements
             }
         });
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.mobicom_basic_menu_for_normal_message, menu);
     }
 
     @Override

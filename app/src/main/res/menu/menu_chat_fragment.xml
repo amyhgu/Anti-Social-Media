@@ -31,7 +31,7 @@
         android:orderInCategory="3"
         android:showAsAction="ifRoom|collapseActionView"
         android:title="@string/start_New"
-        android:visible="false"
+        android:visible="true"
         mobicomkit:showAsAction="ifRoom|collapseActionView" />
 
     <item
@@ -40,7 +40,7 @@
         android:orderInCategory="4"
         android:showAsAction="ifRoom|collapseActionView"
         android:title="@string/dial"
-        android:visible="false"
+        android:visible="true"
         mobicomkit:showAsAction="ifRoom|collapseActionView" />
 
     <item

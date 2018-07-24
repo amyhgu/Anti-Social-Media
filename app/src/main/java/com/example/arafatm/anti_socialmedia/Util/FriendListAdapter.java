@@ -94,7 +94,7 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
             public void onClick(View view) {
                 ProfileFragment profileFragment = ProfileFragment.newInstance(friend);
                 ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, profileFragment)
+                        .replace(R.id.layout_child_activity, profileFragment)
                         .commit();
             }
         });
