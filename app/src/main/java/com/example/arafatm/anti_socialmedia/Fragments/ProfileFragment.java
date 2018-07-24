@@ -1,7 +1,6 @@
 package com.example.arafatm.anti_socialmedia.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -39,13 +38,11 @@ public class ProfileFragment extends Fragment {
     ArrayList<ParseObject> groupList;
 
     private static final String ARG_PARAM1 = "param1";
-    private GroupManagerFragment.OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;
 
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void navigate_to_fragment(Fragment fragment);
     }
 
     public static ProfileFragment newInstance(ParseUser user) {
@@ -92,6 +89,17 @@ public class ProfileFragment extends Fragment {
         profileGroups = view.findViewById(R.id.gvProfileGroups);
         groupList = new ArrayList<>();
 
+        loadAllGroups(view, profileGroups);
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    private void loadAllGroups(final View view, final GridView profileGroups){
         //loadAllGroups method from GroupManagerFragment
         final Group.Query postQuery = new Group.Query();
         postQuery.findInBackground(new FindCallback<Group>() {
@@ -111,6 +119,7 @@ public class ProfileFragment extends Fragment {
                                     Toast.LENGTH_SHORT).show();
                             Fragment fragment = new GroupFeedFragment();
                             Bundle args = new Bundle();
+
                             ParseObject selectedGroup = groupList.get(position);
                             args.putString(ARG_PARAM1,selectedGroup.getObjectId()); //pass group objectId
                             fragment.setArguments(args);
@@ -125,7 +134,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
     }
 
     /*this initializes the adapter, and pass the groupList into it and navigates to GroupFeed fragment*/

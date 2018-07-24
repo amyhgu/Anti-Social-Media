@@ -6,8 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseException;
@@ -22,6 +24,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     public PostAdapter(List<Post> posts){
         mPosts = posts;
+    }
+
+    //create ViewHolder class
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView tvFullName;
+        public TextView tvPostText;
+        public ImageView ivPostPic;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            //perform findViewBtId lookups
+            tvFullName = (TextView) itemView.findViewById(R.id.tvFullNameFeed);
+            tvPostText = (TextView) itemView.findViewById(R.id.tvPostBody);
+            ivPostPic = (ImageView) itemView.findViewById(R.id.ivProPicPost);
+
+        }
     }
 
     @NonNull
@@ -39,10 +58,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder viewHolder, int position) {
         // get the data according to this position
         Post post = mPosts.get(position);
-
-        // not a default function for "fullName"
-        String fullname = "something";
-
         ParseUser sender1 = null;
 
         //added this because debugger asked us to
@@ -52,15 +67,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             e.printStackTrace();
         }
 
-        String sender = sender1.getString("fullName");
         String message = post.getMessage();
+        String sender = sender1.getString("fullName");
+        String propicUrl = sender1.getString("propicUrl");
 
-        //populate the views according to this (user name and body)
+        //populate the views according to this (username, body, profile picture)
         viewHolder.tvPostText.setText(message);
         viewHolder.tvFullName.setText(sender);
 
-
-//        Glide.with(context).load(post.getImage().getUrl()).into(viewHolder.ivPost); <== for image
+        //profile picture
+        if ((propicUrl != null) && (propicUrl != "")) {
+            Glide.with(context).load(propicUrl).into(viewHolder.ivPostPic);
+        }
     }
 
     @Override
@@ -68,20 +86,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         return mPosts.size();
     }
 
-    //create ViewHolder class
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvFullName;
-        public TextView tvPostText;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            //perform findViewBtId lookups
-            tvFullName = (TextView) itemView.findViewById(R.id.tvFullNameFeed);
-            tvPostText = (TextView) itemView.findViewById(R.id.tvPostBody);
-
-        }
-     }
 
     // Clean all elements of the recycler
     public void clear() {
