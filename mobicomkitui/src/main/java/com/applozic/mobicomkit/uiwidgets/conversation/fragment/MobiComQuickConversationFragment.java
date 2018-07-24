@@ -181,7 +181,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
 
         //startNewButton = (Button) spinnerLayout.findViewById(R.id.start_new_conversation);
 
-        fabButton.setVisibility(alCustomizationSettings.isStartNewFloatingButton() ? View.VISIBLE : View.GONE);
+        fabButton.setVisibility(alCustomizationSettings.isStartNewFloatingButton() ? View.VISIBLE : View.VISIBLE);
 
         swipeLayout = (SwipeRefreshLayout) list.findViewById(R.id.swipe_container);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
