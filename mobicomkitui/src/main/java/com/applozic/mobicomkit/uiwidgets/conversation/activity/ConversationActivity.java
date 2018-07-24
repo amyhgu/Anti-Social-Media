@@ -344,7 +344,6 @@ public class ConversationActivity extends AppCompatActivity implements MessageCo
         setContentView(R.layout.quickconversion_activity);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-//        MobiComQuickConversationFragment.hideFabButton();
         baseContactService = new AppContactService(this);
         conversationUIService = new ConversationUIService(this);
         mobiComMessageService = new MobiComMessageService(this, MessageIntentService.class);

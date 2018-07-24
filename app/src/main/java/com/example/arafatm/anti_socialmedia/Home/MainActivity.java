@@ -24,6 +24,7 @@ import com.applozic.mobicomkit.api.account.user.User;
 import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.api.conversation.ApplozicMqttIntentService;
 import com.applozic.mobicomkit.api.conversation.Message;
+import com.applozic.mobicomkit.api.conversation.MobiComConversationService;
 import com.applozic.mobicomkit.api.people.UserIntentService;
 import com.applozic.mobicomkit.broadcast.BroadcastService;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
@@ -48,7 +49,7 @@ import com.parse.ParseUser;
 
 
 public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
-        GroupManagerFragment.OnFragmentInteractionListener,
+        GroupManagerFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         StoryFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
         GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface {
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                                 return true;
                             case R.id.ic_story:
                                 FragmentTransaction fragmentTransactionThree = fragmentManager.beginTransaction();
-                                fragmentTransactionThree.replace(R.id.layout_child_activity, gameFragment).commit();
+                                fragmentTransactionThree.replace(R.id.layout_child_activity, storyFragement).commit();
                                 return true;
                             case R.id.ic_menu_thin:
                                 FragmentTransaction fragmentTransactionFour = fragmentManager.beginTransaction();
@@ -176,6 +177,11 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         fragmentTransaction.replace(R.id.layout_child_activity, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    public void startChat(String contactName, String message) {
+        new MobiComConversationService(this).sendMessage(new Message(contactName, message));
+
     }
 
     /* From Chat Fragment tutorial */

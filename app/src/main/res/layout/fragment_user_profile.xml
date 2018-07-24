@@ -27,14 +27,43 @@
     <GridView
         android:id="@+id/gvProfileGroups"
         android:layout_width="match_parent"
-        android:layout_height="504dp"
-        android:layout_marginTop="193dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ivStartChat"
         android:columnWidth="90dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />
+
+    <ImageView
+        android:id="@+id/ivCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvFullName"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        app:srcCompat="@drawable/applozic_ic_action_call_holo_light" />
+
+    <ImageView
+        android:id="@+id/ivStartChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvFullName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        app:srcCompat="@drawable/ic_chat_filled" />
+
+    <ImageView
+        android:id="@+id/ivThreeDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tvFullName"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="30dp"
+        app:srcCompat="@drawable/ic_three_dots" />
 
 
 </RelativeLayout>
