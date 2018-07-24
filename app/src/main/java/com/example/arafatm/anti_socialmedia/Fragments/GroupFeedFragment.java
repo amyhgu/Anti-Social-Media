@@ -63,8 +63,12 @@ public class GroupFeedFragment extends Fragment {
     private String mParam2;
     private String groupObjectId;
 
-    private EditText groupName;
-    private ImageView groupPic;
+    private String groupName;
+    private int groupId;
+
+    private TextView tvGroupName;
+    private ImageView ivGroupPic;
+    private ImageView ivStartChat;
     private File photoFile;
     public String photoFileName = "photo.jpg";
 
@@ -86,6 +90,12 @@ public class GroupFeedFragment extends Fragment {
 
     public GroupFeedFragment() {
         // Required empty public constructor
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void navigate_to_fragment(Fragment fragment);
+        void startGroupChat(int groupId, String groupName);
     }
 
     /**
@@ -141,29 +151,6 @@ public class GroupFeedFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_group_feed, container, false);
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }                                             //TODO: question- do we need this?
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -173,6 +160,7 @@ public class GroupFeedFragment extends Fragment {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
         messageInput = view.findViewById(R.id.etNewPost);
         createButton = view.findViewById(R.id.btCreatePost);
+        ivStartChat = view.findViewById(R.id.ivStartChat);
 
         //displaying the posts
         posts = new ArrayList<>();
@@ -197,17 +185,20 @@ public class GroupFeedFragment extends Fragment {
                 if (e == null) {
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
 
-                    TextView name = (TextView) view.findViewById(R.id.tvGroupName);
-                    name.setText(object.getString("groupName"));
+                    tvGroupName = (TextView) view.findViewById(R.id.tvGroupName);
+                    groupName = object.getString("groupName");
+                    tvGroupName.setText(groupName);
+                    groupId = convert(object.getObjectId());
+                    Log.d("weird", Integer.toString(groupId));
 
-                    ImageView profile = (ImageView) view.findViewById(R.id.ivCoverPhoto);
+                    ivGroupPic = (ImageView) view.findViewById(R.id.ivCoverPhoto);
                     ParseFile groupImage = object.getParseFile("groupImage");
 
                     if (groupImage != null) {
                         /*shows group image on gridView*/
                         Glide.with(getContext())
                                 .load(groupImage.getUrl())
-                                .into(profile);
+                                .into(ivGroupPic);
                     }
 
                     Button button = (Button) view.findViewById(R.id.btAddPostImage);
@@ -253,6 +244,13 @@ public class GroupFeedFragment extends Fragment {
 //                    }
 //
 //                });
+            }
+        });
+
+        ivStartChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.startGroupChat(groupId, groupName);
             }
         });
 
@@ -395,5 +393,25 @@ public class GroupFeedFragment extends Fragment {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    // for converting group objectId to integer (used for chat channel ID)
+    private static final String CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    private static int convertChar(char c) {
+        int ret = CHARS.indexOf( c );
+        if (ret == -1)
+            throw new IllegalArgumentException( "Invalid character encountered: "+c);
+        return ret;
+    }
+
+    public static int convert(String s) {
+        if (s.length() != 10)
+            throw new IllegalArgumentException( "String length must be 10, was "+s.length() );
+        int ret = 0;
+        for (int i = 0; i < s.length(); i++) {
+            ret = (ret << 6) + convertChar( s.charAt( i ));
+        }
+        return ret;
     }
 }

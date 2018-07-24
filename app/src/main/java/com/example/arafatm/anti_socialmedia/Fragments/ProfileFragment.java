@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.applozic.mobicomkit.api.conversation.MobiComConversationService;
 import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
@@ -45,7 +44,7 @@ public class ProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void navigate_to_fragment(Fragment fragment);
-        void startChat(String contactName, String message);
+        void startUserChat(String contactName, String message);
     }
 
     public static ProfileFragment newInstance(ParseUser user) {
@@ -104,7 +103,7 @@ public class ProfileFragment extends Fragment {
         ivStartChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.startChat(user.getString("fullName"), "testing");
+                mListener.startUserChat(user.getString("fullName"), "testing");
             }
         });
 

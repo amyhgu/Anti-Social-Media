@@ -179,11 +179,19 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         fragmentTransaction.commit();
     }
 
-    public void startChat(String contactName, String message) {
+    public void startUserChat(String contactName, String message) {
         Intent intent = new Intent(this, ConversationActivity.class);
         intent.putExtra(ConversationUIService.USER_ID, contactName);
         intent.putExtra(ConversationUIService.TAKE_ORDER, true);
         intent.putExtra(ConversationUIService.DISPLAY_NAME, contactName);
+        startActivity(intent);
+    }
+
+    public void startGroupChat(int channelId, String groupName) {
+        Intent intent = new Intent(this, ConversationActivity.class);
+        intent.putExtra(ConversationUIService.GROUP_ID, channelId);
+        intent.putExtra(ConversationUIService.TAKE_ORDER, true);
+        intent.putExtra(ConversationUIService.GROUP_NAME, groupName);
         startActivity(intent);
     }
 
