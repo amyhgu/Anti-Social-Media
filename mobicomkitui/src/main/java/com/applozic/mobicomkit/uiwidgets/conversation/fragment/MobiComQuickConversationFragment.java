@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,7 +66,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
 
     public static final String QUICK_CONVERSATION_EVENT = "quick_conversation";
     protected RecyclerView recyclerView = null;
-    protected ImageButton fabButton;
+    protected static ImageButton fabButton;
     protected TextView emptyTextView;
     protected Button startNewButton;
     protected SwipeRefreshLayout swipeLayout;
@@ -103,6 +104,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("weird", "Mobi create");
         String jsonString = FileUtils.loadSettingsJsonFile(getActivity().getApplicationContext());
         if (!TextUtils.isEmpty(jsonString)) {
             alCustomizationSettings = (AlCustomizationSettings) GsonUtils.getObjectFromJson(jsonString, AlCustomizationSettings.class);
@@ -181,7 +183,8 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
 
         //startNewButton = (Button) spinnerLayout.findViewById(R.id.start_new_conversation);
 
-        fabButton.setVisibility(alCustomizationSettings.isStartNewFloatingButton() ? View.VISIBLE : View.VISIBLE);
+//        fabButton.setVisibility(alCustomizationSettings.isStartNewFloatingButton() ? View.VISIBLE : View.VISIBLE);
+        fabButton.setVisibility(View.VISIBLE);
 
         swipeLayout = (SwipeRefreshLayout) list.findViewById(R.id.swipe_container);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
@@ -202,6 +205,10 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
                 ((MobiComKitActivityInterface) getActivity()).startContactActivityForResult();
             }
         };
+    }
+
+    public static void hideFabButton() {
+        fabButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -507,7 +514,8 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     @Override
     public void onPause() {
         super.onPause();
-//        toolbar.setVisibility(View.GONE);
+        fabButton.setVisibility(View.GONE);
+        Log.d("weird", "Mobi pause");
         listIndex = linearLayoutManager.findFirstVisibleItemPosition();
         BroadcastService.currentUserId = null;
         if (recyclerView != null) {
@@ -524,7 +532,8 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
         //Assigning to avoid notification in case if quick conversation fragment is opened....
 //        toolbar.setTitle(getResources().getString(R.string.chats));
 //        toolbar.setSubtitle("");
-//        toolbar.setVisibility(View.VISIBLE);
+        fabButton.setVisibility(View.VISIBLE);
+        Log.d("weird", "Mobi Resume");
         BroadcastService.selectMobiComKitAll();
         super.onResume();
         if (recyclerView != null) {

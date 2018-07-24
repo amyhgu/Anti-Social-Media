@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.applozic.mobicomkit.api.conversation.MessageIntentService;
@@ -48,6 +49,7 @@ public class ConversationFragment extends MobiComConversationFragment implements
     private List<String> attachmentKey = new ArrayList<>();
     private List<String> attachmentText = new ArrayList<>();
     private List<String> attachmentIcon = new ArrayList<>();
+    ImageButton fabButton;
 
     public static ConversationFragment newInstance(Contact contact, Channel channel, Integer conversationId, String searchString) {
         ConversationFragment f = new ConversationFragment();
@@ -100,6 +102,8 @@ public class ConversationFragment extends MobiComConversationFragment implements
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
         populateAttachmentOptions();
+        fabButton = view.findViewById(R.id.fab_start_new);
+        fabButton.setVisibility(View.GONE);
 
         if (alCustomizationSettings.isHideAttachmentButton()) {
 
