@@ -17,7 +17,7 @@ import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
-import com.example.arafatm.anti_socialmedia.Fragments.GameFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.StoryFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
@@ -29,7 +29,7 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
         GroupManagerFragment.OnFragmentInteractionListener,
-        GameFragment.OnFragmentInteractionListener,
+        StoryFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
         GroupFeedFragment.OnFragmentInteractionListener {
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
 
         final Fragment chatFragment = new ChatFragment();
         final Fragment groupFragment = new GroupManagerFragment();
-        final Fragment gameFragment = new GameFragment();
+        final Fragment storyFragement = new StoryFragment();
         final Fragment settingsFragment = new SettingsFragment();
 
         // handle navigation selection to various fragments
@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                                 FragmentTransaction fragmentTransactionTwo = fragmentManager.beginTransaction();
                                 fragmentTransactionTwo.replace(R.id.fragment_container, groupFragment).commit();
                                 return true;
-                            case R.id.ic_game_empty:
+                            case R.id.ic_story:
                                 FragmentTransaction fragmentTransactionThree = fragmentManager.beginTransaction();
-                                fragmentTransactionThree.replace(R.id.fragment_container, gameFragment).commit();
+                                fragmentTransactionThree.replace(R.id.fragment_container, storyFragement).commit();
                                 return true;
                             case R.id.ic_menu_thin:
                                 FragmentTransaction fragmentTransactionFour = fragmentManager.beginTransaction();

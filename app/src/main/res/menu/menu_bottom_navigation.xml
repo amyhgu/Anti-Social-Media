@@ -14,9 +14,9 @@
         android:icon="@drawable/ic_group_empty"
         android:title="" />
     <item
-        android:id="@+id/ic_game_empty"
+        android:id="@+id/ic_story"
         android:enabled="true"
-        android:icon="@drawable/ic_game_empty"
+        android:icon="@drawable/ic_action_story"
         android:title=""
         app:showAsAction="ifRoom" />
     <item
