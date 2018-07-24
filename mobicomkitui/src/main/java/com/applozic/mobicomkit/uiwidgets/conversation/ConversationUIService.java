@@ -72,7 +72,7 @@ public class ConversationUIService {
 
     public static final int REQUEST_CODE_CONTACT_GROUP_SELECTION = 1011;
     public static final String CONVERSATION_FRAGMENT = "ConversationFragment";
-    public static final String MESSGAE_INFO_FRAGMENT = "messageInfoFagment";
+    public static final String MESSAGE_INFO_FRAGMENT = "messageInfoFagment";
     public static final String USER_PROFILE_FRAMENT = "userProfilefragment";
     public static final String PARENT_CLIENT_GROUP_ID = "parentClientGroupId";
     public static final String PARENT_GROUP_KEY = "parentGroupKey";
@@ -112,6 +112,8 @@ public class ConversationUIService {
     private TopicDetail topicDetailsParcelable;
     private Contact contact;
     private NotificationManager notificationManager;
+    MobiComQuickConversationFragment mobiComQuickConversationFragment;
+
 
     public ConversationUIService(FragmentActivity fragmentActivity) {
         this.fragmentActivity = fragmentActivity;
@@ -121,15 +123,27 @@ public class ConversationUIService {
         this.fileClientService = new FileClientService(fragmentActivity);
     }
 
+    public ConversationUIService(FragmentActivity fragmentActivity,MobiComQuickConversationFragment mobiComQuickConversationFragment) {
+        this.fragmentActivity = fragmentActivity;
+        this.mobiComQuickConversationFragment = mobiComQuickConversationFragment;
+        this.baseContactService = new AppContactService(fragmentActivity);
+        this.notificationManager  = (NotificationManager) fragmentActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+        this.userPreference = MobiComUserPreference.getInstance(fragmentActivity);
+    }
+
+//    public MobiComQuickConversationFragment getQuickConversationFragment() {
+//
+//        MobiComQuickConversationFragment quickConversationFragment = (MobiComQuickConversationFragment) UIService.getFragmentByTag(fragmentActivity, QUICK_CONVERSATION_FRAGMENT);
+//
+//        if (quickConversationFragment == null) {
+//            quickConversationFragment = new MobiComQuickConversationFragment();
+//            ConversationActivity.addFragment(fragmentActivity, quickConversationFragment, QUICK_CONVERSATION_FRAGMENT);
+//        }
+//        return quickConversationFragment;
+//    }
+
     public MobiComQuickConversationFragment getQuickConversationFragment() {
-
-        MobiComQuickConversationFragment quickConversationFragment = (MobiComQuickConversationFragment) UIService.getFragmentByTag(fragmentActivity, QUICK_CONVERSATION_FRAGMENT);
-
-        if (quickConversationFragment == null) {
-            quickConversationFragment = new MobiComQuickConversationFragment();
-            ConversationActivity.addFragment(fragmentActivity, quickConversationFragment, QUICK_CONVERSATION_FRAGMENT);
-        }
-        return quickConversationFragment;
+        return mobiComQuickConversationFragment;
     }
 
     public ConversationFragment getConversationFragment() {
@@ -162,7 +176,7 @@ public class ConversationUIService {
                     ((MobiComKitActivityInterface) fragmentActivity).addFragment(conversationFragment);
                 } else {
                     UserProfileFragment userProfileFragment = (UserProfileFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.USER_PROFILE_FRAMENT);
-                    MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.MESSGAE_INFO_FRAGMENT);
+                    MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.MESSAGE_INFO_FRAGMENT);
                     if (userProfileFragment != null || messageInfoFragment != null) {
                         if (fragmentActivity.getSupportFragmentManager() != null) {
                             fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
@@ -184,7 +198,7 @@ public class ConversationUIService {
                     ((MobiComKitActivityInterface) fragmentActivity).addFragment(conversationFragment);
                 } else {
                     UserProfileFragment userProfileFragment = (UserProfileFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.USER_PROFILE_FRAMENT);
-                    MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.MESSGAE_INFO_FRAGMENT);
+                    MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, ConversationUIService.MESSAGE_INFO_FRAGMENT);
                     if (userProfileFragment != null || messageInfoFragment != null) {
                         if (fragmentActivity.getSupportFragmentManager() != null) {
                             fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
@@ -421,18 +435,34 @@ public class ConversationUIService {
         }
     }
 
+//    public void addMessage(Message message) {
+//        if (message.isUpdateMessage()) {
+//            if (!BroadcastService.isQuick()) {
+//                return;
+//            }
+//
+//            MobiComQuickConversationFragment fragment = (MobiComQuickConversationFragment) UIService.getFragmentByTag(fragmentActivity, QUICK_CONVERSATION_FRAGMENT);
+//            if (fragment != null) {
+//                if (message.isHidden()) {
+//                    fragment.refreshView();
+//                } else {
+//                    fragment.addMessage(message);
+//                }
+//            }
+//        }
+//    }
+
     public void addMessage(Message message) {
         if (message.isUpdateMessage()) {
             if (!BroadcastService.isQuick()) {
                 return;
             }
 
-            MobiComQuickConversationFragment fragment = (MobiComQuickConversationFragment) UIService.getFragmentByTag(fragmentActivity, QUICK_CONVERSATION_FRAGMENT);
-            if (fragment != null) {
-                if (message.isHidden()) {
-                    fragment.refreshView();
-                } else {
-                    fragment.addMessage(message);
+            if (mobiComQuickConversationFragment != null) {
+                if(message.isHidden()){
+                    mobiComQuickConversationFragment.refreshView();
+                }else {
+                    mobiComQuickConversationFragment.addMessage(message);
                 }
             }
         }
@@ -789,13 +819,13 @@ public class ConversationUIService {
 
     public void startMessageInfoFragment(String messageJson) {
 
-        MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, MESSGAE_INFO_FRAGMENT);
+        MessageInfoFragment messageInfoFragment = (MessageInfoFragment) UIService.getFragmentByTag(fragmentActivity, MESSAGE_INFO_FRAGMENT);
         if (messageInfoFragment == null) {
             messageInfoFragment = new MessageInfoFragment();
             Bundle bundle = new Bundle();
             bundle.putString(MessageInfoFragment.MESSAGE_ARGUMENT_KEY, messageJson);
             messageInfoFragment.setArguments(bundle);
-            ConversationActivity.addFragment(fragmentActivity, messageInfoFragment, MESSGAE_INFO_FRAGMENT);
+            ConversationActivity.addFragment(fragmentActivity, messageInfoFragment, MESSAGE_INFO_FRAGMENT);
         }
     }
 

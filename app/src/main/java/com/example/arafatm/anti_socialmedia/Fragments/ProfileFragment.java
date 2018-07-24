@@ -124,6 +124,7 @@ public class ProfileFragment extends Fragment {
                             args.putString(ARG_PARAM1,selectedGroup.getObjectId()); //pass group objectId
                             fragment.setArguments(args);
 
+                            // TODO: Figure out a way to pass the selected group to the next fragment (feed)
                             /*Navigates to the groupFeedFragment*/
                             mListener.navigate_to_fragment(fragment);
                         }
