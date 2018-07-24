@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -135,7 +136,9 @@ public class StoryFragment extends Fragment {
         mainView = view;
         ImageView startCapturing = (ImageView) view.findViewById(R.id.iv_startCapture);
         ImageView nextStory = (ImageView) view.findViewById(R.id.iv_next);
-        ImageView prevStory = (ImageView) view.findViewById(R.id.ivPrev);
+        ImageView prevStory = (ImageView) view.findViewById(R.id.iv_prev);
+        VideoView videoView = view.findViewById(R.id.vv_story);
+
 
         startCapturing.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +154,6 @@ public class StoryFragment extends Fragment {
                 Toast.makeText(getContext(), "Next story", Toast.LENGTH_LONG).show();
 
 
-
             }
         });
 
@@ -161,7 +163,19 @@ public class StoryFragment extends Fragment {
                 Toast.makeText(getContext(), "Previous story", Toast.LENGTH_LONG).show();
             }
         });
+
+        videoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Toast.makeText(getContext(), "story on hold", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+        });
     }
+
+
+
 
     public void startRecordingVideo() {
         if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
@@ -180,8 +194,8 @@ public class StoryFragment extends Fragment {
         if (requestCode == VIDEO_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(getContext(), "Video has been saved to:\n" + data.getData(), Toast.LENGTH_LONG).show();
-                saveVideo(data);
-                playbackRecordedVideo();
+              //  saveVideo(data);
+             //   playbackRecordedVideo();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(getContext(), "Video recording cancelled.", Toast.LENGTH_LONG).show();
             } else {

@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.arafatm.anti_socialmedia.LoginActivity;
+import com.example.arafatm.anti_socialmedia.Authentification.LoginActivity;
 import com.example.arafatm.anti_socialmedia.R;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;

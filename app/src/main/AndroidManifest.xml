@@ -67,7 +67,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".Authentification.LoginActivity"></activity>
 
         <!-- for fcm push notifications - START -->
 

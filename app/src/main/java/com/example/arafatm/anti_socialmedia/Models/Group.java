@@ -32,16 +32,6 @@ public class Group extends ParseObject {
         put(KEY_IMAGE, image);
     }
 
-    public List<ParseFile> getStories() {
-        return getList(KEY_STORIES);
-    }
-
-    public void addGroupStory(ParseFile story) {
-        List<ParseFile> stories = getList(KEY_STORIES);
-        stories.add(story);
-        put(KEY_STORIES, story);
-    }
-
     //gets list all users
     public List<ParseUser> getUsers() { return getList(KEY_USERS);
     }

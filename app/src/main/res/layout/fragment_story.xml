@@ -14,7 +14,9 @@
     <VideoView
         android:id="@+id/vv_story"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <ImageView
         android:id="@+id/iv_startCapture"
@@ -29,22 +31,19 @@
 
     <ImageView
         android:id="@+id/iv_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="46dp"
+        android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:clickable="true"
-        android:src="@drawable/ic_action_next"
-        android:tint="@color/gray" />
+        android:layout_alignParentTop="true"
+        />
 
     <ImageView
-        android:id="@+id/ivPrev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/iv_prev"
+        android:layout_width="46dp"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/iv_next"
-        android:clickable="true"
-        android:src="@drawable/ic_action_prev"
-        android:tint="@color/gray" />
+        android:layout_alignParentTop="true"
+       />
+
 
 </RelativeLayout>
