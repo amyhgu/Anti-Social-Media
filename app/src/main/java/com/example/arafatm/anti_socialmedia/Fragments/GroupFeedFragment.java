@@ -35,12 +35,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -68,6 +67,9 @@ public class GroupFeedFragment extends Fragment {
     private ImageView groupPic;
     private File photoFile;
     public String photoFileName = "photo.jpg";
+
+    public final String APP_TAG = "MyCustomApp";
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     //posts
 
     //for posting
@@ -221,8 +223,8 @@ public class GroupFeedFragment extends Fragment {
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //uploadImage();
-                           // takePhoto();
+                            uploadImage();
+                            //takePhoto();
                         }
                     });
 
@@ -316,16 +318,18 @@ public class GroupFeedFragment extends Fragment {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference to access to future access
         photoFile = getPhotoFileUri(photoFileName);
+
         // wrap File object into a content provider
         // required for API >= 24
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
         Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
         // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // Start the image capture intent to take photo
-            startActivityForResult(intent, 2);
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -337,7 +341,7 @@ public class GroupFeedFragment extends Fragment {
         // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // Bring up gallery to select a photo
-            startActivityForResult(intent, 2);
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -361,7 +365,7 @@ public class GroupFeedFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 2) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     Uri photoUri = data.getData();

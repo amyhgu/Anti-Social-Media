@@ -14,8 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.arafatm.anti_socialmedia.R;
-import com.facebook.Profile;
 import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.GroupAdapter;
@@ -115,11 +113,9 @@ public class ProfileFragment extends Fragment {
                             Bundle args = new Bundle();
                             ParseObject selectedGroup = groupList.get(position);
                             args.putString(ARG_PARAM1,selectedGroup.getObjectId()); //pass group objectId
-
                             fragment.setArguments(args);
 
                             // TODO: Figure out a way to pass the selected group to the next fragment (feed)
-
                             /*Navigates to the groupFeedFragment*/
                             mListener.navigate_to_fragment(fragment);
                         }
