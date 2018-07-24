@@ -180,8 +180,11 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
     }
 
     public void startChat(String contactName, String message) {
-        new MobiComConversationService(this).sendMessage(new Message(contactName, message));
-
+        Intent intent = new Intent(this, ConversationActivity.class);
+        intent.putExtra(ConversationUIService.USER_ID, contactName);
+        intent.putExtra(ConversationUIService.TAKE_ORDER, true);
+        intent.putExtra(ConversationUIService.DISPLAY_NAME, contactName);
+        startActivity(intent);
     }
 
     /* From Chat Fragment tutorial */
