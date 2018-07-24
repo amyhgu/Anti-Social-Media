@@ -74,7 +74,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         //populate the views according to this (username, body, profile picture)
         viewHolder.tvPostText.setText(message);
         viewHolder.tvFullName.setText(sender);
-        Glide.with(context).load(propicUrl).into(viewHolder.ivPostPic);
+
+        //profile picture
+        if ((propicUrl != null) && (propicUrl != "")) {
+            Glide.with(context).load(propicUrl).into(viewHolder.ivPostPic);
+        }
     }
 
     @Override
