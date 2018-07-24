@@ -396,6 +396,7 @@ public class GroupFeedFragment extends Fragment {
     }
 
     // for converting group objectId to integer (used for chat channel ID)
+    // credit to https://stackoverflow.com/questions/30404946/how-to-convert-parse-objectid-string-to-long
     private static final String CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private static int convertChar(char c) {
