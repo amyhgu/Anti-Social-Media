@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.FriendListAdapter;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -210,12 +212,28 @@ public class GroupCreationFragment extends Fragment {
 
                 //gets list of new members
                 List<String> newMembers = friendListAdapter.getNewGroupMembers();
+
                 //Create new group and initialize it
                 Group newGroup = new Group();
-                newGroup.setGroupName("No Group Name");
-                newGroup.addUsers(newMembers);
-                //save it in Parse
-                newGroup.saveInBackground();
+                newGroup.initGroup("NoName", newMembers);
+//                newGroup.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        if (e == null) {
+//                            Log.d("weird", "Group created");
+//                        } else {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+
+                try {
+                    newGroup.save();
+                    Log.d("weird", "maybe save");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 //bundle the group objectId and send to groupfeed fragment for later use
                 Bundle args = new Bundle();
                 String ObjectId = newGroup.getObjectId();
