@@ -44,13 +44,13 @@ import com.applozic.mobicommons.people.channel.Channel;
 import com.applozic.mobicommons.people.contact.Contact;
 import com.example.arafatm.anti_socialmedia.Authentification.LoginActivity;
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
-import com.example.arafatm.anti_socialmedia.Fragments.StoryFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
 import com.example.arafatm.anti_socialmedia.Models.Group;
+import com.example.arafatm.anti_socialmedia.Fragments.StoryFragment;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
 
         final Fragment chatFragment = new ChatFragment();
         final Fragment groupFragment = new GroupManagerFragment();
-        final Fragment storyFragement = new StoryFragment();
+        final Fragment storyFragment = new StoryFragment();
         final Fragment settingsFragment = new SettingsFragment();
 
         // handle navigation selection to various fragments
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                                 return true;
                             case R.id.ic_story:
                                 FragmentTransaction fragmentTransactionThree = fragmentManager.beginTransaction();
-                                fragmentTransactionThree.replace(R.id.layout_child_activity, storyFragement).commit();
+                                fragmentTransactionThree.replace(R.id.layout_child_activity, storyFragment).commit();
                                 return true;
                             case R.id.ic_menu_thin:
                                 FragmentTransaction fragmentTransactionFour = fragmentManager.beginTransaction();

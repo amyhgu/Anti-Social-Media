@@ -6,12 +6,14 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
     private static final String KEY_SENDER = "sender";
+    private static final String KEY_PROPIC = "profileImage";
     private static final String KEY_RECIPIENT = "recipient";
     private static final String KEY_MESSAGE = "message";
     private static final String KEY_CREATEDAT = "createdAt";
@@ -34,6 +36,7 @@ public class Post extends ParseObject {
         put(KEY_MEDIA, image);
     }
 
+
     public ParseUser getSender() {
         return getParseUser(KEY_SENDER);
     }
@@ -55,9 +58,9 @@ public class Post extends ParseObject {
     }
 
     //Gets the list of comments from Parse
-    public List<ParseObject> getComments() {
-        return getList(KEY_COMMENTS);
-    }
+//    public List<ParseObject> getComments() {
+//        return getList(KEY_COMMENTS);
+//    }
 
     /*Gets the Array of comments from Parse, updates it, and save it back to parse*/
     public void addComments(Post comment) {
@@ -84,5 +87,22 @@ public class Post extends ParseObject {
             return this;
         }
 
+    }
+
+    // Functions for commenting
+    public ArrayList<Comment> getComments(){
+        List<Comment> commentsList = getList("comments");
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+        if(commentsList != null){
+            comments.addAll(commentsList);
+        }
+        return comments;
+    }
+    public void setComments(List<Comment> comments){
+        put("comments", comments);
+        saveInBackground();
+    }
+    public int getCommentsCount(){
+        return getComments().size();
     }
 }
