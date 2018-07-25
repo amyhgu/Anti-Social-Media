@@ -3,8 +3,6 @@ package com.example.arafatm.anti_socialmedia.Util;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
-import com.example.arafatm.anti_socialmedia.Home.MainActivity;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -131,9 +128,9 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            friendName = (TextView) itemView.findViewById(R.id.tvFullName);
+            friendName = (TextView) itemView.findViewById(R.id.tvGroupName);
             addButton = (ImageView) itemView.findViewById(R.id.ivAddButton);
-            friendPic = (ImageView) itemView.findViewById(R.id.ivPropic);
+            friendPic = (ImageView) itemView.findViewById(R.id.ivGroupPic);
         }
     }
 

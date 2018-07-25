@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/ivPropic"
+        android:id="@+id/ivGroupPic"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="20dp"
@@ -16,10 +16,10 @@
         app:srcCompat="@android:color/background_dark" />
 
     <TextView
-        android:id="@+id/tvFullName"
+        android:id="@+id/tvGroupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPropic"
+        android:layout_below="@+id/ivGroupPic"
         android:layout_centerHorizontal="true"
         android:text="Firstname Lastname"
         android:textSize="24sp" />
@@ -41,7 +41,7 @@
         android:id="@+id/ivCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvFullName"
+        android:layout_below="@+id/tvGroupName"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="5dp"
         app:srcCompat="@drawable/applozic_ic_action_call_holo_light" />
@@ -50,7 +50,7 @@
         android:id="@+id/ivStartChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvFullName"
+        android:layout_below="@+id/tvGroupName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         app:srcCompat="@drawable/ic_chat_filled" />
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/tvFullName"
+        android:layout_below="@+id/tvGroupName"
         android:layout_marginTop="5dp"
         android:layout_marginRight="30dp"
         app:srcCompat="@drawable/ic_three_dots" />
