@@ -38,7 +38,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Home.MainActivity">
+        <activity android:name=".Authentification.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -67,7 +67,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Authentification.LoginActivity"></activity>
+        <activity android:name=".Home.MainActivity"></activity>
 
         <!-- for fcm push notifications - START -->
 

@@ -12,8 +12,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.applozic.mobicomkit.ApplozicClient;
 import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
@@ -22,8 +26,12 @@ import com.applozic.mobicomkit.api.account.user.User;
 import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.api.conversation.ApplozicMqttIntentService;
 import com.applozic.mobicomkit.api.conversation.Message;
+import com.applozic.mobicomkit.api.conversation.MobiComConversationService;
+import com.applozic.mobicomkit.api.people.ChannelInfo;
 import com.applozic.mobicomkit.api.people.UserIntentService;
 import com.applozic.mobicomkit.broadcast.BroadcastService;
+import com.applozic.mobicomkit.feed.ChannelFeedApiResponse;
+import com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.MessageCommunicator;
 import com.applozic.mobicomkit.uiwidgets.conversation.MobiComKitBroadcastReceiver;
@@ -34,19 +42,29 @@ import com.applozic.mobicomkit.uiwidgets.conversation.fragment.MobiComQuickConve
 import com.applozic.mobicommons.commons.core.utils.Utils;
 import com.applozic.mobicommons.people.channel.Channel;
 import com.applozic.mobicommons.people.contact.Contact;
+import com.example.arafatm.anti_socialmedia.Authentification.LoginActivity;
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
+import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.Fragments.StoryFragment;
 import com.example.arafatm.anti_socialmedia.R;
+import com.parse.FindCallback;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
-        GroupManagerFragment.OnFragmentInteractionListener,
+        GroupManagerFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         StoryFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
         GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface {
@@ -124,6 +142,20 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
             }
         };
 
+//        ParseUser.logInInBackground("1", "1", new LogInCallback() {
+//            @Override
+//            public void done(ParseUser user, ParseException e) {
+//                if(e == null ){          //if there's no errors
+//                    Log.d("LoginActivity", "Login successful!");
+//                }
+//                else {
+//                    Toast.makeText(getApplicationContext(), "Unsuccessful", Toast.LENGTH_LONG).show();
+//                    Log.e("LoginActivity", "Login failure.");
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+
         ParseUser parseUser = ParseUser.getCurrentUser();
         String userId = parseUser.getObjectId();
         String displayName = parseUser.getString("fullName");
@@ -147,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         Intent lastSeenStatusIntent = new Intent(this, UserIntentService.class);
         lastSeenStatusIntent.putExtra(UserIntentService.USER_LAST_SEEN_AT_STATUS, true);
         startService(lastSeenStatusIntent);
+
+        addGroups(parseUser);
     }
 
 //    @Override
@@ -174,6 +208,22 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         fragmentTransaction.replace(R.id.layout_child_activity, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    public void startUserChat(String contactName, String message) {
+        Intent intent = new Intent(this, ConversationActivity.class);
+        intent.putExtra(ConversationUIService.USER_ID, contactName);
+        intent.putExtra(ConversationUIService.TAKE_ORDER, true);
+        intent.putExtra(ConversationUIService.DISPLAY_NAME, contactName);
+        startActivity(intent);
+    }
+
+    public void startGroupChat(int channelId, String groupName) {
+        Intent intent = new Intent(this, ConversationActivity.class);
+        intent.putExtra(ConversationUIService.GROUP_ID, channelId);
+        intent.putExtra(ConversationUIService.TAKE_ORDER, true);
+        intent.putExtra(ConversationUIService.GROUP_NAME, groupName);
+        startActivity(intent);
     }
 
     /* From Chat Fragment tutorial */
@@ -274,6 +324,68 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         intent.putExtra(ApplozicMqttIntentService.USER_KEY_STRING, userKeyString);
         intent.putExtra(ApplozicMqttIntentService.DEVICE_KEY_STRING, deviceKeyString);
         startService(intent);
+    }
+
+    private void addGroups(ParseUser user) {
+//        List<String> groupIds = user.getList("groups");
+//        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Group");
+//        query.whereContainedIn("objectId", groupIds);
+//
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                if (e == null) {
+//                    for (int i = 0; i < objects.size(); i++) {
+//                        ParseObject currentGroup = objects.get(i);
+//                        createGroup(currentGroup);
+//                    }
+//                }
+//            }
+//        });
+
+        Group.Query groupQuery = new Group.Query();
+        groupQuery.whereEqualTo("groupName", "Group4");
+
+        groupQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        ParseObject currentGroup = objects.get(i);
+                        createGroup(currentGroup);
+                    }
+                }
+            }
+        });
+    }
+
+    private void createGroup(ParseObject group) {
+        AlChannelCreateAsyncTask.TaskListenerInterface channelCreateTaskListener = new AlChannelCreateAsyncTask.TaskListenerInterface() {
+            @Override
+            public void onSuccess(Channel channel, Context context) {
+                Log.i("Group","Group response :"+channel);
+
+            }
+
+            @Override
+            public void onFailure(ChannelFeedApiResponse channelFeedApiResponse, Context context) {
+
+            }
+        };
+
+
+        List<String> groupMembersUserIdList = new ArrayList<>();
+        groupMembersUserIdList.add("Jane Doe");
+        groupMembersUserIdList.add("John Smith");//Note:while creating group exclude logged in userId from list
+        ChannelInfo channelInfo = new ChannelInfo(group.getString("groupName"),groupMembersUserIdList);
+        channelInfo.setType(Channel.GroupType.PUBLIC.getValue().intValue()); //group type
+        channelInfo.setImageUrl(group.getParseFile("groupImage").getUrl()); //pass group image link URL
+        //channelInfo.setChannelMetadata(channelMetadata); //Optional option for setting group meta data
+        channelInfo.setClientGroupId(Integer.toString(GroupFeedFragment.convert(group.getObjectId()))); //Optional if you have your own groupId then you can pass here
+
+        AlChannelCreateAsyncTask channelCreateAsyncTask = new AlChannelCreateAsyncTask(
+                this,channelInfo,channelCreateTaskListener);
+        channelCreateAsyncTask.execute();
     }
 
 }
