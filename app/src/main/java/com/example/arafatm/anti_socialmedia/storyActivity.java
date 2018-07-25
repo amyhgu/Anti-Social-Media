@@ -118,7 +118,7 @@ public class storyActivity extends AppCompatActivity  implements UserGroupList.O
                     Environment.getExternalStorageDirectory().getAbsolutePath() + "/myvideo.mp4");
 
             //get video URI
-            Uri videoUri = FileProvider.getUriForFile(storyActivity.this, "com.Anti-Social-Media.fileprovider", mediaFile);
+            Uri videoUri = FileProvider.getUriForFile(storyActivity.this, "com.antisocialmedia.fileprovider", mediaFile);
             String m = videoUri.toString();
             intent.putExtra(identifier, videoUri);
 
