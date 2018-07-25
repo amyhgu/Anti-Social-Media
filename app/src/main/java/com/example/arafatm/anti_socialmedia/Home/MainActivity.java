@@ -49,6 +49,8 @@ import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.UserGroupList;
+import com.example.arafatm.anti_socialmedia.storyActivity;
 import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.Fragments.StoryFragment;
 import com.example.arafatm.anti_socialmedia.R;
@@ -65,7 +67,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
         GroupManagerFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
-        StoryFragment.OnFragmentInteractionListener,
+         UserGroupList.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
         GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface {
 
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
 
         final Fragment chatFragment = new ChatFragment();
         final Fragment groupFragment = new GroupManagerFragment();
-        final Fragment storyFragment = new StoryFragment();
+        final Fragment storyFragement = new UserGroupList();
         final Fragment settingsFragment = new SettingsFragment();
 
         // handle navigation selection to various fragments
@@ -109,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                                 fragmentTransactionTwo.replace(R.id.layout_child_activity, groupFragment).commit();
                                 return true;
                             case R.id.ic_story:
-                                FragmentTransaction fragmentTransactionThree = fragmentManager.beginTransaction();
-                                fragmentTransactionThree.replace(R.id.layout_child_activity, storyFragment).commit();
+                                Intent intent = new Intent(MainActivity.this, storyActivity.class);
+                                startActivity(intent);
                                 return true;
                             case R.id.ic_menu_thin:
                                 FragmentTransaction fragmentTransactionFour = fragmentManager.beginTransaction();
