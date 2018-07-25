@@ -17,6 +17,7 @@ import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.FriendListAdapter;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -216,20 +217,24 @@ public class GroupCreationFragment extends Fragment {
                 //Create new group and initialize it
                 Group newGroup = new Group();
                 newGroup.initGroup("NoName", newMembers);
-//                newGroup.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (e == null) {
-//                            Log.d("weird", "Group created");
-//                        } else {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
 
                 try {
                     newGroup.save();
-                    Log.d("weird", "maybe save");
+                    Log.d("GroupCreation", "New group saved");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                ParseUser loggedInUser = ParseUser.getCurrentUser();
+
+                List<ParseObject> currentGroups = loggedInUser.getList("groups");
+                if (currentGroups == null) {
+                    currentGroups = new ArrayList<>();
+                }
+                currentGroups.add(newGroup);
+                loggedInUser.put("groups", currentGroups);
+                try {
+                    loggedInUser.save();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
