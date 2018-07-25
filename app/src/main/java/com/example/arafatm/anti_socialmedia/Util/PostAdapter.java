@@ -50,7 +50,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvFullName = (TextView) itemView.findViewById(R.id.tvFullNameFeed);
             tvPostText = (TextView) itemView.findViewById(R.id.tvPostBody);
             ivPostPic = (ImageView) itemView.findViewById(R.id.ivProPicPost);
-            btCommentExpand = (Button) itemView.findViewById(R.id.btCommentCount);      //comment
+            btCommentExpand = (Button) itemView.findViewById(R.id.btCommentIcon);      //comment
 
         }
     }
