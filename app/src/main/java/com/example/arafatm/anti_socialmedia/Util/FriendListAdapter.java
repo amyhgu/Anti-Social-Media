@@ -29,6 +29,7 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
     private Context context;
     private ArrayList<String> newGroupMembers;
     private boolean Added = false;
+
     // Pass in the contact array into the constructor
     public FriendListAdapter(List<ParseUser> allFriends) {
         this.allFriends = allFriends;
@@ -92,10 +93,15 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
         friendName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProfileFragment profileFragment = ProfileFragment.newInstance(friend);
-                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.layout_child_activity, profileFragment)
-                        .commit();
+                openProfile(friend);
+            }
+        });
+
+        final ImageView friendPic = viewHolder.friendPic;
+        friendPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openProfile(friend);
             }
         });
     }
@@ -129,5 +135,12 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
             addButton = (ImageView) itemView.findViewById(R.id.ivAddButton);
             friendPic = (ImageView) itemView.findViewById(R.id.ivPropic);
         }
+    }
+
+    private void openProfile(ParseUser friend) {
+        ProfileFragment profileFragment = ProfileFragment.newInstance(friend);
+        ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.layout_child_activity, profileFragment)
+                .commit();
     }
 }

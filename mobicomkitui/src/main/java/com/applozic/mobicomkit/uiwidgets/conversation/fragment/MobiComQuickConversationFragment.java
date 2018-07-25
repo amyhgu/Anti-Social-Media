@@ -207,9 +207,6 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
         };
     }
 
-    public static void hideFabButton() {
-        fabButton.setVisibility(View.GONE);
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -30,10 +30,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivCoverPhoto"
+        android:layout_below="@+id/ivGames"
         android:ems="10"
         android:hint="What's been happening?"
-        android:inputType="textPersonName" />
+        android:inputType="textMultiLine"/>
 
     <Button
         android:id="@+id/btAddPostImage"
@@ -77,5 +77,34 @@
             android:layout_below="@+id/btAddPostImage"  />
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/ivGames"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvGroupName"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_game_filled" />
+
+    <ImageView
+        android:id="@+id/ivStartChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivCoverPhoto"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_chat_filled" />
+
+    <ImageView
+        android:id="@+id/ivThreeDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/ivCoverPhoto"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="30dp"
+        android:src="@drawable/ic_three_dots" />
 
 </RelativeLayout>
