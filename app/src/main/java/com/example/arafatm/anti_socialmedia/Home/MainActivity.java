@@ -12,8 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -37,19 +35,20 @@ import com.applozic.mobicommons.commons.core.utils.Utils;
 import com.applozic.mobicommons.people.channel.Channel;
 import com.applozic.mobicommons.people.contact.Contact;
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
-import com.example.arafatm.anti_socialmedia.Fragments.StoryFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.UserGroupList;
+import com.example.arafatm.anti_socialmedia.storyActivity;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseUser;
 
 
 public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
         GroupManagerFragment.OnFragmentInteractionListener,
-        StoryFragment.OnFragmentInteractionListener,
+        UserGroupList.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
         GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface {
 
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
 
         final Fragment chatFragment = new ChatFragment();
         final Fragment groupFragment = new GroupManagerFragment();
-        final Fragment storyFragement = new StoryFragment();
+        final Fragment storyFragement = new UserGroupList();
         final Fragment settingsFragment = new SettingsFragment();
 
         // handle navigation selection to various fragments
@@ -93,8 +92,10 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                                 fragmentTransactionTwo.replace(R.id.layout_child_activity, groupFragment).commit();
                                 return true;
                             case R.id.ic_story:
-                                FragmentTransaction fragmentTransactionThree = fragmentManager.beginTransaction();
-                                fragmentTransactionThree.replace(R.id.layout_child_activity, gameFragment).commit();
+//                                FragmentTransaction fragmentTransactionThree = fragmentManager.beginTransaction();
+//                                fragmentTransactionThree.replace(R.id.layout_child_activity, storyFragement).commit();
+                                Intent intent = new Intent(MainActivity.this, storyActivity.class);
+                                startActivity(intent);
                                 return true;
                             case R.id.ic_menu_thin:
                                 FragmentTransaction fragmentTransactionFour = fragmentManager.beginTransaction();
