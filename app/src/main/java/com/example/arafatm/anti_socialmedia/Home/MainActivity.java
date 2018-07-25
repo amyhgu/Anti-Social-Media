@@ -27,8 +27,11 @@ import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.api.conversation.ApplozicMqttIntentService;
 import com.applozic.mobicomkit.api.conversation.Message;
 import com.applozic.mobicomkit.api.conversation.MobiComConversationService;
+import com.applozic.mobicomkit.api.people.ChannelInfo;
 import com.applozic.mobicomkit.api.people.UserIntentService;
 import com.applozic.mobicomkit.broadcast.BroadcastService;
+import com.applozic.mobicomkit.feed.ChannelFeedApiResponse;
+import com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.MessageCommunicator;
 import com.applozic.mobicomkit.uiwidgets.conversation.MobiComKitBroadcastReceiver;
@@ -47,10 +50,17 @@ import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
+import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
@@ -169,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         Intent lastSeenStatusIntent = new Intent(this, UserIntentService.class);
         lastSeenStatusIntent.putExtra(UserIntentService.USER_LAST_SEEN_AT_STATUS, true);
         startService(lastSeenStatusIntent);
+
+        addGroups(parseUser);
     }
 
 //    @Override
@@ -312,6 +324,68 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         intent.putExtra(ApplozicMqttIntentService.USER_KEY_STRING, userKeyString);
         intent.putExtra(ApplozicMqttIntentService.DEVICE_KEY_STRING, deviceKeyString);
         startService(intent);
+    }
+
+    private void addGroups(ParseUser user) {
+//        List<String> groupIds = user.getList("groups");
+//        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Group");
+//        query.whereContainedIn("objectId", groupIds);
+//
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                if (e == null) {
+//                    for (int i = 0; i < objects.size(); i++) {
+//                        ParseObject currentGroup = objects.get(i);
+//                        createGroup(currentGroup);
+//                    }
+//                }
+//            }
+//        });
+
+        Group.Query groupQuery = new Group.Query();
+        groupQuery.whereEqualTo("groupName", "Group4");
+
+        groupQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        ParseObject currentGroup = objects.get(i);
+                        createGroup(currentGroup);
+                    }
+                }
+            }
+        });
+    }
+
+    private void createGroup(ParseObject group) {
+        AlChannelCreateAsyncTask.TaskListenerInterface channelCreateTaskListener = new AlChannelCreateAsyncTask.TaskListenerInterface() {
+            @Override
+            public void onSuccess(Channel channel, Context context) {
+                Log.i("Group","Group response :"+channel);
+
+            }
+
+            @Override
+            public void onFailure(ChannelFeedApiResponse channelFeedApiResponse, Context context) {
+
+            }
+        };
+
+
+        List<String> groupMembersUserIdList = new ArrayList<>();
+        groupMembersUserIdList.add("Jane Doe");
+        groupMembersUserIdList.add("John Smith");//Note:while creating group exclude logged in userId from list
+        ChannelInfo channelInfo = new ChannelInfo(group.getString("groupName"),groupMembersUserIdList);
+        channelInfo.setType(Channel.GroupType.PUBLIC.getValue().intValue()); //group type
+        channelInfo.setImageUrl(group.getParseFile("groupImage").getUrl()); //pass group image link URL
+        //channelInfo.setChannelMetadata(channelMetadata); //Optional option for setting group meta data
+        channelInfo.setClientGroupId(Integer.toString(GroupFeedFragment.convert(group.getObjectId()))); //Optional if you have your own groupId then you can pass here
+
+        AlChannelCreateAsyncTask channelCreateAsyncTask = new AlChannelCreateAsyncTask(
+                this,channelInfo,channelCreateTaskListener);
+        channelCreateAsyncTask.execute();
     }
 
 }

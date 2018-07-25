@@ -10,8 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.applozic.mobicomkit.api.people.ChannelInfo;
 import com.applozic.mobicomkit.contact.AppContactService;
+import com.applozic.mobicomkit.feed.ChannelFeedApiResponse;
+import com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask;
+import com.applozic.mobicommons.people.channel.Channel;
 import com.applozic.mobicommons.people.contact.Contact;
+import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Home.MainActivity;
 import com.example.arafatm.anti_socialmedia.R;
 import com.facebook.AccessToken;
@@ -47,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button parseLoginButton;
     private LoginButton loginButton;
     private Button signupButton;
+    static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         persistLogin();
 
         callbackManager = CallbackManager.Factory.create();
+        context = getApplicationContext();
 
         usernameInput = findViewById(R.id.etUsername);
         passwordInput = findViewById(R.id.etPassword);
@@ -281,15 +288,5 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
-//        try {
-//            List<ParseObject> objects = query.find();
-//            for (int i = 0; i < objects.size(); i++) {
-//                ParseObject currentFriend = objects.get(i);
-//                Log.d("weird", currentFriend.getString("fullName"));
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
     }
 }
