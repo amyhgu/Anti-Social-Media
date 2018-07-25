@@ -217,13 +217,7 @@ public class GroupCreationFragment extends Fragment {
                 //Create new group and initialize it
                 Group newGroup = new Group();
                 newGroup.initGroup("NoName", newMembers);
-
-                try {
-                    newGroup.save();
-                    Log.d("GroupCreation", "New group saved");
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                newGroup.saveInBackground();
 
                 ParseUser loggedInUser = ParseUser.getCurrentUser();
 
@@ -233,11 +227,7 @@ public class GroupCreationFragment extends Fragment {
                 }
                 currentGroups.add(newGroup);
                 loggedInUser.put("groups", currentGroups);
-                try {
-                    loggedInUser.save();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                loggedInUser.saveInBackground();
 
                 //bundle the group objectId and send to groupfeed fragment for later use
                 Bundle args = new Bundle();

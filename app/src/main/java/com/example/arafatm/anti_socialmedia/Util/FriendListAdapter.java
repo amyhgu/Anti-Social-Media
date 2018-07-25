@@ -28,7 +28,6 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
     public List<ParseUser> allFriends;
     private Context context;
     private ArrayList<String> newGroupMembers;
-    private boolean Added = false;
 
     // Pass in the contact array into the constructor
     public FriendListAdapter(List<ParseUser> allFriends) {
@@ -65,45 +64,6 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
                     .apply(RequestOptions.circleCropTransform())
                     .into(viewHolder.friendPic);
         }
-
-        final ImageView addFriendButton =  viewHolder.addButton;
-        addFriendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //get the just added user
-                ParseUser userAdded = allFriends.get(position);
-
-                if (Added == true) { //when the user unselect a friends.
-                    addFriendButton.setImageResource(R.drawable.ic_add_icon);
-                    //remove that user's ObjectId from the newGroupMembers list
-                    newGroupMembers.remove(userAdded.getObjectId());
-                    Added = false;
-                    Toast.makeText(context,friend.getUsername()+" removed", Toast.LENGTH_SHORT).show();
-                } else {
-                    addFriendButton.setImageResource(R.drawable.ic_check_mark);
-                    //add that user's ObjectId to the newGroupMembers list to be accessed later
-                    newGroupMembers.add(userAdded.getObjectId());
-                    Added = true;
-                    Toast.makeText(context,friend.getUsername()+" added", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        final TextView friendName = viewHolder.friendName;
-        friendName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openProfile(friend);
-            }
-        });
-
-        final ImageView friendPic = viewHolder.friendPic;
-        friendPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openProfile(friend);
-            }
-        });
     }
 
     @Override
@@ -117,12 +77,13 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView friendName;
         public ImageView addButton;
         public ImageView friendPic;
+        private boolean Added = false;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -134,6 +95,35 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
             friendName = (TextView) itemView.findViewById(R.id.tvFullName);
             addButton = (ImageView) itemView.findViewById(R.id.ivAddButton);
             friendPic = (ImageView) itemView.findViewById(R.id.ivPropic);
+
+            itemView.setOnClickListener(this);
+            friendName.setOnClickListener(this);
+            addButton.setOnClickListener(this);
+            friendPic.setOnClickListener(this);
+        }
+
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                ParseUser friend = allFriends.get(position);
+                if (view.getId() == friendName.getId() || view.getId() == friendPic.getId()) {
+                    openProfile(friend);
+                } else if (view.getId() == addButton.getId()) {
+                    if (Added == true) { //when the user unselects a friend
+                        addButton.setImageResource(R.drawable.ic_add_icon);
+                        //remove that user's ObjectId from the newGroupMembers list
+                        newGroupMembers.remove(friend.getObjectId());
+                        Added = false;
+                        Toast.makeText(context,friend.getUsername()+" removed", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addButton.setImageResource(R.drawable.ic_check_mark);
+                        //add that user's ObjectId to the newGroupMembers list to be accessed later
+                        newGroupMembers.add(friend.getObjectId());
+                        Added = true;
+                        Toast.makeText(context,friend.getUsername()+" added", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         }
     }
 
