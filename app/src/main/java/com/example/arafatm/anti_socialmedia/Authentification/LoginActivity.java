@@ -1,5 +1,6 @@
 package com.example.arafatm.anti_socialmedia.Authentification;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.applozic.mobicomkit.contact.AppContactService;
+import com.applozic.mobicommons.people.contact.Contact;
 import com.example.arafatm.anti_socialmedia.Home.MainActivity;
 import com.example.arafatm.anti_socialmedia.R;
 import com.facebook.AccessToken;
@@ -20,8 +23,12 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -31,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
@@ -237,5 +245,51 @@ public class LoginActivity extends AppCompatActivity {
         }
         user.put("friendList", friends);
         user.saveInBackground();
+        addContacts(user, friends);
+    }
+
+    // adding local Applozic contacts so that contact tab can be prepopulated
+    private void addContacts(ParseUser user, ArrayList<String> friendList) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereContainedIn("username", friendList);
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        ParseObject currentFriend = objects.get(i);
+                        String friendName = currentFriend.getString("fullName");
+                        Log.d("weird", friendName);
+
+                        Contact contact = new Contact();
+                        contact.setUserId(friendName);
+                        contact.setFullName(friendName);
+                        contact.setEmailId(currentFriend.getString("email"));
+
+                        String propicUrl = currentFriend.getString("propicUrl");
+                        propicUrl = (propicUrl == null) ? currentFriend.getParseFile("profileImage").getUrl() : propicUrl;
+                        contact.setImageURL(propicUrl);
+
+                        Context context = getApplicationContext();
+                        AppContactService appContactService = new AppContactService(context);
+                        appContactService.add(contact);
+
+                    }
+                } else {
+                    Log.e("weird", "Query error");
+                }
+            }
+        });
+
+//        try {
+//            List<ParseObject> objects = query.find();
+//            for (int i = 0; i < objects.size(); i++) {
+//                ParseObject currentFriend = objects.get(i);
+//                Log.d("weird", currentFriend.getString("fullName"));
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
     }
 }

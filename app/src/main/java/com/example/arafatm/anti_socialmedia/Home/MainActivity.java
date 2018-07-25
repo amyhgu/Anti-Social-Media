@@ -12,10 +12,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.applozic.mobicomkit.ApplozicClient;
 import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
@@ -37,6 +39,7 @@ import com.applozic.mobicomkit.uiwidgets.conversation.fragment.MobiComQuickConve
 import com.applozic.mobicommons.commons.core.utils.Utils;
 import com.applozic.mobicommons.people.channel.Channel;
 import com.applozic.mobicommons.people.contact.Contact;
+import com.example.arafatm.anti_socialmedia.Authentification.LoginActivity;
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.StoryFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
@@ -45,6 +48,8 @@ import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
 import com.example.arafatm.anti_socialmedia.R;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 
@@ -126,6 +131,20 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                 // If any failure in registration the callback  will come here
             }
         };
+
+//        ParseUser.logInInBackground("1", "1", new LogInCallback() {
+//            @Override
+//            public void done(ParseUser user, ParseException e) {
+//                if(e == null ){          //if there's no errors
+//                    Log.d("LoginActivity", "Login successful!");
+//                }
+//                else {
+//                    Toast.makeText(getApplicationContext(), "Unsuccessful", Toast.LENGTH_LONG).show();
+//                    Log.e("LoginActivity", "Login failure.");
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         ParseUser parseUser = ParseUser.getCurrentUser();
         String userId = parseUser.getObjectId();
