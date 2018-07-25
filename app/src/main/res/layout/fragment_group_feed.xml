@@ -33,7 +33,7 @@
         android:layout_below="@+id/ivCoverPhoto"
         android:ems="10"
         android:hint="What's been happening?"
-        android:inputType="textPersonName" />
+        android:inputType="textMultiLine"/>
 
     <Button
         android:id="@+id/btAddPostImage"

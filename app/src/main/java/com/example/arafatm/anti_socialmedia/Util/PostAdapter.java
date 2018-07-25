@@ -1,11 +1,14 @@
 package com.example.arafatm.anti_socialmedia.Util;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -26,11 +30,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         mPosts = posts;
     }
 
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+        void navigate_to_fragment(Fragment fragment);
+    }
+
     //create ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvFullName;
         public TextView tvPostText;
         public ImageView ivPostPic;
+        public Button btCommentExpand;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -39,6 +50,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvFullName = (TextView) itemView.findViewById(R.id.tvFullNameFeed);
             tvPostText = (TextView) itemView.findViewById(R.id.tvPostBody);
             ivPostPic = (ImageView) itemView.findViewById(R.id.ivProPicPost);
+            btCommentExpand = (Button) itemView.findViewById(R.id.btCommentCount);
 
         }
     }
@@ -57,7 +69,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder viewHolder, int position) {
         // get the data according to this position
-        Post post = mPosts.get(position);
+        final Post post = mPosts.get(position);
         ParseUser sender1 = null;
 
         //added this because debugger asked us to
@@ -70,16 +82,36 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         String message = post.getMessage();
         String sender = sender1.getString("fullName");
         String propicUrl = sender1.getString("propicUrl");
+        ParseFile propicParse = sender1.getParseFile("profileImage");
 
         //populate the views according to this (username, body, profile picture)
         viewHolder.tvPostText.setText(message);
         viewHolder.tvFullName.setText(sender);
 
         //profile picture
-        if ((propicUrl != null) && (propicUrl != "")) {
+        if (propicUrl != null && !(propicUrl.equals("")))  {
             Glide.with(context).load(propicUrl).into(viewHolder.ivPostPic);
         }
+        else if(propicParse != null){
+            Glide.with(context).load(propicParse.getUrl()).into(viewHolder.ivPostPic);
+        }
+
+//        //goes to the comment fragment
+//        //TODO: update the number of comments in each
+//        final Button commentCountButton = viewHolder.btCommentExpand;
+//        commentCountButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CommentFragment commentFragment = CommentFragment.methodname(post);     //need a method to remember the post from previous screen
+//                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.layout_child_activity, commentFragment)
+//                        .commit();
+//
+//            }
+//        });
+
     }
+
 
     @Override
     public int getItemCount() {
