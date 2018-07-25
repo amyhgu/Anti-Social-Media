@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
 
         final Fragment chatFragment = new ChatFragment();
         final Fragment groupFragment = new GroupManagerFragment();
-        final Fragment storyFragement = new UserGroupList();
+        final Fragment userGroupList = new UserGroupList();
         final Fragment settingsFragment = new SettingsFragment();
 
         // handle navigation selection to various fragments
