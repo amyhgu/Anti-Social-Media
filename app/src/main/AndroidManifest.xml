@@ -7,6 +7,7 @@
     <permission
         android:name="com.example.arafatm.anti_socialmedia.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.example.arafatm.anti_socialmedia.permission.MAPS_RECEIVE" />
@@ -27,7 +28,6 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera2" />
 
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -38,7 +38,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Home.MainActivity">
+        <activity android:name=".Authentification.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -67,7 +67,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Authentification.LoginActivity"></activity>
+        <activity android:name=".Home.MainActivity"></activity>
 
         <!-- for fcm push notifications - START -->
 
@@ -78,11 +78,9 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name="com.parse.fcm.ParseFirebaseMessagingService">
+        <service android:name="com.parse.fcm.ParseFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
@@ -129,15 +127,17 @@
             android:name="com.package.name"
             android:value="${applicationId}" /> <!-- NOTE: Do NOT change this, it should remain same i.e 'com.package.name' -->
 
-        <provider
-        android:name="com.applozic.mobicomkit.uiwidgets.ALFileProvider"
-        android:authorities="${applicationId}.provider"
-        android:exported="false"
-        android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/applozic_provider_paths" />
-    </provider>
+
+        <!-- <provider -->
+        <!-- android:name="com.applozic.mobicomkit.uiwidgets.ALFileProvider" -->
+        <!-- android:authorities="${applicationId}.provider" -->
+        <!-- android:exported="false" -->
+        <!-- android:grantUriPermissions="true"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+        <!-- android:resource="@xml/applozic_provider_paths" /> -->
+        <!-- </provider> -->
+
 
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
@@ -290,12 +290,12 @@
         </receiver>
 
         <!-- Applozic end -->
-        <activity android:name=".Authentification.SignupActivity"></activity>
-
+        <activity android:name=".Authentification.SignupActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.antisocialmedia.fileprovider"
+
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -303,7 +303,17 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
+        <!-- <provider -->
+        <!-- android:name="android.support.v4.content.FileProvider" -->
+        <!-- android:authorities="com.antisocialmedia.fileprovider" -->
+        <!-- android:exported="false" -->
+        <!-- android:grantUriPermissions="true"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+        <!-- android:resource="@xml/fileprovider" /> -->
+        <!-- </provider> -->
 
+        <activity android:name=".storyActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.example.arafatm.anti_socialmedia.Models;
 
+import android.net.Uri;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -29,15 +31,15 @@ public class Story extends ParseObject {
         put(KEY_RECIPIENT, recipient);
     }
 
-    //Gets the list of comments from Parse
-    public List<ParseObject> getStories() {
-        return getList(KEY_STORY);
-    }
+//    //Gets the list of comments from Parse
+//    public List<ParseObject> getStories() {
+//        return getList(KEY_STORY);
+//    }
 
     /*Gets the Array of stories from Parse, updates it, and save it back to parse*/
-    public void addStory(ParseObject story) {
-        List<ParseObject> stories = getList(KEY_STORY);
-        stories.add(story);
+    public void setStory(Uri storyUri) {
+        List<Uri> stories = getList(KEY_STORY);
+        stories.add(storyUri);
         put(KEY_STORY, stories);
     }
 }

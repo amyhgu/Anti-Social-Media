@@ -34,6 +34,7 @@ public class ProfileFragment extends Fragment {
     private Context mContext;
     private GridView profileGroups;
     private String mParam1;
+    private ImageView ivStartChat;
     GroupAdapter groupAdapter;
     ArrayList<ParseObject> groupList;
 
@@ -43,6 +44,7 @@ public class ProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void navigate_to_fragment(Fragment fragment);
+        void startUserChat(String contactName, String message);
     }
 
     public static ProfileFragment newInstance(ParseUser user) {
@@ -56,6 +58,12 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement ProfileFragment.OnFragmentInteractionListener");
+        }
         mContext = context;
     }
 
@@ -90,6 +98,14 @@ public class ProfileFragment extends Fragment {
         groupList = new ArrayList<>();
 
         loadAllGroups(view, profileGroups);
+
+        ivStartChat = view.findViewById(R.id.ivStartChat);
+        ivStartChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.startUserChat(user.getString("fullName"), "testing");
+            }
+        });
 
     }
 
