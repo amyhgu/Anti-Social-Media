@@ -325,7 +325,7 @@ public class GroupFeedFragment extends Fragment {
         // required for API >= 24
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
 
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.Anti-Social-Media.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.antisocialmedia.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
