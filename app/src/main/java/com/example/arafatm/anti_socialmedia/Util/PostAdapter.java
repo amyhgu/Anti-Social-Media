@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -70,15 +71,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         String message = post.getMessage();
         String sender = sender1.getString("fullName");
         String propicUrl = sender1.getString("propicUrl");
+        ParseFile propicParse = sender1.getParseFile("profileImage");
 
         //populate the views according to this (username, body, profile picture)
         viewHolder.tvPostText.setText(message);
         viewHolder.tvFullName.setText(sender);
 
         //profile picture
-        if ((propicUrl != null) && (propicUrl != "")) {
+        if (propicUrl != null && !(propicUrl.equals("")))  {
             Glide.with(context).load(propicUrl).into(viewHolder.ivPostPic);
         }
+        else if(propicParse != null){
+            Glide.with(context).load(propicParse.getUrl()).into(viewHolder.ivPostPic);
+        }
+
     }
 
     @Override

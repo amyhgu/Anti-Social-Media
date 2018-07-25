@@ -12,6 +12,7 @@ import java.util.List;
 @ParseClassName("Post")
 public class Post extends ParseObject {
     private static final String KEY_SENDER = "sender";
+    private static final String KEY_PROPIC = "profileImage";
     private static final String KEY_RECIPIENT = "recipient";
     private static final String KEY_MESSAGE = "message";
     private static final String KEY_CREATEDAT = "createdAt";
@@ -33,6 +34,7 @@ public class Post extends ParseObject {
     public void setImage(ParseFile image) {
         put(KEY_MEDIA, image);
     }
+
 
     public ParseUser getSender() {
         return getParseUser(KEY_SENDER);
