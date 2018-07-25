@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -11,6 +14,11 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
+    //for groupie, comment function
+//    dataBinding {
+//        enabled = true
+//    }
 
     buildTypes {
         release {
@@ -30,6 +38,13 @@ android {
         exclude 'META-INF/ECLIPSE_.RSA'
     }
 }
+
+// for comment function ~
+// IMPORTANT!  Enables view caching in viewholders.
+// See: https://github.com/Kotlin/KEEP/blob/master/proposals/android-extensions-entity-caching.md
+//androidExtensions {
+//    experimental = true
+//}
 
 ext {
     supportLibVersion = '27.1.1'
@@ -89,6 +104,11 @@ dependencies {
     //camera access
     implementation 'com.github.hotchemi:permissionsdispatcher:3.1.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
+
+    // groupie (for comments)
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+//    implementation 'com.xwray:groupie:2.0.3'
+//    implementation 'com.xwray:groupie-kotlin-android-extensions:2.0.3'
+//    implementation 'com.xwray:groupie-databinding:2.0.3'
 }
 
-apply plugin: 'com.google.gms.google-services'
