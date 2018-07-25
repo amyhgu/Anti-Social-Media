@@ -41,7 +41,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         public TextView tvFullName;
         public TextView tvPostText;
         public ImageView ivPostPic;
-        public Button btCommentExpand;
+        public Button btCommentExpand;                                                   //comment
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -50,7 +50,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvFullName = (TextView) itemView.findViewById(R.id.tvFullNameFeed);
             tvPostText = (TextView) itemView.findViewById(R.id.tvPostBody);
             ivPostPic = (ImageView) itemView.findViewById(R.id.ivProPicPost);
-            btCommentExpand = (Button) itemView.findViewById(R.id.btCommentCount);
+            btCommentExpand = (Button) itemView.findViewById(R.id.btCommentCount);      //comment
 
         }
     }
@@ -84,7 +84,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         String propicUrl = sender1.getString("propicUrl");
         ParseFile propicParse = sender1.getParseFile("profileImage");
 
-        //populate the views according to this (username, body, profile picture)
+        //populate the views according to this (username, body)
         viewHolder.tvPostText.setText(message);
         viewHolder.tvFullName.setText(sender);
 
