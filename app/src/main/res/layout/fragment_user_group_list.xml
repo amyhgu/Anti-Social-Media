@@ -7,19 +7,31 @@
     tools:context=".Fragments.UserGroupList">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="498dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="34dp" />
-
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="211dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:text="Share To"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Add Story to a Group"
-        android:textColor="@color/black" />
+        android:text="Share Now"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/solid_white" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="505dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true" />
+
+
 </RelativeLayout>

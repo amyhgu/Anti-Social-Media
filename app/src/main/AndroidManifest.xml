@@ -313,7 +313,7 @@
         <!-- android:resource="@xml/fileprovider" /> -->
         <!-- </provider> -->
 
-        <activity android:name=".storyActivity"></activity>
+        <activity android:name=".StoryActivity"></activity>
     </application>
 
 </manifest>
