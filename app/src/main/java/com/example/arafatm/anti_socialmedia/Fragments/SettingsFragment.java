@@ -125,8 +125,8 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         logOutBtn = view.findViewById(R.id.log_out_button);
-        ivPropic = view.findViewById(R.id.ivPropic);
-        tvFullName = view.findViewById(R.id.tvFullName);
+        ivPropic = view.findViewById(R.id.ivGroupPic);
+        tvFullName = view.findViewById(R.id.tvGroupName);
         tvViewProfile = view.findViewById(R.id.tvViewProfile);
         rlViewProfile = view.findViewById(R.id.rlViewProfile);
 
