@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
@@ -54,7 +55,7 @@ import static android.app.Activity.RESULT_OK;
 public class GroupFeedFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "objectId";
+    private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
@@ -65,10 +66,13 @@ public class GroupFeedFragment extends Fragment {
 
     private String groupName;
     private int groupId;
+    private Group group;
 
     private TextView tvGroupName;
     private ImageView ivGroupPic;
     private ImageView ivStartChat;
+    private ImageView ivThreeDots;
+
     private File photoFile;
     public String photoFileName = "photo.jpg";
 
@@ -98,14 +102,6 @@ public class GroupFeedFragment extends Fragment {
         void startGroupChat(int groupId, String groupName);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GroupFeedFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static GroupFeedFragment newInstance(String param1, String param2) {
         GroupFeedFragment fragment = new GroupFeedFragment();
@@ -161,6 +157,7 @@ public class GroupFeedFragment extends Fragment {
         messageInput = view.findViewById(R.id.etNewPost);
         createButton = view.findViewById(R.id.btCreatePost);
         ivStartChat = view.findViewById(R.id.ivStartChat);
+        ivThreeDots = view.findViewById(R.id.ivThreeDots);
 
         //displaying the posts
         posts = new ArrayList<>();
@@ -184,6 +181,7 @@ public class GroupFeedFragment extends Fragment {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
+                    group = (Group) object;
 
                     tvGroupName = (TextView) view.findViewById(R.id.tvGroupName);
                     groupName = object.getString("groupName");
@@ -211,7 +209,7 @@ public class GroupFeedFragment extends Fragment {
                     });
 
                 } else {
-                    // something went wrong
+                    e.printStackTrace();
                 }
             }
 
@@ -251,6 +249,14 @@ public class GroupFeedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mListener.startGroupChat(groupId, groupName);
+            }
+        });
+
+        ivThreeDots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GroupSettingsFragment groupSettingsFragment = GroupSettingsFragment.newInstance(group);
+                mListener.navigate_to_fragment(groupSettingsFragment);
             }
         });
 

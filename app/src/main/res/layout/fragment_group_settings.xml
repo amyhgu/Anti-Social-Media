@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.GroupSettingsFragment">
+
+    <EditText
+        android:id="@+id/etGroupName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:ems="10"
+        android:hint="e.g. peas in a pod"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/tvNameCommand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="71dp"
+        android:text="Change your group's name "
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvColorCommand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="252dp"
+        android:text="Change the color scheme "
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/ivColorRed"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvColorCommand"
+        android:layout_marginTop="15dp"
+        android:layout_alignStart="@+id/etGroupName"
+        android:src="@color/alphabet_g" />
+
+    <ImageView
+        android:id="@+id/ivColorGreen"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/ivColorRed"
+        android:layout_centerHorizontal="true"
+        android:src="@color/alphabet_k" />
+
+    <ImageView
+        android:id="@+id/ivColorBlue"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignEnd="@+id/etGroupName"
+        android:layout_alignTop="@+id/ivColorRed"
+        android:src="@color/alphabet_f" />
+
+    <Button
+        android:id="@+id/btSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivColorBlue"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:text="Save" />
+</RelativeLayout>
