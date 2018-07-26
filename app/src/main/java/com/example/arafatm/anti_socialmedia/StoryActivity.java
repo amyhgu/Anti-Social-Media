@@ -7,20 +7,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.example.arafatm.anti_socialmedia.Fragments.UserGroupList;
+import com.example.arafatm.anti_socialmedia.Home.MainActivity;
 import com.example.arafatm.anti_socialmedia.Models.Story;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -28,7 +24,7 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 
-public class storyActivity extends AppCompatActivity  implements UserGroupList.OnFragmentInteractionListener {
+public class StoryActivity extends AppCompatActivity {
     private Context context;
     private static final int VIDEO_CAPTURE = 101;
     private VideoView mVideoView;
@@ -39,11 +35,11 @@ public class storyActivity extends AppCompatActivity  implements UserGroupList.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = storyActivity.this;
+        context = StoryActivity.this;
         setContentView(R.layout.activity_story);
 
 
-        ImageView startCapturing = (ImageView) findViewById(R.id.iv_startCapture);
+        final ImageView startCapturing = (ImageView) findViewById(R.id.iv_startCapture);
         ImageView nextStory = (ImageView) findViewById(R.id.iv_next);
         ImageView prevStory = (ImageView) findViewById(R.id.iv_prev);
         VideoView videoView = findViewById(R.id.vv_story);
@@ -61,6 +57,7 @@ public class storyActivity extends AppCompatActivity  implements UserGroupList.O
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "Next story", Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -71,38 +68,36 @@ public class storyActivity extends AppCompatActivity  implements UserGroupList.O
             }
         });
 
-        videoView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (mVideoView != null) {
-                    if (mVideoView.isPlaying()) {
-                        mVideoView.pause();
-                        Toast.makeText(context, "story on hold", Toast.LENGTH_LONG).show();
-                    } else {
-                        mVideoView.start();
-                        Toast.makeText(context, "story playing", Toast.LENGTH_LONG).show();
-                    }
-                }
-                return false;
-            }
-        });
+//        videoView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                Toast.makeText(context, "Adding story", Toast.LENGTH_LONG).show();
+//
+//                if (mVideoView != null) {
+//                    if (mVideoView.isPlaying()) {
+//                        mVideoView.pause();
+//                        Toast.makeText(context, "story on hold", Toast.LENGTH_LONG).show();
+//                    } else {
+//                        mVideoView.start();
+//                        Toast.makeText(context, "story playing", Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//                return false;
+//            }
+//        });
 
         goToAddStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(context, "Adding story", Toast.LENGTH_LONG).show();
+
                 if (mVideoView != null) {
-                    //create new groupList fragment
-                    Fragment groupList = new UserGroupList();
-                    //create a bundle to store the newly created story
-                    Bundle args = new Bundle();
-
-                    args.putString(ARG_PARAM1, "here you are"); //pass group objectId
-                    groupList.setArguments(args);
-
-                    //navigate to fragment
-                    final FragmentManager fragmentManager = getSupportFragmentManager(); //Initiates FragmentManager
-                    FragmentTransaction fragmentTransactionThree = fragmentManager.beginTransaction();
-                    fragmentTransactionThree.replace(R.id.layout_story_activity, groupList).commit();
+                    Intent intent = new Intent(StoryActivity.this, MainActivity.class);
+                    //Pass the newly created story id
+                    intent.putExtra("key", "yoooo");
+                    setResult(RESULT_OK, intent); // set result code and bundle data for response
+                    finish(); // closes the activity, pass data to parent
+                    startActivity(intent);
                 }
             }
         });
@@ -118,7 +113,7 @@ public class storyActivity extends AppCompatActivity  implements UserGroupList.O
                     Environment.getExternalStorageDirectory().getAbsolutePath() + "/myvideo.mp4");
 
             //get video URI
-            Uri videoUri = FileProvider.getUriForFile(storyActivity.this, "com.antisocialmedia.fileprovider", mediaFile);
+            Uri videoUri = FileProvider.getUriForFile(StoryActivity.this, "com.antisocialmedia.fileprovider", mediaFile);
             String m = videoUri.toString();
             intent.putExtra(identifier, videoUri);
 
@@ -168,7 +163,6 @@ public class storyActivity extends AppCompatActivity  implements UserGroupList.O
                 Log.d("SAVING STORY", "SUCCESSFULLY STORED STORY IN PARSE");
             }
         });
-
     }
 
     public void playbackRecordedVideo(Uri videouri) {
@@ -179,8 +173,5 @@ public class storyActivity extends AppCompatActivity  implements UserGroupList.O
         mVideoView.start();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
-    }
 }
