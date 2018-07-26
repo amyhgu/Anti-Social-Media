@@ -15,6 +15,7 @@ import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 
 import java.util.ArrayList;
 
@@ -41,13 +42,13 @@ public class NotifsAdapter extends RecyclerView.Adapter<NotifsAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         GroupRequestNotif request = requests.get(position);
 
-        Group group = request.getRequestedGroup();
-        String groupName = group.getGroupName();
+        ParseObject group = request.getRequestedGroup();
+        String groupName = group.getString("groupName");
         String senderName = request.getSender().getString("fullName");
         String requestMessage = String.format("%s invites you to join the group %s.", senderName, groupName);
         viewHolder.tvRequest.setText(requestMessage);
 
-        ParseFile groupPic = group.getGroupImage();
+        ParseFile groupPic = group.getParseFile("groupImage");
         if (groupPic != null) {
             Glide.with(context).load(groupPic.getUrl()).into(viewHolder.ivCoverPhoto);
         } else {
