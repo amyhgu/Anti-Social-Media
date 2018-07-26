@@ -16,14 +16,14 @@
         android:background="@color/colorPrimary" />
 
     <Button
-        android:id="@+id/btCreateGroup"
+        android:id="@+id/btNext"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="61dp"
         android:background="@color/colorPrimary"
-        android:text="Create"
+        android:text="Next"
         android:textColor="@color/white" />
 
     <android.support.v7.widget.RecyclerView

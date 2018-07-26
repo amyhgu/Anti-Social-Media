@@ -68,7 +68,7 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
         return allFriends.size();
     }
 
-    public List<String> getNewGroupMembers() {
+    public ArrayList<String> getNewGroupMembers() {
         return newGroupMembers;
     }
 

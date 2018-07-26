@@ -40,6 +40,7 @@ import com.applozic.mobicommons.people.channel.Channel;
 import com.applozic.mobicommons.people.contact.Contact;
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.GroupCustomizationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupManagerFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
@@ -62,7 +63,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
         GroupManagerFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
-        GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface,  UserGroupList.OnFragmentInteractionListener {
+        GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface,
+        UserGroupList.OnFragmentInteractionListener, GroupCustomizationFragment.OnFragmentInteractionListener {
 
     // for chat fragment
     private static int retry;
