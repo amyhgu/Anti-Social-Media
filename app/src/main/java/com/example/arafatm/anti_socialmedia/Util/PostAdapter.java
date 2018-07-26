@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         public TextView tvFullName;
         public TextView tvPostText;
         public ImageView ivPostPic;
-        public Button btCommentExpand;                                                   //comment
+        public ImageButton btCommentExpand;                                                   //comment
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -50,7 +51,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvFullName = (TextView) itemView.findViewById(R.id.tvFullNameFeed);
             tvPostText = (TextView) itemView.findViewById(R.id.tvPostBody);
             ivPostPic = (ImageView) itemView.findViewById(R.id.ivProPicPost);
-            btCommentExpand = (Button) itemView.findViewById(R.id.btCommentIcon);      //comment
+            btCommentExpand = (ImageButton) itemView.findViewById(R.id.btCommentIcon);      //comment
 
         }
     }
