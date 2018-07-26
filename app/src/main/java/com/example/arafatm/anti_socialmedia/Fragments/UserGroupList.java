@@ -3,14 +3,17 @@ package com.example.arafatm.anti_socialmedia.Fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.GroupListAdapter;
+import com.parse.ParseObject;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +29,8 @@ public class UserGroupList extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    GroupListAdapter groupAdapter;
+    ArrayList<ParseObject> groupList;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -68,6 +73,7 @@ public class UserGroupList extends Fragment {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             String storyId = getArguments().getString(ARG_PARAM1);
+            Toast.makeText(getContext(), storyId, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -115,16 +121,46 @@ public class UserGroupList extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void navigate_to_fragment(Fragment fragment);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
-
-
+//    @Override
+//    public void onViewCreated(View view, Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//
+//        groupList = new ArrayList<>();
+//        GridView gridview = (GridView) view.findViewById(R.id.gv_group_list);
+//        ImageView add_group = (ImageView) view.findViewById(R.id.ic_add_icon);
+//
+//        add_group.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(getContext(), "Adding a new group", Toast.LENGTH_SHORT).show();
+//                /*Navigates to the groupManagerFragment*/
+//                Fragment fragment = new GroupCreationFragment();
+//                mListener.navigate_to_fragment(fragment);
+//            }
+//        });
+//
+//        loadAllGroups(view, gridview);
+//    }
+//
+//    /*loads all groups from parse and display it*/
+//    private void loadAllGroups(final View view, final GridView gridview) {
+//        final Group.Query postQuery = new Group.Query();
+//        postQuery.findInBackground(new FindCallback<Group>() {
+//            @Override
+//            public void done(final List<Group> objects, ParseException e) {
+//                if (e == null) {
+//
+//
+//                }
+//            });
+//    }
+//
+//    private void displayRecyckerView(List<Group> objects, View view, GridView gridview) {
+//
+//    }
 
     //TODO
     //customize vieeoview
@@ -133,3 +169,4 @@ public class UserGroupList extends Fragment {
     //add caption
 
 }
+

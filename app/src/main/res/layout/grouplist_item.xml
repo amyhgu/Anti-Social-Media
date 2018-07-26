@@ -20,15 +20,14 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/ivGroupPic"
-        android:text="Friend McFrienderson"
+        android:text="Group one"
         android:textSize="24sp" />
 
-    <ImageView
-        android:id="@+id/ivAddButton"
+    <RadioButton
+        android:id="@+id/rd_selected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        app:srcCompat="@drawable/ic_add_icon" />
-
+        android:checked="false" />
 </RelativeLayout>
