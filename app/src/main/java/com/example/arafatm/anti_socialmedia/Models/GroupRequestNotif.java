@@ -2,6 +2,7 @@ package com.example.arafatm.anti_socialmedia.Models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -47,6 +48,37 @@ public class GroupRequestNotif extends ParseObject {
         pending.remove(getReceiver().getObjectId());
         group.put("pending", pending);
         group.saveInBackground();
+    }
+
+    public static class Query extends ParseQuery {
+        public Query() {
+            super(GroupRequestNotif.class);
+        }
+
+        public GroupRequestNotif.Query withGroup() {
+            include("requestedGroup");
+            return this;
+        }
+
+        public GroupRequestNotif.Query withReceiver() {
+            include("receiver");
+            return this;
+        }
+
+        public GroupRequestNotif.Query withSender() {
+            include("sender");
+            return this;
+        }
+
+        public GroupRequestNotif.Query getInvitesSent(ParseUser user) {
+            whereEqualTo("sender", user);
+            return this;
+        }
+
+        public GroupRequestNotif.Query getInvitesReceived(ParseUser user) {
+            whereEqualTo("receiver", user);
+            return this;
+        }
     }
 
 //    ParseUser sender;
