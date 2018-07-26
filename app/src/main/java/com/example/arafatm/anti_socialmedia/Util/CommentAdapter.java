@@ -8,17 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
-
-import org.w3c.dom.Comment;
 
 import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
-    private List<Comment> mComments;
+    private List<Post> mComments;
     Context context;
 
-    public CommentAdapter(List<Comment> comments){
+    public CommentAdapter(List<Post> comments){
         mComments = comments;
     }
 
@@ -52,6 +51,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
     }
+
 
     @Override
     public int getItemCount() {

@@ -91,7 +91,7 @@ public class  FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.V
 
             friendName = (TextView) itemView.findViewById(R.id.tvGroupName);
             addButton = (ImageView) itemView.findViewById(R.id.ivAddButton);
-            friendPic = (ImageView) itemView.findViewById(R.id.ivPropic);
+            friendPic = (ImageView) itemView.findViewById(R.id.ivGroupPic);
 
             itemView.setOnClickListener(this);
             friendName.setOnClickListener(this);

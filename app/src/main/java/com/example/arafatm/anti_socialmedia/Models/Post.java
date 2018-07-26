@@ -6,6 +6,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.w3c.dom.Comment;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -90,9 +92,9 @@ public class Post extends ParseObject {
     }
 
     // Functions for commenting
-    public ArrayList<Comment> getComments(){
-        List<Comment> commentsList = getList("comments");
-        ArrayList<Comment> comments = new ArrayList<Comment>();
+    public ArrayList<Post> getComments(){
+        List<Post> commentsList = getList("comments");
+        ArrayList<Post> comments = new ArrayList<Post>();
         if(commentsList != null){
             comments.addAll(commentsList);
         }
