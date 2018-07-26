@@ -218,7 +218,7 @@ public class GroupCreationFragment extends Fragment {
                 List<String> newMembers = friendListAdapter.getNewGroupMembers();
 
                 //Create new group and initialize it
-                Group newGroup = new Group();
+                final Group newGroup = new Group();
                 newGroup.initGroup("NoName", newMembers);
                 newGroup.saveInBackground();
 
@@ -234,13 +234,11 @@ public class GroupCreationFragment extends Fragment {
 
                 for (int i = 0; i < newMembers.size(); i++) {
                     final GroupRequestNotif newRequest = new GroupRequestNotif();
-                    newRequest.setSender(loggedInUser);
-                    newRequest.setRequestedGroup(newGroup);
                     ParseQuery<ParseUser> query = ParseUser.getQuery();
                     query.getInBackground(newMembers.get(i), new GetCallback<ParseUser>() {
                         @Override
                         public void done(ParseUser object, ParseException e) {
-                            newRequest.setReceiver(object);
+                            newRequest.initRequest(object, newGroup);
                             try {
                                 newRequest.save();
                             } catch (ParseException e1) {

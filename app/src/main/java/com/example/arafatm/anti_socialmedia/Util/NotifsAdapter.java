@@ -83,8 +83,10 @@ public class NotifsAdapter extends RecyclerView.Adapter<NotifsAdapter.ViewHolder
                 GroupRequestNotif request = requests.get(position);
                 if (view.getId() == btAccept.getId()) {
                     request.acceptRequest();
+                    removeAt(position);
                 } else if (view.getId() == btReject.getId()) {
                     request.rejectRequest();
+                    removeAt(position);
                 }
             }
         }
@@ -93,5 +95,11 @@ public class NotifsAdapter extends RecyclerView.Adapter<NotifsAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return requests.size();
+    }
+
+    public void removeAt(int position) {
+        requests.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, requests.size());
     }
 }

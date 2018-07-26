@@ -14,7 +14,8 @@ public class GroupRequestNotif extends ParseObject {
     private String KEY_SENDER = "sender";
     private String KEY_RECEIVER = "receiver";
     private String KEY_REQUESTED_GROUP = "requestedGroup";
-    private String KEY_IS_ACCEPTED = "isAccepted";
+    private String KEY_SEEN = "isSeen";
+//    private String KEY_IS_ACCEPTED = "isAccepted";
 
     public ParseUser getSender() { return getParseUser(KEY_SENDER); }
 
@@ -28,8 +29,16 @@ public class GroupRequestNotif extends ParseObject {
 
     public void setRequestedGroup(Group group) { put(KEY_REQUESTED_GROUP, group); }
 
+    public void initRequest(ParseUser receiver, Group group) {
+        setReceiver(receiver);
+        setSender(ParseUser.getCurrentUser());
+        setRequestedGroup(group);
+        put(KEY_SEEN, false);
+    }
+
     public void acceptRequest() {
-        put(KEY_IS_ACCEPTED, true);
+        put(KEY_SEEN, true);
+        saveInBackground();
         ParseObject group = getRequestedGroup();
         String userId = getReceiver().getObjectId();
         List<String> approved = group.getList("users");
@@ -42,7 +51,8 @@ public class GroupRequestNotif extends ParseObject {
     }
 
     public void rejectRequest() {
-        put(KEY_IS_ACCEPTED, false);
+        put(KEY_SEEN, true);
+        saveInBackground();
         ParseObject group = getRequestedGroup();
         List<String> pending = group.getList("pending");
         pending.remove(getReceiver().getObjectId());
@@ -55,18 +65,8 @@ public class GroupRequestNotif extends ParseObject {
             super(GroupRequestNotif.class);
         }
 
-        public GroupRequestNotif.Query withGroup() {
-            include("requestedGroup");
-            return this;
-        }
-
-        public GroupRequestNotif.Query withReceiver() {
-            include("receiver");
-            return this;
-        }
-
-        public GroupRequestNotif.Query withSender() {
-            include("sender");
+        public GroupRequestNotif.Query withAll() {
+            include("requestedGroup").include("receiver").include("sender").include("isSeen");
             return this;
         }
 
@@ -76,40 +76,8 @@ public class GroupRequestNotif extends ParseObject {
         }
 
         public GroupRequestNotif.Query getInvitesReceived(ParseUser user) {
-            whereEqualTo("receiver", user);
+            whereEqualTo("receiver", user).whereEqualTo("isSeen", false);
             return this;
         }
     }
-
-//    ParseUser sender;
-//    ParseUser receiver;
-//    Group requestedGroup;
-//    Boolean isAccepted;
-//    ParseUser currentUser = ParseUser.getCurrentUser();
-//
-//    public ParseUser getSender() { return sender; }
-//
-//    public void setSender(ParseUser senderUser) { sender = senderUser; };
-//
-//    public ParseUser getReceiver() { return receiver; }
-//
-//    public void setReceiver(ParseUser receiverUser) { receiver = receiverUser; }
-//
-//    public Group getRequestedGroup() { return requestedGroup; }
-//
-//    public void setRequestedGroup(Group group) { requestedGroup = group; }
-//
-//    public void acceptRequest() {
-//        isAccepted = true;
-//        Group group = getRequestedGroup();
-//        group.approveUser(getReceiver());
-//    }
-//
-//    public void rejectRequest() {
-//        isAccepted = false;
-//        Group group = getRequestedGroup();
-//        List<String> pending = group.getPending();
-//        pending.remove(getReceiver().getObjectId());
-//        group.setPending(pending);
-//    }
 }
