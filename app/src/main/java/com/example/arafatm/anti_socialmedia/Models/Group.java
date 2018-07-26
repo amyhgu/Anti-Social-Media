@@ -6,6 +6,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ParseClassName("Group")
@@ -15,6 +16,7 @@ public class Group extends ParseObject {
     private static final String KEY_NAME = "groupName"; //Name of group name column in parse
     private static final String KEY_IMAGE = "groupImage"; //Name of group image column in parse
     private static final String KEY_STORIES = "groupStory"; //Name of group story column in parse
+    private static final String KEY_PENDING = "pending";
 
     public String getGroupName() {
         return getString(KEY_NAME);
@@ -33,12 +35,36 @@ public class Group extends ParseObject {
     }
 
     //gets list all users
-    public List<ParseUser> getUsers() { return getList(KEY_USERS);
+    public List<String> getUsers() { return getList(KEY_USERS);
     }
 
     /*Gets the Array of users from Parse, updates it, and save it back to parse*/
-    public void addUsers(List<String> users) {
+    public void setUsers(List<String> users) {
         put(KEY_USERS, users);
+    }
+
+    public List<String> getPending() {
+        return getList(KEY_PENDING);
+    }
+
+    public void setPending(List<String> requests) {
+        put(KEY_PENDING, requests);
+    }
+
+    public void approveUser(ParseUser user) {
+        String userId = user.getObjectId();
+        List<String> approved = getUsers();
+        List<String> pending = getPending();
+        approved.add(userId);
+        pending.remove(userId);
+    }
+
+    public void initGroup(String name, List<String> requests) {
+        setGroupName(name);
+        setPending(requests);
+        ArrayList<String> approved = new ArrayList<String>();
+        approved.add(ParseUser.getCurrentUser().getObjectId());
+        setUsers(approved);
     }
 
     //gets list all posts

@@ -67,7 +67,9 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
     ConversationUIService conversationUIService;
     MobiComQuickConversationFragment mobiComQuickConversationFragment;
     MobiComKitBroadcastReceiver mobiComKitBroadcastReceiver;
+    ParseUser parseUser;
     private static final String ARG_PARAM1 = "param1";
+          
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,72 +132,8 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
                     }
                 });
 
-
-        UserLoginTask.TaskListener listener = new UserLoginTask.TaskListener() {
-
-            @Override
-            public void onSuccess(RegistrationResponse registrationResponse, Context context) {
-                ApplozicClient.getInstance(context).hideChatListOnNotification();
-//                Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
-//                intent.putExtra(ConversationUIService.USER_ID, "receiveruserid123");
-//                intent.putExtra(ConversationUIService.DISPLAY_NAME, "Friend McFrienderson"); //put it for displaying the title.
-//                intent.putExtra(ConversationUIService.TAKE_ORDER,false); //Skip chat list for showing on back press
-//                startActivity(intent);
-            }
-
-            @Override
-            public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
-                // If any failure in registration the callback  will come here
-            }
-        };
-
-//        ParseUser.logInInBackground("1", "1", new LogInCallback() {
-//            @Override
-//            public void done(ParseUser user, ParseException e) {
-//                if(e == null ){          //if there's no errors
-//                    Log.d("LoginActivity", "Login successful!");
-//                }
-//                else {
-//                    Toast.makeText(getApplicationContext(), "Unsuccessful", Toast.LENGTH_LONG).show();
-//                    Log.e("LoginActivity", "Login failure.");
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-
-        ParseUser parseUser = ParseUser.getCurrentUser();
-        String userId = parseUser.getObjectId();
-        String displayName = parseUser.getString("fullName");
-        String email = parseUser.getEmail();
-
-        // login user for Chat Fragment
-        User user = new User();
-        user.setUserId(userId); //userId it can be any unique user identifier
-        user.setDisplayName(displayName); //displayName is the name of the user which will be shown in chat messages
-        user.setEmail(email); //optional
-        user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());
-        user.setPassword(""); //optional, leave it blank for testing purpose,
-        new UserLoginTask(user, listener, this).execute((Void) null);
-
-
-        // chat fragment setup
-        mobiComQuickConversationFragment = new MobiComQuickConversationFragment();
-        conversationUIService = new ConversationUIService(this, mobiComQuickConversationFragment);
-        mobiComKitBroadcastReceiver = new MobiComKitBroadcastReceiver(this, conversationUIService);
-
-        Intent lastSeenStatusIntent = new Intent(this, UserIntentService.class);
-        lastSeenStatusIntent.putExtra(UserIntentService.USER_LAST_SEEN_AT_STATUS, true);
-        startService(lastSeenStatusIntent);
-
-        addGroups(parseUser);
+        chatLogin();
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_chat_fragment, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -242,9 +180,6 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         fragmentTransaction.replace(R.id.layout_child_activity, fragmentToAdd,
                 fragmentTag);
 
-//        if (supportFragmentManager.getBackStackEntryCount() > 1) {
-//            supportFragmentManager.popBackStackImmediate();
-//        }
         fragmentTransaction.addToBackStack(fragmentTag);
         fragmentTransaction.commitAllowingStateLoss();
         supportFragmentManager.executePendingTransactions();
@@ -331,6 +266,47 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
         intent.putExtra(ApplozicMqttIntentService.USER_KEY_STRING, userKeyString);
         intent.putExtra(ApplozicMqttIntentService.DEVICE_KEY_STRING, deviceKeyString);
         startService(intent);
+    }
+
+    public void chatLogin() {
+        UserLoginTask.TaskListener listener = new UserLoginTask.TaskListener() {
+
+            @Override
+            public void onSuccess(RegistrationResponse registrationResponse, Context context) {
+                ApplozicClient.getInstance(context).hideChatListOnNotification();
+            }
+
+            @Override
+            public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
+                // If any failure in registration the callback  will come here
+            }
+        };
+
+        parseUser = ParseUser.getCurrentUser();
+        String userId = parseUser.getObjectId();
+        String displayName = parseUser.getString("fullName");
+        String email = parseUser.getEmail();
+
+        // login user for Chat Fragment
+        User user = new User();
+        user.setUserId(userId); //userId it can be any unique user identifier
+        user.setDisplayName(displayName); //displayName is the name of the user which will be shown in chat messages
+        user.setEmail(email); //optional
+        user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());
+        user.setPassword(""); //optional, leave it blank for testing purpose,
+        new UserLoginTask(user, listener, this).execute((Void) null);
+
+
+        // chat fragment setup
+        mobiComQuickConversationFragment = new MobiComQuickConversationFragment();
+        conversationUIService = new ConversationUIService(this, mobiComQuickConversationFragment);
+        mobiComKitBroadcastReceiver = new MobiComKitBroadcastReceiver(this, conversationUIService);
+
+        Intent lastSeenStatusIntent = new Intent(this, UserIntentService.class);
+        lastSeenStatusIntent.putExtra(UserIntentService.USER_LAST_SEEN_AT_STATUS, true);
+        startService(lastSeenStatusIntent);
+
+        addGroups(parseUser);
     }
 
     private void addGroups(ParseUser user) {

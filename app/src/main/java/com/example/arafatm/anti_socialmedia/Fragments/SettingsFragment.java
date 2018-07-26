@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,21 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Authentification.LoginActivity;
+import com.example.arafatm.anti_socialmedia.Models.Group;
+import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.NotifsAdapter;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +58,9 @@ public class SettingsFragment extends Fragment {
     private TextView tvFullName;
     private TextView tvViewProfile;
     private RelativeLayout rlViewProfile;
+    private RecyclerView rvNotifs;
+    private ArrayList<GroupRequestNotif> requestList;
+    private NotifsAdapter requestAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -115,8 +130,6 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false);
-
-
     }
 
 
@@ -129,6 +142,11 @@ public class SettingsFragment extends Fragment {
         tvFullName = view.findViewById(R.id.tvGroupName);
         tvViewProfile = view.findViewById(R.id.tvViewProfile);
         rlViewProfile = view.findViewById(R.id.rlViewProfile);
+        rvNotifs = view.findViewById(R.id.rvNotifs);
+
+        requestList = new ArrayList<>();
+        getGroupInvites();
+        requestAdapter = new NotifsAdapter(requestList);
 
         ParseUser user = ParseUser.getCurrentUser();
 
@@ -165,9 +183,38 @@ public class SettingsFragment extends Fragment {
                 mListener.onViewProfileSelected();
             }
         });
+    }
 
+    public void getGroupInvites() {
+        Group.Query query = new Group.Query();
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+        query.whereEqualTo("pending", currentUser.getObjectId());
 
+        query.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(List<Group> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        final GroupRequestNotif notif = new GroupRequestNotif();
+                        final Group group = objects.get(i);
+                        List<String> users = group.getList("users");
+                        String senderId = users.get(0);
 
+                        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+                        userQuery.getInBackground(senderId, new GetCallback<ParseUser>() {
+                            @Override
+                            public void done(ParseUser object, ParseException e) {
+                                notif.setSender(object);
+                                notif.setReceiver(currentUser);
+                                notif.setRequestedGroup(group);
+                                requestList.add(notif);
+                                requestAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     private void logout() {
@@ -184,14 +231,6 @@ public class SettingsFragment extends Fragment {
         Intent intent = new Intent(SettingsFragment.this.getContext(), LoginActivity.class);
         startActivity(intent);
     }
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-
 
 
     @Override
