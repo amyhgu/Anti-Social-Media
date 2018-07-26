@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/ivCoverPhoto"
         android:layout_alignParentStart="true"
-        android:text="Group Name"
+        android:text=""
         android:textColor="@color/black"
         android:textSize="24sp" />
 

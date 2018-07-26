@@ -100,7 +100,7 @@ public class GroupCustomizationFragment extends Fragment {
                 //bundle the group objectId and send to groupfeed fragment for later use
                 Bundle args = new Bundle();
                 String objectId = newGroup.getObjectId();
-                args.putString("objectId", objectId);
+                args.putString("param1", objectId);
 
                 /*Navigates to the GroupFeedFragment*/
                 Fragment fragment = new GroupFeedFragment();
