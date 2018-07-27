@@ -23,8 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.PhotoHelper;
 import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
 import com.example.arafatm.anti_socialmedia.Models.Group;
 
@@ -72,8 +74,11 @@ public class GroupFeedFragment extends Fragment {
     private TextView tvGroupName;
     private ImageView ivGroupPic;
     private ImageView ivStartChat;
+    private ImageView ivThreeDots;
+
     private File photoFile;
     public String photoFileName = "photo.jpg";
+    PhotoHelper photoHelper;
 
     public final String APP_TAG = "MyCustomApp";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
@@ -150,6 +155,7 @@ public class GroupFeedFragment extends Fragment {
         messageInput = view.findViewById(R.id.etNewPost);
         createButton = view.findViewById(R.id.btCreatePost);
         ivStartChat = view.findViewById(R.id.ivStartChat);
+        ivThreeDots = view.findViewById(R.id.ivThreeDots);
 
         //displaying the posts
         posts = new ArrayList<>();
@@ -174,6 +180,7 @@ public class GroupFeedFragment extends Fragment {
                 if (e == null) {
                     group = (Group) object;
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
+                    group = (Group) object;
 
                     tvGroupName = (TextView) view.findViewById(R.id.tvGroupName);
                     groupName = object.getString("groupName");
@@ -196,12 +203,15 @@ public class GroupFeedFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
 //                            uploadImage();
-                            takePhoto();
+//                            takePhoto();
+                            photoHelper = new PhotoHelper(getContext());
+                            Intent intent = photoHelper.takePhoto();
+                            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                         }
                     });
 
                 } else {
-                    // something went wrong
+                    e.printStackTrace();
                 }
             }
 
@@ -244,6 +254,14 @@ public class GroupFeedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mListener.startGroupChat(groupId, groupName);
+            }
+        });
+
+        ivThreeDots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GroupSettingsFragment groupSettingsFragment = GroupSettingsFragment.newInstance(group);
+                mListener.navigate_to_fragment(groupSettingsFragment);
             }
         });
 

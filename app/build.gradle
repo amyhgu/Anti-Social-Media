@@ -86,7 +86,7 @@ dependencies {
 
     implementation 'com.android.support:recyclerview-v7:28.0.0-alpha3'
 
-    implementation  'com.facebook.android:facebook-android-sdk:[4,5)' // facebook login
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)' // facebook login
 
     // implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.8.8' // applozic chat client
 
@@ -111,4 +111,3 @@ dependencies {
 //    implementation 'com.xwray:groupie-kotlin-android-extensions:2.0.3'
 //    implementation 'com.xwray:groupie-databinding:2.0.3'
 }
-

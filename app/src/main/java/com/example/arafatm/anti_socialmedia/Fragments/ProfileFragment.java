@@ -36,7 +36,7 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private ImageView ivStartChat;
     GroupAdapter groupAdapter;
-    ArrayList<ParseObject> groupList;
+    ArrayList<Group> groupList;
 
     private static final String ARG_PARAM1 = "param1";
     private OnFragmentInteractionListener mListener;

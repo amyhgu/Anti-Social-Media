@@ -6,23 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SearchView;
 
-import com.example.arafatm.anti_socialmedia.Models.Group;
-import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.FriendListAdapter;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +80,7 @@ public class GroupCreationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_group_creation, container, false);
+        View view = inflater.inflate(R.layout.fragment_group_creation, container, false);
 
         //RECYCLERVIEW SETUP
         // Lookup the recyclerview in activity layout
@@ -181,10 +174,8 @@ public class GroupCreationFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button createButton = (Button) view.findViewById(R.id.btCreateGroup);
+        Button nextButton = (Button) view.findViewById(R.id.btNext);
 
-        //TODO
-        //Enable searching friends by name!
         final SearchView searchView = (SearchView) view.findViewById(R.id.sv_search);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -209,56 +200,10 @@ public class GroupCreationFragment extends Fragment {
         });
 
 
-        createButton.setOnClickListener(new View.OnClickListener() {
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //  Toast.makeText(getContext(), "Navigating to Group Feed", Toast.LENGTH_SHORT).show();
-
-                //gets list of new members
-                List<String> newMembers = friendListAdapter.getNewGroupMembers();
-
-                //Create new group and initialize it
-                Group newGroup = new Group();
-                newGroup.initGroup("NoName", newMembers);
-                newGroup.saveInBackground();
-
-                ParseUser loggedInUser = ParseUser.getCurrentUser();
-
-                List<ParseObject> currentGroups = loggedInUser.getList("groups");
-                if (currentGroups == null) {
-                    currentGroups = new ArrayList<>();
-                }
-                currentGroups.add(newGroup);
-                loggedInUser.put("groups", currentGroups);
-                loggedInUser.saveInBackground();
-
-                for (int i = 0; i < newMembers.size(); i++) {
-                    final GroupRequestNotif newRequest = new GroupRequestNotif();
-                    newRequest.setSender(loggedInUser);
-                    newRequest.setRequestedGroup(newGroup);
-                    ParseQuery<ParseUser> query = ParseUser.getQuery();
-                    query.getInBackground(newMembers.get(i), new GetCallback<ParseUser>() {
-                        @Override
-                        public void done(ParseUser object, ParseException e) {
-                            newRequest.setReceiver(object);
-                            try {
-                                newRequest.save();
-                            } catch (ParseException e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-                    });
-                }
-
-                //bundle the group objectId and send to groupfeed fragment for later use
-                Bundle args = new Bundle();
-                String ObjectId = newGroup.getObjectId();
-                args.putString(ARG_PARAM1, ObjectId);
-
-                /*Navigates to the GroupFeedFragment*/
-                Fragment fragment = new GroupFeedFragment();
-                fragment.setArguments(args);
-                mListener.navigate_to_fragment(fragment);
+                passToCustomization();
             }
         });
     }
@@ -289,5 +234,11 @@ public class GroupCreationFragment extends Fragment {
 
     //TODO
     //get empty search to fetch all users
+
+    private void passToCustomization() {
+        ArrayList<String> newMembers = friendListAdapter.getNewGroupMembers();
+        GroupCustomizationFragment gcFragment = GroupCustomizationFragment.newInstance(newMembers);
+        mListener.navigate_to_fragment(gcFragment);
+    }
 }
 

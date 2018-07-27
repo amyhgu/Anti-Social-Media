@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,7 +135,7 @@ public class SettingsFragment extends Fragment {
         rvNotifs = view.findViewById(R.id.rvNotifs);
 
         requestList = new ArrayList<>();
-        getGroupInvites();
+        getGroupRequests();
 
         requestAdapter = new NotifsAdapter(requestList);
         rvNotifs.setAdapter(requestAdapter);
@@ -191,33 +192,21 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-    public void getGroupInvites() {
-        Group.Query query = new Group.Query();
-        final ParseUser currentUser = ParseUser.getCurrentUser();
-        query.whereEqualTo("pending", currentUser.getObjectId());
+    public void getGroupRequests() {
+        GroupRequestNotif.Query query = new GroupRequestNotif.Query();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        query.getInvitesReceived(currentUser).withAll();
 
-        query.findInBackground(new FindCallback<Group>() {
+        query.findInBackground(new FindCallback<GroupRequestNotif>() {
             @Override
-            public void done(List<Group> objects, ParseException e) {
+            public void done(List<GroupRequestNotif> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        final GroupRequestNotif notif = new GroupRequestNotif();
-                        final Group group = objects.get(i);
-                        List<String> users = group.getList("users");
-                        String senderId = users.get(0);
-
-                        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-                        userQuery.getInBackground(senderId, new GetCallback<ParseUser>() {
-                            @Override
-                            public void done(ParseUser object, ParseException e) {
-                                notif.setSender(object);
-                                notif.setReceiver(currentUser);
-                                notif.setRequestedGroup(group);
-                                requestList.add(notif);
-                                requestAdapter.notifyDataSetChanged();
-                            }
-                        });
+                        requestList.add(objects.get(i));
+                        requestAdapter.notifyDataSetChanged();
                     }
+                } else {
+                    e.printStackTrace();
                 }
             }
         });

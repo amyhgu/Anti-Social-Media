@@ -16,8 +16,10 @@ import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NotifsAdapter extends RecyclerView.Adapter<NotifsAdapter.ViewHolder> {
     private Context context;
@@ -83,8 +85,15 @@ public class NotifsAdapter extends RecyclerView.Adapter<NotifsAdapter.ViewHolder
                 GroupRequestNotif request = requests.get(position);
                 if (view.getId() == btAccept.getId()) {
                     request.acceptRequest();
+                    removeAt(position);
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    List<Group> currentGroups = currentUser.getList("groups");
+                    currentGroups.add((Group) request.getRequestedGroup());
+                    currentUser.put("groups", currentGroups);
+                    currentUser.saveInBackground();
                 } else if (view.getId() == btReject.getId()) {
                     request.rejectRequest();
+                    removeAt(position);
                 }
             }
         }
@@ -93,5 +102,11 @@ public class NotifsAdapter extends RecyclerView.Adapter<NotifsAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return requests.size();
+    }
+
+    public void removeAt(int position) {
+        requests.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, requests.size());
     }
 }

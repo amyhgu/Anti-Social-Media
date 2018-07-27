@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class GroupAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<ParseObject> groupList;
+    private ArrayList<Group> groupList;
 
-    public GroupAdapter(Context context, ArrayList<ParseObject> List) {
+    public GroupAdapter(Context context, ArrayList<Group> List) {
         mContext = context;
         this.groupList = List;
     }
@@ -57,12 +58,12 @@ public class GroupAdapter extends BaseAdapter {
 
         ParseFile groupImage = groupList.get(position).getParseFile("groupImage");
 
-            if (groupImage != null) {
-                /*shows group image on gridView*/
-                Glide.with(viewGroup.getContext())
-                        .load(groupImage.getUrl())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(imageView);
+        if (groupImage != null) {
+            /*shows group image on gridView*/
+            Glide.with(viewGroup.getContext())
+                    .load(groupImage.getUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imageView);
         } else {
             imageView.setImageResource(R.drawable.ic_group_default);
         }
@@ -70,7 +71,7 @@ public class GroupAdapter extends BaseAdapter {
     }
 
     // Add a list of items -- change to type used
-    public void addAll(List<ParseObject> list) {
+    public void addAll(List<Group> list) {
         groupList.addAll(list);
         notifyDataSetChanged();
     }
