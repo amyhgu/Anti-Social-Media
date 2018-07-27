@@ -298,6 +298,8 @@ public class GroupFeedFragment extends Fragment {
 
     private void loadTopPosts() {
         final Post.Query postsQuery = new Post.Query();
+
+
         postsQuery.getTop();       //<== this gets the post from a specific user. Won't cause harm, but don't need it rn
         // ^ this line originally had ".withUser", so this should fix it
 
