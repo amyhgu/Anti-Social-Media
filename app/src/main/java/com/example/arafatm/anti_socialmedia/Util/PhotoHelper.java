@@ -11,6 +11,8 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.parse.ParseFile;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,9 +22,10 @@ import java.io.IOException;
 public class PhotoHelper {
 
     private File photoFile;
-    public String photoFileName = "photo.jpg";
+    public String photoFileName = "photo";
     private Context context;
     String imagePath;
+    File resizedFile;
     int SOME_WIDTH = 240;
 
     public final String APP_TAG = "MyCustomApp";
@@ -119,9 +122,9 @@ public class PhotoHelper {
         // Compress the image further
         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
         // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
-        File resizedUri = getPhotoFileUri(photoFileName + "_resized");
+        File resizedUri = getPhotoFileUri(photoFileName + "_resized.jpg");
         imagePath = resizedUri.getPath();
-        File resizedFile = new File(imagePath);
+        resizedFile = new File(imagePath);
 
         Log.d("CameraActivity", "resizing successful");
         try {
@@ -147,6 +150,11 @@ public class PhotoHelper {
         Log.d("CameraActivity", "loading successful");
         // Load the taken image into a preview
         return resizedBitmap;
+    }
+
+    public ParseFile grabImage() {
+        ParseFile parseFile = new ParseFile(resizedFile);
+        return parseFile;
     }
 
     public static Bitmap scaleToFitWidth(Bitmap b, int width)

@@ -59,9 +59,10 @@ public class Group extends ParseObject {
         pending.remove(userId);
     }
 
-    public void initGroup(String name, List<String> requests) {
+    public void initGroup(String name, List<String> requests, ParseFile image) {
         setGroupName(name);
         setPending(requests);
+        setGroupImage(image);
         ArrayList<String> approved = new ArrayList<String>();
         approved.add(ParseUser.getCurrentUser().getObjectId());
         setUsers(approved);

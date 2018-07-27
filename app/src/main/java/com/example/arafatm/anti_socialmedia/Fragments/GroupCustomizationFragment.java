@@ -3,9 +3,7 @@ package com.example.arafatm.anti_socialmedia.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +21,7 @@ import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.PhotoHelper;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -123,7 +122,6 @@ public class GroupCustomizationFragment extends Fragment {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    Uri photoUri = data.getData();
                     Bitmap bitmap = photoHelper.resizePhoto();
                     ivPreview.setImageBitmap(bitmap);
                 }
@@ -136,20 +134,27 @@ public class GroupCustomizationFragment extends Fragment {
     private void sendGroupRequest() {
         //Create new group and initialize it
         final Group newGroup = new Group();
-        String newName = etGroupName.getText().toString();
-        newGroup.initGroup(newName, newMembers);
-        newGroup.saveInBackground(new SaveCallback() {
+        final String newName = etGroupName.getText().toString();
+        final ParseFile newGroupPic = photoHelper.grabImage();
+
+        newGroupPic.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                //bundle the group objectId and send to groupfeed fragment for later use
-                Bundle args = new Bundle();
-                String objectId = newGroup.getObjectId();
-                args.putString("param1", objectId);
+                newGroup.initGroup(newName, newMembers, newGroupPic);
+                newGroup.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        //bundle the group objectId and send to groupfeed fragment for later use
+                        Bundle args = new Bundle();
+                        String objectId = newGroup.getObjectId();
+                        args.putString("param1", objectId);
 
-                /*Navigates to the GroupFeedFragment*/
-                Fragment fragment = new GroupFeedFragment();
-                fragment.setArguments(args);
-                mListener.navigate_to_fragment(fragment);
+                        /*Navigates to the GroupFeedFragment*/
+                        Fragment fragment = new GroupFeedFragment();
+                        fragment.setArguments(args);
+                        mListener.navigate_to_fragment(fragment);
+                    }
+                });
             }
         });
 
