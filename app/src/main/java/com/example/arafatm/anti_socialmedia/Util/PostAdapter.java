@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.arafatm.anti_socialmedia.Fragments.CommentFragment;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.parse.ParseException;
@@ -24,7 +26,6 @@ import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     private List<Post> mPosts;
-
     Context context;
 
     public PostAdapter(List<Post> posts){
@@ -36,6 +37,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         void onFragmentInteraction(Uri uri);
         void navigate_to_fragment(Fragment fragment);
     }
+
+//    public void onViewProfileSelected() {
+//        ProfileFragment profileFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser());
+//        navigate_to_fragment(profileFragment);
+//    }
+//    public static ProfileFragment newInstance(ParseUser user) {
+//        ProfileFragment profileFragment = new ProfileFragment();
+//        Bundle args = new Bundle();
+//        args.putParcelable(ParseUser.class.getSimpleName(), Parcels.wrap(user));
+//        profileFragment.setArguments(args);
+//        return profileFragment;
+//    }
 
     //create ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -97,19 +110,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             Glide.with(context).load(propicParse.getUrl()).into(viewHolder.ivPostPic);
         }
 
-//        //goes to the comment fragment
-//        //TODO: update the number of comments in each
-//        final Button commentCountButton = viewHolder.btCommentExpand;
-//        commentCountButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                CommentFragment commentFragment = CommentFragment.methodname(post);     //need a method to remember the post from previous screen
-//                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.layout_child_activity, commentFragment)
-//                        .commit();
-//
-//            }
-//        });
+        //goes to the comment fragment
+        //TODO: update the number of comments in each
+        final ImageButton commentExpandButton = viewHolder.btCommentExpand;
+        commentExpandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommentFragment commentFragment = CommentFragment.newInstance(post);     //need a method to remember the post from previous screen
+                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.layout_child_activity, commentFragment)
+                        .commit();
+
+            }
+        });
 
     }
 
@@ -118,7 +131,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     public int getItemCount() {
         return mPosts.size();
     }
-
 
     // Clean all elements of the recycler
     public void clear() {

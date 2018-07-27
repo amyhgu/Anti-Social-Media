@@ -62,7 +62,13 @@ import java.util.List;
 //import com.example.arafatm.anti_socialmedia.Fragments.StoryFragment;
 
 
-public class MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
+public class
+
+
+
+
+
+MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInteractionListener,
         GroupManagerFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
         GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface,
@@ -81,10 +87,10 @@ public class MainActivity extends AppCompatActivity implements ChatFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String name = getIntent().getStringExtra("key");
 
-        if (getIntent() != null) {
+        if (name != null) {
             // Extract name value from result extras
-            String name = getIntent().getStringExtra("key");
 
             Fragment fragment = new UserGroupList();
             FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager(); //Initiates FragmentManager

@@ -90,17 +90,21 @@ public class Post extends ParseObject {
     }
 
     // Functions for commenting
-    public ArrayList<Comment> getComments(){
-        List<Comment> commentsList = getList("comments");
-        ArrayList<Comment> comments = new ArrayList<Comment>();
+    public ArrayList<Post> getComments(){
+        List<Post> commentsList = getList("comments");
+        ArrayList<Post> comments = new ArrayList<Post>();
         if(commentsList != null){
             comments.addAll(commentsList);
         }
         return comments;
     }
-    public void setComments(List<Comment> comments){
+    public void setComments(List<Post> comments){
         put("comments", comments);
         saveInBackground();
+    }
+
+    public void setCommentString(String parseFile){
+        put("comment", parseFile);
     }
     public int getCommentsCount(){
         return getComments().size();
