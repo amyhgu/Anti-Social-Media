@@ -51,6 +51,7 @@ import com.example.arafatm.anti_socialmedia.Fragments.ProfileFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.SettingsFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.UserGroupList;
 import com.example.arafatm.anti_socialmedia.Models.Group;
+import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.StoryActivity;
 import com.parse.FindCallback;
@@ -75,7 +76,7 @@ MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInterac
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
         GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface,
         UserGroupList.OnFragmentInteractionListener, GroupCustomizationFragment.OnFragmentInteractionListener,
-        GroupSettingsFragment.OnFragmentInteractionListener, CreatePostFragment.OnFragmentInteractionListener {
+        GroupSettingsFragment.OnFragmentInteractionListener {
 
     // for chat fragment
     private static int retry;
@@ -173,8 +174,7 @@ MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInterac
     @Override
     public void navigateToDialog(DialogFragment dialogFragment) {
         FragmentManager fm = getSupportFragmentManager();
-        CreatePostFragment createPostFragment = new CreatePostFragment();
-        createPostFragment.show(fm, "fragment_create_post");
+        dialogFragment.show(fm, "fragment_create_post");
     }
 
     public void startUserChat(String contactName, String message) {

@@ -54,7 +54,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link GroupFeedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GroupFeedFragment extends Fragment {
+public class GroupFeedFragment extends Fragment implements CreatePostFragment.OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -186,7 +186,8 @@ public class GroupFeedFragment extends Fragment {
         ivLaunchNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreatePostFragment cpFragment = new CreatePostFragment();
+                CreatePostFragment cpFragment = CreatePostFragment.newInstance(group);
+                cpFragment.setTargetFragment(GroupFeedFragment.this, 1);
                 mListener.navigateToDialog(cpFragment);
             }
         });
@@ -453,5 +454,13 @@ public class GroupFeedFragment extends Fragment {
             ret = (ret << 6) + convertChar( s.charAt( i ));
         }
         return ret;
+    }
+
+    @Override
+    public void onFinishCreatePost(Post post) {
+        posts.add(0, post);
+        postAdapter.notifyItemInserted(0);
+        rvPosts.scrollToPosition(0);
+        Toast.makeText(getContext(), "New post created", Toast.LENGTH_SHORT).show();
     }
 }

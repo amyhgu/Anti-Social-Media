@@ -35,8 +35,7 @@ public class Group extends ParseObject {
     }
 
     //gets list all users
-    public List<String> getUsers() { return getList(KEY_USERS);
-    }
+    public List<String> getUsers() { return getList(KEY_USERS); }
 
     /*Gets the Array of users from Parse, updates it, and save it back to parse*/
     public void setUsers(List<String> users) {
@@ -49,6 +48,20 @@ public class Group extends ParseObject {
 
     public void setPending(List<String> requests) {
         put(KEY_PENDING, requests);
+    }
+
+    public List<Post> getPosts() {
+        return getList(KEY_POSTS);
+    }
+
+    /*Gets the Array of posts from Parse, updates it, and save it back to parse*/
+    public void addPost(Post post) {
+        List<Post> posts = getPosts();
+        if (posts == null) {
+            posts = new ArrayList<Post>();
+        }
+        posts.add(post);
+        put(KEY_POSTS, posts);
     }
 
     public void approveUser(ParseUser user) {
@@ -66,18 +79,6 @@ public class Group extends ParseObject {
         ArrayList<String> approved = new ArrayList<String>();
         approved.add(ParseUser.getCurrentUser().getObjectId());
         setUsers(approved);
-    }
-
-    //gets list all posts
-    public List<ParseObject> getPosts() {
-        return getList(KEY_POSTS);
-    }
-
-    /*Gets the Array of posts from Parse, updates it, and save it back to parse*/
-    public void addPosts(Post post) {
-        List<ParseObject> users = getList(KEY_POSTS);
-        users.add(post);
-        put(KEY_POSTS, users);
     }
 
     public static class Query extends ParseQuery {

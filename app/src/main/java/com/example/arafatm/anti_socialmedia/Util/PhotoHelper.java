@@ -150,30 +150,6 @@ public class PhotoHelper {
         // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
 
         writeStreamToFile(bytes);
-//        File resizedUri = getPhotoFileUri(photoFileName + "_resized.jpg");
-//        imagePath = resizedUri.getPath();
-//        resizedFile = new File(imagePath);
-//
-//        Log.d("CameraActivity", "resizing successful");
-//        try {
-//            resizedFile.createNewFile();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        FileOutputStream fos = null;
-//        try {
-//            fos = new FileOutputStream(resizedFile);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        // Write the bytes of the bitmap to file
-//        try {
-//            fos.write(bytes.toByteArray());
-//            fos.close();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         Log.d("CameraActivity", "loading successful");
         // Load the taken image into a preview
