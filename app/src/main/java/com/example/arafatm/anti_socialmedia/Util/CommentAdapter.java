@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
+import com.parse.ParseException;
 
 import java.util.List;
 
@@ -49,12 +50,24 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-    }
+        Post comment = mComments.get(i);
+        String body = "";
+        String user = "";
 
+        try {
+            body = comment.fetchIfNeeded().getString("comment");
+            user = comment.getSender().fetchIfNeeded().toString();
+        }
+        catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        viewHolder.tvBodyComment.setText(body);
+        viewHolder.tvUserComment.setText(user);
+    }
 
     @Override
     public int getItemCount() {
-//        mComments.size();
-        return 0;
+        return mComments.size();
     }
 }

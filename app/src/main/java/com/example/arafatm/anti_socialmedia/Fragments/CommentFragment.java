@@ -21,6 +21,7 @@ import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
@@ -84,7 +85,37 @@ public class CommentFragment extends Fragment{
             }
         });
 
-        createComment(pointToComment, originalPost);
+        loadTopPosts();
+
+        btCommentSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String commentString = etCommentText.getText().toString();
+                Post comment = new Post();
+
+                // save comment to Parse
+                comment.setUser(ParseUser.getCurrentUser());
+                comment.setCommentString(commentString);
+                pointToComment.add(comment);
+
+                comment.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            originalPost.setComments(pointToComment);
+                            Toast.makeText(getContext(), "Comment posted!", Toast.LENGTH_SHORT).show();
+                            etCommentText.setText("");
+                        }
+                        else {
+                            e.printStackTrace();
+                        }
+                    }
+
+                });
+
+
+            }
+        });
 
     }
 
@@ -96,27 +127,6 @@ public class CommentFragment extends Fragment{
         return commentFragment;
     }
 
-    private void createComment(final ArrayList<Post> pointToComment, final Post parentPost){
-        btCommentSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String commentString = etCommentText.getText().toString();
-                Post comment = new Post();
-
-                // save comment to Parse
-                comment.setUser(ParseUser.getCurrentUser());
-                comment.setCommentString(commentString);
-                comment.saveInBackground();
-
-                pointToComment.add(comment);
-                parentPost.setComments(pointToComment);
-
-                etCommentText.setText("");
-
-                Toast.makeText(getContext(), "Comment posted!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     private void refreshFeed(){
         PostAdapter adapter = new PostAdapter(comments);
