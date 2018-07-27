@@ -30,8 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/ivPreview"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/ivCamera"
+        android:layout_marginTop="30dp"
         android:text="Pick a color scheme"
         android:textSize="18sp" />
 
@@ -88,4 +88,20 @@
         android:layout_centerHorizontal="true"
         android:text="Take or upload a group picture"
         android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/ivCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/btCreateGroup"
+        android:layout_below="@+id/ivPreview"
+        android:src="@drawable/ic_camera_post" />
+
+    <ImageView
+        android:id="@+id/ivUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btCreateGroup"
+        android:layout_below="@+id/ivPreview"
+        android:src="@drawable/ic_photo" />
 </RelativeLayout>

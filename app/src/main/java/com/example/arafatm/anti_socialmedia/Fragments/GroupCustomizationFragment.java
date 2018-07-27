@@ -1,8 +1,11 @@
 package com.example.arafatm.anti_socialmedia.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,10 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.PhotoHelper;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -22,13 +28,24 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class GroupCustomizationFragment extends Fragment {
     private EditText etGroupName;
     private Button btCreateGroup;
+    private ImageView ivPreview;
+    private ImageView ivCamera;
+    private ImageView ivUpload;
+
     private List<String> newMembers;
+    private PhotoHelper photoHelper;
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,6 +97,18 @@ public class GroupCustomizationFragment extends Fragment {
 
         etGroupName = view.findViewById(R.id.etGroupName);
         btCreateGroup = view.findViewById(R.id.btCreateGroup);
+        ivPreview = view.findViewById(R.id.ivPreview);
+        ivCamera = view.findViewById(R.id.ivCamera);
+        ivUpload = view.findViewById(R.id.ivUpload);
+
+        ivCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photoHelper = new PhotoHelper(getContext());
+                Intent intent = photoHelper.takePhoto();
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
 
         btCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +116,21 @@ public class GroupCustomizationFragment extends Fragment {
                 sendGroupRequest();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    Uri photoUri = data.getData();
+                    Bitmap bitmap = photoHelper.resizePhoto();
+                    ivPreview.setImageBitmap(bitmap);
+                }
+            } else { // Result was a failure
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void sendGroupRequest() {
