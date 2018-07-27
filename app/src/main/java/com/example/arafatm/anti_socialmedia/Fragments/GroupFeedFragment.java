@@ -107,7 +107,7 @@ public class GroupFeedFragment extends Fragment {
     public static GroupFeedFragment newInstance(String mParam1) {
         GroupFeedFragment fragment = new GroupFeedFragment();
         Bundle args = new Bundle();
-        args.putString(key1, mParam1);
+        args.putString(ARG_PARAM1, mParam1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -176,9 +176,9 @@ public class GroupFeedFragment extends Fragment {
         query.getInBackground(groupObjectId, new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
-                    group = (Group) object;
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
                     group = (Group) object;
+                    String objectId = group.getObjectId();
 
                     tvGroupName = (TextView) view.findViewById(R.id.tvGroupName);
                     groupName = object.getString("groupName");

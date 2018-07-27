@@ -3,6 +3,7 @@ package com.example.arafatm.anti_socialmedia.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,6 +38,7 @@ public class GroupSettingsFragment extends Fragment {
     private PhotoHelper photoHelper;
     private Boolean hasNewPic = false;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public final static int UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE = 1035;
 
     private GroupSettingsFragment.OnFragmentInteractionListener mListener;
 
@@ -108,6 +110,16 @@ public class GroupSettingsFragment extends Fragment {
             }
         });
 
+        ivUpload = view.findViewById(R.id.ivUpload);
+        ivUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photoHelper = new PhotoHelper(getContext());
+                Intent intent = photoHelper.uploadImage();
+                startActivityForResult(intent, UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
         btSave = view.findViewById(R.id.btSave);
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +148,7 @@ public class GroupSettingsFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 GroupFeedFragment groupFeedFragment = GroupFeedFragment.newInstance(currentGroup.getObjectId());
+                String objectId = currentGroup.getObjectId();
                 mListener.navigate_to_fragment(groupFeedFragment);
             }
         });
@@ -143,16 +156,18 @@ public class GroupSettingsFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    hasNewPic = true;
-                    Bitmap bitmap = photoHelper.handleTakenPhoto();
-                    ivPreview.setImageBitmap(bitmap);
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                hasNewPic = true;
+                if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    ivPreview.setImageBitmap(photoHelper.handleTakenPhoto());
+                } else if (requestCode == UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    Uri photoUri = data.getData();
+                    ivPreview.setImageBitmap(photoHelper.handleUploadedImage(photoUri));
                 }
-            } else { // Result was a failure
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(getContext(), "No picture chosen", Toast.LENGTH_SHORT).show();
         }
     }
 }

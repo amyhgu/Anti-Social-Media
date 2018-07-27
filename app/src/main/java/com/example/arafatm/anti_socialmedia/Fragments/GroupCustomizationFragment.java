@@ -120,7 +120,7 @@ public class GroupCustomizationFragment extends Fragment {
         btCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendGroupRequest();
+                createNewGroup();
             }
         });
     }
@@ -141,7 +141,7 @@ public class GroupCustomizationFragment extends Fragment {
         }
     }
 
-    private void sendGroupRequest() {
+    private void createNewGroup() {
         //Create new group and initialize it
         final Group newGroup = new Group();
         final String newName = etGroupName.getText().toString();
@@ -168,6 +168,10 @@ public class GroupCustomizationFragment extends Fragment {
             }
         });
 
+        sendGroupRequests(newGroup);
+    }
+
+    private void sendGroupRequests(final Group newGroup) {
         ParseUser loggedInUser = ParseUser.getCurrentUser();
 
         List<ParseObject> currentGroups = loggedInUser.getList("groups");
@@ -194,7 +198,6 @@ public class GroupCustomizationFragment extends Fragment {
             });
         }
     }
-
 
     @Override
     public void onDetach() {
