@@ -135,13 +135,23 @@ public class CommentFragment extends Fragment{
 
     private void loadTopPosts() {
         final Post.Query postsQuery = new Post.Query();     //there's got to be a better way for doing this
-        postsQuery.getTopComment();
+        postsQuery.getTop();
+
+
+        postsQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+
+            }
+        });
+
 
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
                     commentAdapter.notifyDataSetChanged();
+
                     comments.addAll(objects);
 
                     swipeRefreshLayout.setRefreshing(false);
@@ -159,7 +169,8 @@ public class CommentFragment extends Fragment{
 
         adapter.clear();
         loadTopPosts();
-        rvComments.scrollToPosition(0);
+        rvComments.smoothScrollToPosition(0);
+
     }
 
 }

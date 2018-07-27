@@ -91,12 +91,6 @@ public class Post extends ParseObject {
             return this;
         }
 
-        public Query getTopComment(){
-            whereNotEqualTo("comment", null);
-            setLimit(20);
-            return this;
-        }
-
         public Query withUser(){
             include("User");
             return this;
