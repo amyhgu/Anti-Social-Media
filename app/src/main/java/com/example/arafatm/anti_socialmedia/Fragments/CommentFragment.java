@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.CommentAdapter;
-import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -72,7 +71,7 @@ public class CommentFragment extends Fragment{
         //set up ArrayList of pointers to comments
         final ArrayList<Post> pointToComment = originalPost.getComments();
         comments = new ArrayList<>();
-        commentAdapter = new CommentAdapter(comments);
+        commentAdapter = new CommentAdapter(pointToComment);
         rvComments.setLayoutManager(new LinearLayoutManager(getContext()));
         rvComments.setAdapter(commentAdapter);
 
@@ -91,35 +90,14 @@ public class CommentFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 String commentString = etCommentText.getText().toString();
-                Post comment = new Post();
 
-                // save comment to Parse
-                comment.setUser(ParseUser.getCurrentUser());
-                comment.setCommentString(commentString);
-                pointToComment.add(comment);
-
-                comment.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e == null){
-                            originalPost.setComments(pointToComment);
-                            commentAdapter.notifyItemInserted(comments.size() -1);
-                            Toast.makeText(getContext(), "Comment posted!", Toast.LENGTH_SHORT).show();
-                            etCommentText.setText("");
-                            refreshFeed();
-                        }
-                        else {
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-
-
+                createComment(commentString, pointToComment);
             }
         });
 
     }
+
+
 
     public static CommentFragment newInstance(Post post) {
         CommentFragment commentFragment = new CommentFragment();
@@ -129,24 +107,40 @@ public class CommentFragment extends Fragment{
         return commentFragment;
     }
 
+    private void createComment(String commentString, final ArrayList<Post> pointToComment){
+        Post comment = new Post();
 
-    private void refreshFeed(){
-        PostAdapter adapter = new PostAdapter(comments);
+        // save comment to Parse
+        comment.setUser(ParseUser.getCurrentUser());
+        comment.setCommentString(commentString);
+        pointToComment.add(comment);
 
-        adapter.clear();
-        loadTopPosts();
-        rvComments.scrollToPosition(0);
+        comment.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+                    originalPost.setComments(pointToComment);
+                    commentAdapter.notifyItemInserted(0);
+                    Toast.makeText(getContext(), "Comment posted!", Toast.LENGTH_SHORT).show();
+                    etCommentText.setText("");
+                    refreshFeed();
+                }
+                else {
+                    e.printStackTrace();
+                }
+            }
+
+        });
     }
 
     private void loadTopPosts() {
         final Post.Query postsQuery = new Post.Query();     //there's got to be a better way for doing this
-        postsQuery.getTop();
+        postsQuery.getTopComment();
 
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
-
                     commentAdapter.notifyDataSetChanged();
                     comments.addAll(objects);
 
@@ -158,6 +152,14 @@ public class CommentFragment extends Fragment{
             }
         });
 
+    }
+
+    private void refreshFeed(){
+        CommentAdapter adapter = new CommentAdapter(comments);
+
+        adapter.clear();
+        loadTopPosts();
+        rvComments.scrollToPosition(0);
     }
 
 }

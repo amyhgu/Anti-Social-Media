@@ -51,18 +51,25 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Post comment = mComments.get(i);
+        Post comment_Post = null;
         ParseUser parseUser = null;
 
         try {
-            parseUser = comment.getSender().fetchIfNeeded();
+            comment_Post = mComments.get(i).fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            parseUser = comment_Post.getSender().fetchIfNeeded();
+
         }
         catch (ParseException e){
             e.printStackTrace();
         }
-
         String user = parseUser.getString("fullName");
-        String body = comment.getString("comment");
+
+        String body = comment_Post.getComment();
 
         viewHolder.tvBodyComment.setText(body);
         viewHolder.tvUserComment.setText(user);
@@ -71,5 +78,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public int getItemCount() {
         return mComments.size();
+    }
+
+    public void clear() {
+        mComments.clear();
+        notifyDataSetChanged();
     }
 }
