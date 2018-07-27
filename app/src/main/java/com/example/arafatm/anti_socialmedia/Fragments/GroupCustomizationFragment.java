@@ -127,25 +127,17 @@ public class GroupCustomizationFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    Bitmap bitmap = photoHelper.resizePhoto();
-                    ivPreview.setImageBitmap(bitmap);
-                }
-            } else { // Result was a failure
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    ivPreview.setImageBitmap(photoHelper.handleTakenPhoto());
+                } else if (requestCode == UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE) {
                     Uri photoUri = data.getData();
-                    Bitmap bitmap = photoHelper.handleUploadedImage(photoUri);
-                    ivPreview.setImageBitmap(bitmap);
+                    ivPreview.setImageBitmap(photoHelper.handleUploadedImage(photoUri));
                 }
-            } else {
-                Toast.makeText(getContext(), "Picture wasn't uploaded!", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(getContext(), "No picture chosen", Toast.LENGTH_SHORT).show();
         }
     }
 

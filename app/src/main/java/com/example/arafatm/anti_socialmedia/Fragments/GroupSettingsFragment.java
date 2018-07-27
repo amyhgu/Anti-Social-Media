@@ -25,8 +25,6 @@ import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
-import java.util.List;
-
 import static android.app.Activity.RESULT_OK;
 
 public class GroupSettingsFragment extends Fragment {
@@ -149,7 +147,7 @@ public class GroupSettingsFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     hasNewPic = true;
-                    Bitmap bitmap = photoHelper.resizePhoto();
+                    Bitmap bitmap = photoHelper.handleTakenPhoto();
                     ivPreview.setImageBitmap(bitmap);
                 }
             } else { // Result was a failure
