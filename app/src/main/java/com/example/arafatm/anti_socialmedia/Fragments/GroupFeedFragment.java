@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.PhotoHelper;
 import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -75,6 +76,7 @@ public class GroupFeedFragment extends Fragment {
 
     private File photoFile;
     public String photoFileName = "photo.jpg";
+    PhotoHelper photoHelper;
 
     public final String APP_TAG = "MyCustomApp";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
@@ -204,7 +206,10 @@ public class GroupFeedFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
 //                            uploadImage();
-                            takePhoto();
+//                            takePhoto();
+                            photoHelper = new PhotoHelper(getContext());
+                            Intent intent = photoHelper.takePhoto();
+                            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                         }
                     });
 
