@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +20,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Authentification.LoginActivity;
-import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.NotifsAdapter;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -157,7 +152,14 @@ public class SettingsFragment extends Fragment {
 
         ParseUser user = ParseUser.getCurrentUser();
 
-        Glide.with(mContext).load(user.getString("propicUrl")).into(ivPropic);
+        // for Parse profile pictures
+        String propicUrl = user.getString("propicUrl");
+        if (propicUrl != null && !(propicUrl.equals("")))  {
+            Glide.with(mContext).load(propicUrl).into(ivPropic);
+        }
+        else if(user.getParseFile("profileImage") != null){
+            Glide.with(mContext).load(user.getParseFile("profileImage").getUrl()).into(ivPropic);
+        }
         tvFullName.setText(user.getString("fullName"));
 
         logOutBtn.setOnClickListener( new View.OnClickListener(){

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +32,7 @@ import java.util.List;
 public class CommentFragment extends Fragment{
     private ParseUser user;
     private Context mContext;
-    private String bundleComment;
     private Post originalPost;
-    private Post newComment;
 
     private Button btCommentSubmit;
     private EditText etCommentText;
@@ -66,15 +65,16 @@ public class CommentFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //set up ArrayList of pointers to comments
-        final ArrayList<Post> pointToComment = originalPost.getComments();
-
         btCommentSubmit = view.findViewById(R.id.btCommentPost);
         etCommentText = view.findViewById(R.id.etComment);
         rvComments = view.findViewById(R.id.rvComments);
 
+        //set up ArrayList of pointers to comments
+        final ArrayList<Post> pointToComment = originalPost.getComments();
         comments = new ArrayList<>();
-        commentAdapter = new CommentAdapter(pointToComment);
+        commentAdapter = new CommentAdapter(comments);
+        rvComments.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvComments.setAdapter(commentAdapter);
 
         // Setup refresh listener which triggers new data loading
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.commentSwipeContainer);
@@ -103,8 +103,10 @@ public class CommentFragment extends Fragment{
                     public void done(ParseException e) {
                         if(e == null){
                             originalPost.setComments(pointToComment);
+                            commentAdapter.notifyItemInserted(comments.size() -1);
                             Toast.makeText(getContext(), "Comment posted!", Toast.LENGTH_SHORT).show();
                             etCommentText.setText("");
+                            refreshFeed();
                         }
                         else {
                             e.printStackTrace();
@@ -145,8 +147,8 @@ public class CommentFragment extends Fragment{
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
 
-                    comments.addAll(objects);
                     commentAdapter.notifyDataSetChanged();
+                    comments.addAll(objects);
 
                     swipeRefreshLayout.setRefreshing(false);
 

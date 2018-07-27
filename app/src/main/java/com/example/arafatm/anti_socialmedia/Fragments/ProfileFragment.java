@@ -92,7 +92,14 @@ public class ProfileFragment extends Fragment {
         ivPropic = view.findViewById(R.id.ivGroupPic);
         String propicUrl = user.getString("propicUrl");
         propicUrl = (propicUrl == null) ? user.getParseFile("profileImage").getUrl() : propicUrl;
-        Glide.with(mContext).load(propicUrl).into(ivPropic);
+
+        // for Parse profile pictures
+        if (propicUrl != null && !(propicUrl.equals("")))  {
+            Glide.with(mContext).load(propicUrl).into(ivPropic);
+        }
+        else if(user.getParseFile("profileImage") != null){
+            Glide.with(mContext).load(user.getParseFile("profileImage").getUrl()).into(ivPropic);
+        }
 
         profileGroups = view.findViewById(R.id.gvProfileGroups);
         groupList = new ArrayList<>();
