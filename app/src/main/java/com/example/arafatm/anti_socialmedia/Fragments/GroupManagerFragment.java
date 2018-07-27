@@ -157,7 +157,6 @@ public class GroupManagerFragment extends Fragment {
             @Override
             public void done(final List<Group> objects, ParseException e) {
                 if (e == null) {
-
                     groupList.addAll(objects);
                     displayOnGridView(objects, view, gridview);
                     groupAdapter = new GroupAdapter(getContext(), groupList);

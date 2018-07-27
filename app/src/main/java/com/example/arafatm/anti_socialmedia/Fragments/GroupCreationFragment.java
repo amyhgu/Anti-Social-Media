@@ -14,10 +14,13 @@ import android.widget.Button;
 import android.widget.SearchView;
 
 import com.example.arafatm.anti_socialmedia.Models.Group;
+import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.FriendListAdapter;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -228,6 +231,24 @@ public class GroupCreationFragment extends Fragment {
                 currentGroups.add(newGroup);
                 loggedInUser.put("groups", currentGroups);
                 loggedInUser.saveInBackground();
+
+                for (int i = 0; i < newMembers.size(); i++) {
+                    final GroupRequestNotif newRequest = new GroupRequestNotif();
+                    newRequest.setSender(loggedInUser);
+                    newRequest.setRequestedGroup(newGroup);
+                    ParseQuery<ParseUser> query = ParseUser.getQuery();
+                    query.getInBackground(newMembers.get(i), new GetCallback<ParseUser>() {
+                        @Override
+                        public void done(ParseUser object, ParseException e) {
+                            newRequest.setReceiver(object);
+                            try {
+                                newRequest.save();
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    });
+                }
 
                 //bundle the group objectId and send to groupfeed fragment for later use
                 Bundle args = new Bundle();
