@@ -74,7 +74,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.View
 
     @Override
     public void onClick(View view) {
-
+        Toast.makeText(mContext, "Group selected", Toast.LENGTH_SHORT).show();
     }
 
     // Provide a direct reference to each of the views within a data item
