@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -73,6 +74,9 @@ public class GroupFeedFragment extends Fragment {
     private ImageView ivGroupPic;
     private ImageView ivStartChat;
     private ImageView ivThreeDots;
+    private ImageView ivCamera;
+    private ImageView ivUpload;
+    private ImageView ivLaunchNewPost;
 
     private File photoFile;
     public String photoFileName = "photo.jpg";
@@ -80,6 +84,8 @@ public class GroupFeedFragment extends Fragment {
 
     public final String APP_TAG = "MyCustomApp";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public final static int UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE = 1035;
+
     //posts
 
     //for posting
@@ -102,6 +108,7 @@ public class GroupFeedFragment extends Fragment {
         // TODO: Update argument type and name
         void navigate_to_fragment(Fragment fragment);
         void startGroupChat(int groupId, String groupName);
+        void navigateToDialog(DialogFragment dialogFragment);
     }
 
     public static GroupFeedFragment newInstance(String mParam1) {
@@ -154,6 +161,9 @@ public class GroupFeedFragment extends Fragment {
         createButton = view.findViewById(R.id.btCreatePost);
         ivStartChat = view.findViewById(R.id.ivStartChat);
         ivThreeDots = view.findViewById(R.id.ivThreeDots);
+        ivCamera = view.findViewById(R.id.ivCamera);
+        ivUpload = view.findViewById(R.id.ivUpload);
+        ivLaunchNewPost = view.findViewById(R.id.ivLaunchNewPost);
         rvPosts = view.findViewById(R.id.rvPostsFeed);
 
         //displaying the posts
@@ -173,12 +183,19 @@ public class GroupFeedFragment extends Fragment {
             }
         });
 
+        ivLaunchNewPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreatePostFragment cpFragment = new CreatePostFragment();
+                mListener.navigateToDialog(cpFragment);
+            }
+        });
+
         query.getInBackground(groupObjectId, new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
                     group = (Group) object;
-                    String objectId = group.getObjectId();
 
                     tvGroupName = (TextView) view.findViewById(R.id.tvGroupName);
                     groupName = object.getString("groupName");
@@ -196,18 +213,25 @@ public class GroupFeedFragment extends Fragment {
                                 .into(ivGroupPic);
                     }
 
-                    Button button = (Button) view.findViewById(R.id.btAddPostImage);
-                    button.setOnClickListener(new View.OnClickListener() {
+                    ivCamera = view.findViewById(R.id.ivCamera);
+                    ivCamera.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-//                            uploadImage();
-//                            takePhoto();
                             photoHelper = new PhotoHelper(getContext());
                             Intent intent = photoHelper.takePhoto();
                             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                         }
                     });
 
+                    ivUpload = view.findViewById(R.id.ivUpload);
+                    ivUpload.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            photoHelper = new PhotoHelper(getContext());
+                            Intent intent = photoHelper.uploadImage();
+                            startActivityForResult(intent, UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE);
+                        }
+                    });
                 } else {
                     e.printStackTrace();
                 }

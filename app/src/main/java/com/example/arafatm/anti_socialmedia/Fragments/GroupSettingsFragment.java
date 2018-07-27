@@ -148,7 +148,6 @@ public class GroupSettingsFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 GroupFeedFragment groupFeedFragment = GroupFeedFragment.newInstance(currentGroup.getObjectId());
-                String objectId = currentGroup.getObjectId();
                 mListener.navigate_to_fragment(groupFeedFragment);
             }
         });

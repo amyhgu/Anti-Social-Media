@@ -30,18 +30,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivGames"
+        android:layout_below="@+id/ivStartChat"
         android:ems="10"
         android:hint="What's been happening?"
         android:inputType="textMultiLine"/>
 
-    <Button
-        android:id="@+id/btAddPostImage"
+    <ImageView
+        android:id="@+id/ivCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/etNewPost"
-        android:text="Add Image" />
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_camera_post"/>
+
+    <ImageView
+        android:id="@+id/ivUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etNewPost"
+        android:layout_toEndOf="@+id/ivCamera"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_photo"/>
 
     <Button
         android:id="@+id/btShareFrom"
@@ -67,35 +78,35 @@
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btAddPostImage">
+        android:layout_below="@+id/ivCamera">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvPostsFeed"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/btAddPostImage"  />
+            android:layout_below="@+id/ivCamera"  />
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <ImageView
-        android:id="@+id/ivGames"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvGroupName"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/ic_game_filled" />
 
     <ImageView
         android:id="@+id/ivStartChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivCoverPhoto"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvGroupName"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="5dp"
+        android:src="@drawable/ic_chat_empty" />
+
+    <ImageView
+        android:id="@+id/ivLaunchNewPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivCoverPhoto"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_chat_filled" />
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_create_post" />
 
     <ImageView
         android:id="@+id/ivThreeDots"

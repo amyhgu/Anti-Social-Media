@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -40,6 +41,7 @@ import com.applozic.mobicommons.commons.core.utils.Utils;
 import com.applozic.mobicommons.people.channel.Channel;
 import com.applozic.mobicommons.people.contact.Contact;
 import com.example.arafatm.anti_socialmedia.Fragments.ChatFragment;
+import com.example.arafatm.anti_socialmedia.Fragments.CreatePostFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCreationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupCustomizationFragment;
 import com.example.arafatm.anti_socialmedia.Fragments.GroupFeedFragment;
@@ -73,7 +75,7 @@ MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInterac
         SettingsFragment.OnFragmentInteractionListener, GroupCreationFragment.OnFragmentInteractionListener,
         GroupFeedFragment.OnFragmentInteractionListener, MessageCommunicator, MobiComKitActivityInterface,
         UserGroupList.OnFragmentInteractionListener, GroupCustomizationFragment.OnFragmentInteractionListener,
-        GroupSettingsFragment.OnFragmentInteractionListener {
+        GroupSettingsFragment.OnFragmentInteractionListener, CreatePostFragment.OnFragmentInteractionListener {
 
     // for chat fragment
     private static int retry;
@@ -166,6 +168,13 @@ MainActivity extends AppCompatActivity implements ChatFragment.OnFragmentInterac
         fragmentTransaction.replace(R.id.layout_child_activity, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void navigateToDialog(DialogFragment dialogFragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        CreatePostFragment createPostFragment = new CreatePostFragment();
+        createPostFragment.show(fm, "fragment_create_post");
     }
 
     public void startUserChat(String contactName, String message) {
