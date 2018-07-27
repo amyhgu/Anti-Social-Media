@@ -77,7 +77,7 @@
         android:layout_below="@+id/tvPictureCommand"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_camera_post" />
+        android:src="@drawable/ic_group_default" />
 
     <TextView
         android:id="@+id/tvPictureCommand"

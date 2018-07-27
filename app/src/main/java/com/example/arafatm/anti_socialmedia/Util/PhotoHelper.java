@@ -59,7 +59,6 @@ public class PhotoHelper {
         return null;
     }
 
-
     public Intent uploadImage() {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -91,7 +90,7 @@ public class PhotoHelper {
         return file;
     }
 
-    public Bitmap handleTakenImage(Uri photoUri) {
+    public Bitmap handleUploadedImage(Uri photoUri) {
         Bitmap selectedImage = null;
         try {
             selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
@@ -103,11 +102,9 @@ public class PhotoHelper {
         selectedImage.compress(Bitmap.CompressFormat.PNG, 0, stream);
         byte[] Data = stream.toByteArray();
 
-        Toast.makeText(context, "Picture taken!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Picture uploaded!", Toast.LENGTH_SHORT).show();
 
-        Bitmap previewBitmap = resizePhoto();
-
-        return previewBitmap;
+        return selectedImage;
     }
 
     public Bitmap resizePhoto() {
