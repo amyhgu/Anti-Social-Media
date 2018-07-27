@@ -26,6 +26,8 @@ import com.bumptech.glide.Glide;
 import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
+import com.example.arafatm.anti_socialmedia.Models.Group;
+
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -55,7 +57,7 @@ public class GroupFeedFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String key1 = "111";
 
     // TODO: Rename and change types of parameters
     //general feed setup
@@ -65,6 +67,7 @@ public class GroupFeedFragment extends Fragment {
 
     private String groupName;
     private int groupId;
+    private Group group;
 
     private TextView tvGroupName;
     private ImageView ivGroupPic;
@@ -98,20 +101,10 @@ public class GroupFeedFragment extends Fragment {
         void startGroupChat(int groupId, String groupName);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GroupFeedFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GroupFeedFragment newInstance(String param1, String param2) {
+    public static GroupFeedFragment newInstance(String mParam1) {
         GroupFeedFragment fragment = new GroupFeedFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(key1, mParam1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -130,15 +123,10 @@ public class GroupFeedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-             mParam2 = getArguments().getString(ARG_PARAM2);
-             groupObjectId = getArguments().getString(ARG_PARAM1);
-//            ParseQuery<ParseObject> gameQuery = ParseQuery.getQuery("Group");
-//            gameQuery.whereEqualTo("objectId", ParseUser.getCurrentUser());
-//
-//            ParseUser.getQuery().get();  // how to get the "User"'s "objectId"
+        Bundle bundle = this.getArguments();
 
+        if (bundle != null) {
+             groupObjectId = bundle.getString(ARG_PARAM1, groupObjectId);
         }
 
     }
@@ -157,7 +145,8 @@ public class GroupFeedFragment extends Fragment {
 
         //creating a post
         final ParseUser postUser = ParseUser.getCurrentUser();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
+        final ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
+
         messageInput = view.findViewById(R.id.etNewPost);
         createButton = view.findViewById(R.id.btCreatePost);
         ivStartChat = view.findViewById(R.id.ivStartChat);
@@ -183,6 +172,7 @@ public class GroupFeedFragment extends Fragment {
         query.getInBackground(groupObjectId, new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
+                    group = (Group) object;
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
 
                     tvGroupName = (TextView) view.findViewById(R.id.tvGroupName);
@@ -224,7 +214,10 @@ public class GroupFeedFragment extends Fragment {
             public void onClick(View view) {
                 final String message = messageInput.getText().toString();
 
-                createPost(message, postUser);
+                createPost(message, postUser, group);
+
+                //TODO: Do i need to create a new instance for groups? This method should require a group
+                //I am trying to pass the group so that the post knows what group it's going under
 
 //                final ParseFile parseFile = new ParseFile(textPost);
                 //debugger says that there's something wrong around here
@@ -262,10 +255,11 @@ public class GroupFeedFragment extends Fragment {
         mListener = null;
     }
 
-    private void createPost(final String message, ParseUser creator){    // +param -> Parsefile imageFile
+    private void createPost(final String message, ParseUser creator, Group group){    // +param -> Parsefile imageFile
         final Post newPost = new Post();
         newPost.setMessage(message);
         newPost.setUser(creator);
+        newPost.setRecipient(group);
 //        newPost.setImage(imageFile);          <== figure out image posting later
 
         newPost.saveInBackground(new SaveCallback() {
@@ -282,6 +276,8 @@ public class GroupFeedFragment extends Fragment {
                 }
             }
         });
+
+        // TODO - add the post to the current Group's list/array of Posts
     }
 
     private void loadTopPosts() {
@@ -294,8 +290,8 @@ public class GroupFeedFragment extends Fragment {
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
 
-                    posts.addAll(objects);
                     postAdapter.notifyDataSetChanged();
+                    posts.addAll(objects);
 
                     swipeContainer.setRefreshing(false);
 
