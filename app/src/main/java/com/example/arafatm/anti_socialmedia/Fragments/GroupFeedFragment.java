@@ -191,14 +191,15 @@ public class GroupFeedFragment extends Fragment implements CreatePostFragment.On
                                 .load(groupImage.getUrl())
                                 .into(ivGroupPic);
                     }
+
+                    loadTopPosts();
+
                 } else {
                     e.printStackTrace();
                 }
             }
 
         });
-
-        loadTopPosts();
 
         ivStartChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,11 +225,10 @@ public class GroupFeedFragment extends Fragment implements CreatePostFragment.On
     }
 
     private void loadTopPosts() {
+
         final Post.Query postsQuery = new Post.Query();
 
-
-        postsQuery.getTop();       //<== this gets the post from a specific user. Won't cause harm, but don't need it rn
-        // ^ this line originally had ".withUser", so this should fix it
+        postsQuery.getTop().withUser().forGroup(group);
 
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override

@@ -89,6 +89,11 @@ public class Post extends ParseObject {
             return this;
         }
 
+        public Query forGroup(Group group) {
+            whereEqualTo("recipient", group);
+            return this;
+        }
+
     }
 
     // Functions for commenting
