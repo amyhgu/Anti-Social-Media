@@ -28,8 +28,6 @@ import com.example.arafatm.anti_socialmedia.Models.Post;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.PhotoHelper;
 import com.example.arafatm.anti_socialmedia.Util.PostAdapter;
-import com.example.arafatm.anti_socialmedia.Models.Group;
-
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -156,11 +154,11 @@ public class GroupFeedFragment extends Fragment {
         createButton = view.findViewById(R.id.btCreatePost);
         ivStartChat = view.findViewById(R.id.ivStartChat);
         ivThreeDots = view.findViewById(R.id.ivThreeDots);
+        rvPosts = view.findViewById(R.id.rvPostsFeed);
 
         //displaying the posts
         posts = new ArrayList<>();
         postAdapter = new PostAdapter(posts);
-        rvPosts = view.findViewById(R.id.rvPostsFeed);
 
         //RecyclerView setup (layout manager, use adapter)
         rvPosts.setLayoutManager(new LinearLayoutManager(GroupFeedFragment.this.getContext()));

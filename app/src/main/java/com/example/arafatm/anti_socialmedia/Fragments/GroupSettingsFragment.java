@@ -12,18 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.arafatm.anti_socialmedia.Models.Group;
-import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GroupSettingsFragment extends Fragment {
@@ -105,7 +99,7 @@ public class GroupSettingsFragment extends Fragment {
         currentGroup.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                GroupFeedFragment groupFeedFragment = GroupFeedFragment.newInstance(currentGroup.getObjectId(), "");
+                GroupFeedFragment groupFeedFragment = GroupFeedFragment.newInstance(currentGroup.getObjectId());
                 mListener.navigate_to_fragment(groupFeedFragment);
             }
         });
