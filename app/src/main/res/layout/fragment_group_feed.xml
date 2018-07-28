@@ -22,7 +22,6 @@
         android:layout_alignBottom="@+id/ivCoverPhoto"
         android:layout_alignParentStart="true"
         android:text=""
-        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -49,6 +48,7 @@
         android:layout_below="@+id/tvGroupName"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="5dp"
+        android:tint="?attr/colorAccent"
         android:src="@drawable/ic_chat_empty" />
 
     <ImageView
@@ -58,6 +58,7 @@
         android:layout_below="@+id/ivCoverPhoto"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:tint="?attr/colorAccent"
         android:src="@drawable/ic_create_post" />
 
     <ImageView
@@ -68,6 +69,7 @@
         android:layout_below="@+id/ivCoverPhoto"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="30dp"
+        android:tint="?attr/colorAccent"
         android:src="@drawable/ic_three_dots" />
 
 </RelativeLayout>

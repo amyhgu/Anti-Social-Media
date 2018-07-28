@@ -147,7 +147,7 @@ public class GroupSettingsFragment extends Fragment {
         currentGroup.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                GroupFeedFragment groupFeedFragment = GroupFeedFragment.newInstance(currentGroup.getObjectId());
+                GroupFeedFragment groupFeedFragment = GroupFeedFragment.newInstance(currentGroup.getObjectId(), currentGroup.getTheme());
                 mListener.navigate_to_fragment(groupFeedFragment);
             }
         });

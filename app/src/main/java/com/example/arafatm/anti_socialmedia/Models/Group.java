@@ -17,6 +17,7 @@ public class Group extends ParseObject {
     private static final String KEY_IMAGE = "groupImage"; //Name of group image column in parse
     private static final String KEY_STORIES = "groupStory"; //Name of group story column in parse
     private static final String KEY_PENDING = "pending";
+    private static final String KEY_THEME = "theme";
 
     public String getGroupName() {
         return getString(KEY_NAME);
@@ -53,6 +54,8 @@ public class Group extends ParseObject {
     public List<Post> getPosts() {
         return getList(KEY_POSTS);
     }
+
+    public String getTheme() { return getString(KEY_THEME); }
 
     /*Gets the Array of posts from Parse, updates it, and save it back to parse*/
     public void addPost(Post post) {

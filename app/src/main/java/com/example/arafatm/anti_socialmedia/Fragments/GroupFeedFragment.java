@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -79,6 +80,7 @@ public class GroupFeedFragment extends Fragment implements CreatePostFragment.On
     private EditText messageInput;
     private Button createButton;
     private SwipeRefreshLayout swipeContainer;
+    String themeName;
 
     //list of users
 
@@ -95,10 +97,11 @@ public class GroupFeedFragment extends Fragment implements CreatePostFragment.On
         void navigateToDialog(DialogFragment dialogFragment);
     }
 
-    public static GroupFeedFragment newInstance(String mParam1) {
+    public static GroupFeedFragment newInstance(String mParam1, String theme) {
         GroupFeedFragment fragment = new GroupFeedFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, mParam1);
+        args.putString("theme", theme);
         fragment.setArguments(args);
         return fragment;
     }
@@ -121,6 +124,7 @@ public class GroupFeedFragment extends Fragment implements CreatePostFragment.On
 
         if (bundle != null) {
              groupObjectId = bundle.getString(ARG_PARAM1, groupObjectId);
+             themeName = bundle.getString("theme", "red");
         }
 
     }
@@ -130,7 +134,18 @@ public class GroupFeedFragment extends Fragment implements CreatePostFragment.On
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // Equivalent to setContentView
-        return inflater.inflate(R.layout.fragment_group_feed, container, false);
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+        final Context contextThemeWrapper;
+        if (themeName.matches("red")) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.GroupRedTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.GroupBlueTheme);
+        }
+        // clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
+        // inflate the layout using the cloned inflater, not default inflater
+        return localInflater.inflate(R.layout.fragment_group_feed, container, false);
     }
 
     @Override

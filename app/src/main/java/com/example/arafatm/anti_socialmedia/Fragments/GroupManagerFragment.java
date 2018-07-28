@@ -198,11 +198,12 @@ public class GroupManagerFragment extends Fragment {
                                     int position, long id) {
                 Toast.makeText(getContext(), "" + position,
                         Toast.LENGTH_SHORT).show();
-                Fragment fragment = new GroupFeedFragment();
-                Bundle args = new Bundle();
+//                Bundle args = new Bundle();
                 ParseObject selectedGroup = groupList.get(position);
-                args.putString(ARG_PARAM1,selectedGroup.getObjectId()); //pass group objectId
-                fragment.setArguments(args);
+                Fragment fragment = GroupFeedFragment.newInstance(selectedGroup.getObjectId(), selectedGroup.getString("theme"));
+//                args.putString(ARG_PARAM1,selectedGroup.getObjectId()); //pass group objectId
+//                args.putString("theme", selectedGroup.getString("theme"));
+//                fragment.setArguments(args);
                 /*Navigates to the groupFeedFragment*/
                 mListener.navigate_to_fragment(fragment);
             }
@@ -220,10 +221,13 @@ public class GroupManagerFragment extends Fragment {
                                     int position, long id) {
                 Toast.makeText(getContext(), "" + position,
                         Toast.LENGTH_SHORT).show();
-                Fragment fragment = new GroupFeedFragment();
-                Bundle args = new Bundle();
-                args.putString(ARG_PARAM1, groupList.get(position).getObjectId()); //TO BE CHANGED LATER
-                fragment.setArguments(args);
+//                Fragment fragment = new GroupFeedFragment();
+//                Bundle args = new Bundle();
+//                args.putString(ARG_PARAM1, groupList.get(position).getObjectId()); //TO BE CHANGED LATER
+//                args.putString("theme", groupList.get(position).getString("theme"));
+//                fragment.setArguments(args);
+                ParseObject selectedGroup = groupList.get(position);
+                Fragment fragment = GroupFeedFragment.newInstance(selectedGroup.getObjectId(), selectedGroup.getString("theme"));
 
                 /*Navigates to the groupManagerFragment*/
                 mListener.navigate_to_fragment(fragment);
