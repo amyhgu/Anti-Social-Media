@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,7 +54,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         public TextView tvFullName;
         public TextView tvPostText;
         public ImageView ivPostPic;
-        public ImageButton btCommentExpand;                                                   //comment
+        public TextView tvNumberComments;                                           //comment
+        public ImageButton btCommentExpand;                                         //comment
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -64,6 +64,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvFullName = (TextView) itemView.findViewById(R.id.tvFullNameFeed);
             tvPostText = (TextView) itemView.findViewById(R.id.tvPostBody);
             ivPostPic = (ImageView) itemView.findViewById(R.id.ivProPicPost);
+            tvNumberComments = (TextView) itemView.findViewById(R.id.tvNumberOfComments);   //comment
             btCommentExpand = (ImageButton) itemView.findViewById(R.id.btCommentIcon);      //comment
 
         }
@@ -95,12 +96,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
         String message = post.getMessage();
         String sender = sender1.getString("fullName");
+//        int number = mPosts.size();
         String propicUrl = sender1.getString("propicUrl");
         ParseFile propicParse = sender1.getParseFile("profileImage");
 
         //populate the views according to this (username, body)
         viewHolder.tvPostText.setText(message);
         viewHolder.tvFullName.setText(sender);
+//        viewHolder.tvNumberComments.setText(number);
 
         //profile picture
         if (propicUrl != null && !(propicUrl.equals("")))  {
@@ -111,7 +114,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         }
 
         //goes to the comment fragment
-        //TODO: update the number of comments in each
         final ImageButton commentExpandButton = viewHolder.btCommentExpand;
         commentExpandButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +122,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.layout_child_activity, commentFragment)
                         .commit();
-
             }
         });
 

@@ -19,9 +19,15 @@ public class Post extends ParseObject {
     private static final String KEY_CREATEDAT = "createdAt";
     private static final String KEY_MEDIA = "media";
     private static final String KEY_COMMENTS = "comments";
+    private static final String KEY_COMMENT = "comment";
+
 
     public String getMessage() {
         return getString(KEY_MESSAGE);
+    }
+
+    public String getComment() {
+        return getString(KEY_COMMENT);
     }
 
     public void setMessage(String message) {
@@ -38,7 +44,9 @@ public class Post extends ParseObject {
 
 
     public ParseUser getSender() {
+        if (getParseUser(KEY_SENDER) == null) return null;
         return getParseUser(KEY_SENDER);
+
     }
 
     public void setUser(ParseUser sender) {
@@ -77,6 +85,7 @@ public class Post extends ParseObject {
         }
 
         public Query getTop(){
+            whereNotEqualTo("message", null);
             orderByDescending("createdAt");
             setLimit(20);
             return this;
