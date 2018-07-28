@@ -11,6 +11,8 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.parse.ParseFile;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,9 +22,11 @@ import java.io.IOException;
 public class PhotoHelper {
 
     private File photoFile;
-    public String photoFileName = "photo.jpg";
+    public String photoFileName = "photo";
     private Context context;
+    private Uri uri;
     String imagePath;
+    File resizedFile;
     int SOME_WIDTH = 240;
 
     public final String APP_TAG = "MyCustomApp";
@@ -56,7 +60,6 @@ public class PhotoHelper {
         return null;
     }
 
-
     public Intent uploadImage() {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -88,7 +91,7 @@ public class PhotoHelper {
         return file;
     }
 
-    public Bitmap handleTakenImage(Uri photoUri) {
+    public Bitmap handleUploadedImage(Uri photoUri) {
         Bitmap selectedImage = null;
         try {
             selectedImage = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
@@ -98,32 +101,19 @@ public class PhotoHelper {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         selectedImage.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        byte[] Data = stream.toByteArray();
 
-        Toast.makeText(context, "Picture taken!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Picture uploaded!", Toast.LENGTH_SHORT).show();
 
-        Bitmap previewBitmap = resizePhoto();
+        writeStreamToFile(stream);
 
-        return previewBitmap;
+        return selectedImage;
     }
 
-    public Bitmap resizePhoto() {
-        // by this point we have the camera photo on disk
-        Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-
-        // RESIZE BITMAP, see section below
-        // See BitmapScaler.java: https://gist.github.com/nesquena/3885707fd3773c09f1bb
-        Bitmap resizedBitmap = scaleToFitWidth(takenImage, SOME_WIDTH);
-        // Configure byte output stream
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        // Compress the image further
-        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-        // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
-        File resizedUri = getPhotoFileUri(photoFileName + "_resized");
+    private void writeStreamToFile(ByteArrayOutputStream stream) {
+        File resizedUri = getPhotoFileUri(photoFileName + "_resized.jpg");
         imagePath = resizedUri.getPath();
-        File resizedFile = new File(imagePath);
+        resizedFile = new File(imagePath);
 
-        Log.d("CameraActivity", "resizing successful");
         try {
             resizedFile.createNewFile();
         } catch (IOException e) {
@@ -137,16 +127,38 @@ public class PhotoHelper {
         }
         // Write the bytes of the bitmap to file
         try {
-            fos.write(bytes.toByteArray());
+            fos.write(stream.toByteArray());
             fos.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public Bitmap handleTakenPhoto() {
+        // by this point we have the camera photo on disk
+        Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+
+        // RESIZE BITMAP, see section below
+        // See BitmapScaler.java: https://gist.github.com/nesquena/3885707fd3773c09f1bb
+        Bitmap resizedBitmap = scaleToFitWidth(takenImage, SOME_WIDTH);
+        // Configure byte output stream
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        // Compress the image further
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+        // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
+
+        writeStreamToFile(bytes);
+
         Log.d("CameraActivity", "loading successful");
         // Load the taken image into a preview
         return resizedBitmap;
+    }
+
+    public ParseFile grabImage() {
+        ParseFile parseFile = new ParseFile(resizedFile);
+        return parseFile;
     }
 
     public static Bitmap scaleToFitWidth(Bitmap b, int width)

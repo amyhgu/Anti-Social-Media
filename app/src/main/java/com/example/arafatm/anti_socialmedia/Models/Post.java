@@ -65,10 +65,12 @@ public class Post extends ParseObject {
         return getDate(KEY_CREATEDAT);
     }
 
-    //Gets the list of comments from Parse
-//    public List<ParseObject> getComments() {
-//        return getList(KEY_COMMENTS);
-//    }
+    public void initPost(String message, Group group) {
+        setMessage(message);
+        setUser(ParseUser.getCurrentUser());
+        setRecipient(group);
+        group.addPost(this);
+    }
 
     /*Gets the Array of comments from Parse, updates it, and save it back to parse*/
     public void addComments(Post comment) {
@@ -93,6 +95,11 @@ public class Post extends ParseObject {
 
         public Query withUser(){
             include("User");
+            return this;
+        }
+
+        public Query forGroup(Group group) {
+            whereEqualTo("recipient", group);
             return this;
         }
 

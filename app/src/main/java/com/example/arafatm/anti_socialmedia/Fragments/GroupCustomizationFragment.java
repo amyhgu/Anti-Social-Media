@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,13 +22,12 @@ import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.PhotoHelper;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +43,7 @@ public class GroupCustomizationFragment extends Fragment {
     private List<String> newMembers;
     private PhotoHelper photoHelper;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-
+    public final static int UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE = 1035;
 
     private OnFragmentInteractionListener mListener;
 
@@ -110,49 +108,70 @@ public class GroupCustomizationFragment extends Fragment {
             }
         });
 
+        ivUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photoHelper = new PhotoHelper(getContext());
+                Intent intent = photoHelper.uploadImage();
+                startActivityForResult(intent, UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
         btCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendGroupRequest();
+                createNewGroup();
             }
         });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    ivPreview.setImageBitmap(photoHelper.handleTakenPhoto());
+                } else if (requestCode == UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE) {
                     Uri photoUri = data.getData();
-                    Bitmap bitmap = photoHelper.resizePhoto();
-                    ivPreview.setImageBitmap(bitmap);
+                    ivPreview.setImageBitmap(photoHelper.handleUploadedImage(photoUri));
                 }
-            } else { // Result was a failure
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(getContext(), "No picture chosen", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void sendGroupRequest() {
+    private void createNewGroup() {
         //Create new group and initialize it
         final Group newGroup = new Group();
-        String newName = etGroupName.getText().toString();
-        newGroup.initGroup(newName, newMembers);
-        newGroup.saveInBackground(new SaveCallback() {
+        final String newName = etGroupName.getText().toString();
+        final ParseFile newGroupPic = photoHelper.grabImage();
+
+        newGroupPic.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                //bundle the group objectId and send to groupfeed fragment for later use
-                Bundle args = new Bundle();
-                String objectId = newGroup.getObjectId();
-                args.putString("param1", objectId);
+                newGroup.initGroup(newName, newMembers, newGroupPic);
+                newGroup.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        //bundle the group objectId and send to groupfeed fragment for later use
+                        Bundle args = new Bundle();
+                        String objectId = newGroup.getObjectId();
+                        args.putString("param1", objectId);
 
-                /*Navigates to the GroupFeedFragment*/
-                Fragment fragment = new GroupFeedFragment();
-                fragment.setArguments(args);
-                mListener.navigate_to_fragment(fragment);
+                        /*Navigates to the GroupFeedFragment*/
+                        Fragment fragment = new GroupFeedFragment();
+                        fragment.setArguments(args);
+                        mListener.navigate_to_fragment(fragment);
+                    }
+                });
             }
         });
 
+        sendGroupRequests(newGroup);
+    }
+
+    private void sendGroupRequests(final Group newGroup) {
         ParseUser loggedInUser = ParseUser.getCurrentUser();
 
         List<ParseObject> currentGroups = loggedInUser.getList("groups");
@@ -179,7 +198,6 @@ public class GroupCustomizationFragment extends Fragment {
             });
         }
     }
-
 
     @Override
     public void onDetach() {

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -6,6 +6,22 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="GroupRedTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/alphabet_g</item>
+        <item name="android:colorBackground">@color/alphabet_b</item>
+        <item name="colorPrimary">@color/red_9</item>
+        <item name="android:textColor">@color/red_7</item>
+        <item name="colorAccent">@color/red_4</item>
+    </style>
+
+    <style name="GroupBlueTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/alphabet_e</item>
+        <item name="android:colorBackground">@color/alphabet_e</item>
+        <item name="colorPrimary">@color/alphabet_x</item>
+        <item name="android:textColor">@color/alphabet_i</item>
+        <item name="colorAccent">@color/alphabet_f</item>
     </style>
 
 

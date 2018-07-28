@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -53,18 +55,12 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link GroupFeedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GroupFeedFragment extends Fragment {
+public class GroupFeedFragment extends Fragment implements CreatePostFragment.OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String key1 = "111";
 
-    // TODO: Rename and change types of parameters
-    //general feed setup
-    private String mParam1;
-    private String mParam2;
     private String groupObjectId;
-
     private String groupName;
     private int groupId;
     private Group group;
@@ -74,13 +70,8 @@ public class GroupFeedFragment extends Fragment {
     private ImageView ivGroupPic;
     private ImageView ivStartChat;
     private ImageView ivThreeDots;
+    private ImageView ivLaunchNewPost;
 
-    private File photoFile;
-    public String photoFileName = "photo.jpg";
-    PhotoHelper photoHelper;
-
-    public final String APP_TAG = "MyCustomApp";
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     //posts
 
     //for posting
@@ -90,6 +81,7 @@ public class GroupFeedFragment extends Fragment {
     private EditText messageInput;
     private Button createButton;
     private SwipeRefreshLayout swipeContainer;
+    String themeName;
 
 
     private OnFragmentInteractionListener mListener;
@@ -102,12 +94,14 @@ public class GroupFeedFragment extends Fragment {
         // TODO: Update argument type and name
         void navigate_to_fragment(Fragment fragment);
         void startGroupChat(int groupId, String groupName);
+        void navigateToDialog(DialogFragment dialogFragment);
     }
 
-    public static GroupFeedFragment newInstance(String mParam1) {
+    public static GroupFeedFragment newInstance(String mParam1, String theme) {
         GroupFeedFragment fragment = new GroupFeedFragment();
         Bundle args = new Bundle();
-        args.putString(key1, mParam1);
+        args.putString(ARG_PARAM1, mParam1);
+        args.putString("theme", theme);
         fragment.setArguments(args);
         return fragment;
     }
@@ -130,6 +124,7 @@ public class GroupFeedFragment extends Fragment {
 
         if (bundle != null) {
              groupObjectId = bundle.getString(ARG_PARAM1, groupObjectId);
+             themeName = bundle.getString("theme", "red");
         }
 
     }
@@ -139,7 +134,18 @@ public class GroupFeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // Equivalent to setContentView
-        return inflater.inflate(R.layout.fragment_group_feed, container, false);
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+        final Context contextThemeWrapper;
+        if (themeName.matches("red")) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.GroupRedTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.GroupBlueTheme);
+        }
+        // clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
+        // inflate the layout using the cloned inflater, not default inflater
+        return localInflater.inflate(R.layout.fragment_group_feed, container, false);
     }
 
     @Override
@@ -147,13 +153,11 @@ public class GroupFeedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //creating a post
-        final ParseUser postUser = ParseUser.getCurrentUser();
         final ParseQuery<ParseObject> query = ParseQuery.getQuery("Group");
 
-        messageInput = view.findViewById(R.id.etNewPost);
-        createButton = view.findViewById(R.id.btCreatePost);
         ivStartChat = view.findViewById(R.id.ivStartChat);
         ivThreeDots = view.findViewById(R.id.ivThreeDots);
+        ivLaunchNewPost = view.findViewById(R.id.ivLaunchNewPost);
         rvPosts = view.findViewById(R.id.rvPostsFeed);
         tvCommentCount = view.findViewById(R.id.tvNumberOfComments);
 
@@ -174,10 +178,18 @@ public class GroupFeedFragment extends Fragment {
             }
         });
 
+        ivLaunchNewPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreatePostFragment cpFragment = CreatePostFragment.newInstance(group);
+                cpFragment.setTargetFragment(GroupFeedFragment.this, 1);
+                mListener.navigateToDialog(cpFragment);
+            }
+        });
+
         query.getInBackground(groupObjectId, new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
-                    group = (Group) object;
                     Toast.makeText(getContext(), object.getString("groupName") + " Successfully Loaded", Toast.LENGTH_SHORT).show();
                     group = (Group) object;
 
@@ -185,7 +197,6 @@ public class GroupFeedFragment extends Fragment {
                     groupName = object.getString("groupName");
                     tvGroupName.setText(groupName);
                     groupId = convert(object.getObjectId());
-                    Log.d("weird", Integer.toString(groupId));
 
                     ivGroupPic = (ImageView) view.findViewById(R.id.ivCoverPhoto);
                     ParseFile groupImage = object.getParseFile("groupImage");
@@ -197,56 +208,13 @@ public class GroupFeedFragment extends Fragment {
                                 .into(ivGroupPic);
                     }
 
-                    Button button = (Button) view.findViewById(R.id.btAddPostImage);
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-//                            uploadImage();
-//                            takePhoto();
-                            photoHelper = new PhotoHelper(getContext());
-                            Intent intent = photoHelper.takePhoto();
-                            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-                        }
-                    });
+                    loadTopPosts();
 
                 } else {
                     e.printStackTrace();
                 }
             }
 
-        });
-
-        loadTopPosts();
-
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String message = messageInput.getText().toString();
-
-                createPost(message, postUser, group);
-
-                //TODO: Do i need to create a new instance for groups? This method should require a group
-                //I am trying to pass the group so that the post knows what group it's going under
-
-//                final ParseFile parseFile = new ParseFile(textPost);
-                //debugger says that there's something wrong around here
-                //ParseObject Post that we created
-
-                //save file to parse
-                //this is code from Parsetagram, but probably don't need a Parsefile because we aren't posting with an image
-//                parseFile.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if(e == null){
-//                            createPost(message, user);
-//                        }
-//                        else{
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                });
-            }
         });
 
         ivStartChat.setOnClickListener(new View.OnClickListener() {
@@ -272,37 +240,11 @@ public class GroupFeedFragment extends Fragment {
         mListener = null;
     }
 
-    private void createPost(final String message, ParseUser creator, Group group){    // +param -> Parsefile imageFile
-        final Post newPost = new Post();
-        newPost.setMessage(message);
-        newPost.setUser(creator);
-        newPost.setRecipient(group);
-//        newPost.setImage(imageFile);          <== figure out image posting later
-
-        newPost.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null) {
-                    Log.d("PostActivity", "Create post success!");
-                    Toast.makeText(GroupFeedFragment.this.getContext(), "Posted!", Toast.LENGTH_LONG).show();
-                    messageInput.setText("");
-                    refreshFeed();
-                }
-                else{
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        // TODO - add the post to the current Group's list/array of Posts
-    }
-
     private void loadTopPosts() {
+
         final Post.Query postsQuery = new Post.Query();
 
-
-        postsQuery.getTop();       //<== this gets the post from a specific user. Won't cause harm, but don't need it rn
-        // ^ this line originally had ".withUser", so this should fix it
+        postsQuery.getTop().withUser().forGroup(group);
 
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
@@ -330,87 +272,6 @@ public class GroupFeedFragment extends Fragment {
         rvPosts.scrollToPosition(0);
     }
 
-    private void takePhoto() {
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Create a File reference to access to future access
-        photoFile = getPhotoFileUri(photoFileName);
-
-        // wrap File object into a content provider
-        // required for API >= 24
-        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.antisocialmedia.fileprovider", photoFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            // Start the image capture intent to take photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-    }
-
-
-    public void uploadImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            // Bring up gallery to select a photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-    }
-
-    // Returns the File for a photo stored on disk given the fileName
-    public File getPhotoFileUri(String fileName) {
-        // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
-        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "GroupFeedFragment");
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d("GroupFeedFragment", "failed to create directory");
-        }
-
-        // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-        return file;
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    Uri photoUri = data.getData();
-                    // Do something with the photo based on Uri
-                    Bitmap selectedImage = null;
-                    try {
-                        selectedImage = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    selectedImage.compress(Bitmap.CompressFormat.PNG, 0, stream);
-                    byte[] Data = stream.toByteArray();
-
-                    Toast.makeText(getContext(), "Picture taken!", Toast.LENGTH_SHORT).show();
-
-                    //TODO
-                    //add to post
-                    //display
-                }
-            } else { // Result was a failure
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     // for converting group objectId to integer (used for chat channel ID)
     // credit to https://stackoverflow.com/questions/30404946/how-to-convert-parse-objectid-string-to-long
     private static final String CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -430,5 +291,13 @@ public class GroupFeedFragment extends Fragment {
             ret = (ret << 6) + convertChar( s.charAt( i ));
         }
         return ret;
+    }
+
+    @Override
+    public void onFinishCreatePost(Post post) {
+        posts.add(0, post);
+        postAdapter.notifyItemInserted(0);
+        rvPosts.scrollToPosition(0);
+        Toast.makeText(getContext(), "New post created", Toast.LENGTH_SHORT).show();
     }
 }
