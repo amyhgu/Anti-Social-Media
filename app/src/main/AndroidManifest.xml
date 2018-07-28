@@ -3,6 +3,7 @@
     package="com.example.arafatm.anti_socialmedia">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <permission
         android:name="com.example.arafatm.anti_socialmedia.permission.MAPS_RECEIVE"
@@ -66,8 +67,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Home.MainActivity"></activity>
+        <activity android:name=".Home.MainActivity" />
 
         <!-- for fcm push notifications - START -->
 
@@ -137,7 +137,6 @@
         <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
         <!-- android:resource="@xml/applozic_provider_paths" /> -->
         <!-- </provider> -->
-
 
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
@@ -295,7 +294,6 @@
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.antisocialmedia.fileprovider"
-
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -313,7 +311,8 @@
         <!-- android:resource="@xml/fileprovider" /> -->
         <!-- </provider> -->
 
-        <activity android:name=".StoryActivity"></activity>
+        <activity android:name=".StoryActivity" />
+        <activity android:name=".PreviewStoryActivity"></activity>
     </application>
 
 </manifest>
