@@ -70,6 +70,7 @@ public class GroupFeedFragment extends Fragment {
     private Group group;
 
     private TextView tvGroupName;
+    private TextView tvCommentCount;
     private ImageView ivGroupPic;
     private ImageView ivStartChat;
     private ImageView ivThreeDots;
@@ -90,7 +91,6 @@ public class GroupFeedFragment extends Fragment {
     private Button createButton;
     private SwipeRefreshLayout swipeContainer;
 
-    //list of users
 
     private OnFragmentInteractionListener mListener;
 
@@ -155,6 +155,7 @@ public class GroupFeedFragment extends Fragment {
         ivStartChat = view.findViewById(R.id.ivStartChat);
         ivThreeDots = view.findViewById(R.id.ivThreeDots);
         rvPosts = view.findViewById(R.id.rvPostsFeed);
+        tvCommentCount = view.findViewById(R.id.tvNumberOfComments);
 
         //displaying the posts
         posts = new ArrayList<>();

@@ -31,9 +31,10 @@ import java.util.List;
 public class CommentFragment extends Fragment{
     private ParseUser user;
     private Context mContext;
-    private Post originalPost;
+     Post originalPost;
 
     private Button btCommentSubmit;
+//    private TextView tvCommentCount = null;
     private EditText etCommentText;
     private RecyclerView rvComments;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -67,6 +68,9 @@ public class CommentFragment extends Fragment{
         btCommentSubmit = view.findViewById(R.id.btCommentPost);
         etCommentText = view.findViewById(R.id.etComment);
         rvComments = view.findViewById(R.id.rvComments);
+//        tvCommentCount = view.findViewById(R.id.tvNumberOfComments);
+
+//        tvCommentCount.setText(originalPost.getCommentsCount());
 
         //set up ArrayList of pointers to comments
         final ArrayList<Post> pointToComment = originalPost.getComments();
@@ -151,9 +155,7 @@ public class CommentFragment extends Fragment{
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
                     commentAdapter.notifyDataSetChanged();
-
                     comments.addAll(objects);
-
                     swipeRefreshLayout.setRefreshing(false);
 
                 } else {

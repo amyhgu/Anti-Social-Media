@@ -96,7 +96,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
         String message = post.getMessage();
         String sender = sender1.getString("fullName");
-//        int number = 2;
+//        int number = mPosts.size();
         String propicUrl = sender1.getString("propicUrl");
         ParseFile propicParse = sender1.getParseFile("profileImage");
 
@@ -104,9 +104,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         viewHolder.tvPostText.setText(message);
         viewHolder.tvFullName.setText(sender);
 //        viewHolder.tvNumberComments.setText(number);
-
-        //TODO: Figure out how to populate number next to comment
-
 
         //profile picture
         if (propicUrl != null && !(propicUrl.equals("")))  {
