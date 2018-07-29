@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
 
-import com.example.arafatm.anti_socialmedia.Models.Group;
 import com.example.arafatm.anti_socialmedia.R;
 import com.example.arafatm.anti_socialmedia.Util.FriendListAdapter;
 import com.parse.ParseException;
@@ -36,6 +36,7 @@ public class GroupCreationFragment extends Fragment {
     private RecyclerView recyclerView;
     private FriendListAdapter friendListAdapter;
     private ArrayList<ParseUser> friendList;
+    ParseUser currentUser = null;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -68,6 +69,7 @@ public class GroupCreationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -78,15 +80,30 @@ public class GroupCreationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_group_creation, container, false);
+        View view = inflater.inflate(R.layout.fragment_group_creation, container, false);
 
         //RECYCLERVIEW SETUP
         // Lookup the recyclerview in activity layout
         recyclerView = (RecyclerView) view.findViewById(R.id.rvFriends);
 
-        //initialize friendList
         friendList = new ArrayList<>();
-        ParseUser currentUser = null;
+        fetchAllFriendList();
+
+        //done!
+        // Create adapter passing in the sample user data
+        friendListAdapter = new FriendListAdapter(friendList);
+        // Attach the adapter to the recyclerview to populate items
+        recyclerView.setAdapter(friendListAdapter);
+        // Set layout manager to position the items
+        recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+
+        return view;
+    }
+
+    private void fetchAllFriendList() {
+        //initialize friendList
+     //   ArrayList<ParseUser> list = new ArrayList<>();
+
         //get current user
         try {
             currentUser = ParseUser.getQuery().get("mK88SMmv6C"); //ParseUser.getCurrentUser(); //Change this!
@@ -104,21 +121,12 @@ public class GroupCreationFragment extends Fragment {
             //   for each id, find corresponding use
             try {
                 ParseUser user = ParseUser.getQuery().get(friendListIds.get(i));
+//                ParseUser.getQuery().whereEqualTo("username", friendListIds.get(i))
                 friendList.add(user);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        //done!
-        //   }
-        // Create adapter passing in the sample user data
-        friendListAdapter = new FriendListAdapter(friendList);
-        // Attach the adapter to the recyclerview to populate items
-        recyclerView.setAdapter(friendListAdapter);
-        // Set layout manager to position the items
-        recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-
-        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -166,38 +174,71 @@ public class GroupCreationFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button createButton = (Button) view.findViewById(R.id.btCreateGroup);
+        Button nextButton = (Button) view.findViewById(R.id.btNext);
 
-        createButton.setOnClickListener(new View.OnClickListener() {
+        final SearchView searchView = (SearchView) view.findViewById(R.id.sv_search);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String friendName) {
+                //gets the user to be searched
+                fetchFriend(friendName);
+                searchView.clearFocus();
+                return true;
+            }
+
+            /*Reloads to show all friendList when the user stops searching*/
+            @Override
+            public boolean onQueryTextChange(String friendName) {
+                if (friendName == null || friendName.isEmpty()) {
+                    fetchAllFriendList();
+                    friendListAdapter.notifyDataSetChanged(); //updates the adapter
+                    return true;
+                }
+                return false;
+            }
+
+        });
+
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //  Toast.makeText(getContext(), "Navigating to Group Feed", Toast.LENGTH_SHORT).show();
-
-                //gets list of new members
-                List<String> newMembers = friendListAdapter.getNewGroupMembers();
-                //Create new group and initialize it
-                Group newGroup = new Group();
-                newGroup.setGroupName("No Group Name");
-                newGroup.addUsers(newMembers);
-                //save it in Parse
-                newGroup.saveInBackground();
-                //bundle the group objectId and send to groupfeed fragment for later use
-                Bundle args = new Bundle();
-                String ObjectId = newGroup.getObjectId();
-                args.putString(ARG_PARAM1, ObjectId);
-
-                /*Navigates to the GroupFeedFragment*/
-                Fragment fragment = new GroupFeedFragment();
-                fragment.setArguments(args);
-                mListener.navigate_to_fragment(fragment);
+                passToCustomization();
             }
         });
     }
 
+    private void fetchFriend(String friendName) {
+        //get the list of friends(Ids)
+        final List<String> friendListIds = currentUser.getList("friendList");
+
+        //TODO
+        //Change this way to Amy way of finding facebook friends
+        friendList.clear(); //Clears all friends
+        // use Ids to find users
+        for (int i = 0; i < friendListIds.size(); i++) {
+            //   for each id, find corresponding use
+            try {
+                ParseUser user = ParseUser.getQuery().get(friendListIds.get(i));
+//                ParseUser.getQuery().whereEqualTo("username", friendListIds.get(i))
+                //looks up users whose names match the input
+                if (user.getString("fullName").compareTo(friendName) == 0) {
+                  friendList.add(user);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        friendListAdapter.notifyDataSetChanged(); //updates the adapter
+    }
 
     //TODO
-    //Enable searching friends by name!
-    //View friends profile
-    //Send message to friend
+    //get empty search to fetch all users
 
+    private void passToCustomization() {
+        ArrayList<String> newMembers = friendListAdapter.getNewGroupMembers();
+        GroupCustomizationFragment gcFragment = GroupCustomizationFragment.newInstance(newMembers);
+        mListener.navigate_to_fragment(gcFragment);
+    }
 }
+

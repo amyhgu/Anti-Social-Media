@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -9,7 +12,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
+
+    //for groupie, comment function
+//    dataBinding {
+//        enabled = true
+//    }
 
     buildTypes {
         release {
@@ -29,6 +38,13 @@ android {
         exclude 'META-INF/ECLIPSE_.RSA'
     }
 }
+
+// for comment function ~
+// IMPORTANT!  Enables view caching in viewholders.
+// See: https://github.com/Kotlin/KEEP/blob/master/proposals/android-extensions-entity-caching.md
+//androidExtensions {
+//    experimental = true
+//}
 
 ext {
     supportLibVersion = '27.1.1'
@@ -74,7 +90,24 @@ dependencies {
 
     // implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.8.8' // applozic chat client
 
+    implementation 'com.parse:parse-fcm-android:1.17.3' // fcm push notifications
+    implementation 'com.google.firebase:firebase-core:16.0.1' // fcm push notifications
+
+    // to fix DexArchiveMergerException
+    implementation 'com.google.firebase:firebase-analytics:15.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
+
     // parceler
-    implementation 'org.parceler:parceler-api:1.1.6'
-    annotationProcessor 'org.parceler:parceler:1.1.6'
+    implementation 'org.parceler:parceler-api:1.1.11'
+    annotationProcessor 'org.parceler:parceler:1.1.11'
+
+    //camera access
+    implementation 'com.github.hotchemi:permissionsdispatcher:3.1.0'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
+
+    // groupie (for comments)
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+//    implementation 'com.xwray:groupie:2.0.3'
+//    implementation 'com.xwray:groupie-kotlin-android-extensions:2.0.3'
+//    implementation 'com.xwray:groupie-databinding:2.0.3'
 }

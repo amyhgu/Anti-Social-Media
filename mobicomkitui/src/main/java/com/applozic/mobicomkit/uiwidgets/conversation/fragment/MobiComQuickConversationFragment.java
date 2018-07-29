@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,7 +66,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
 
     public static final String QUICK_CONVERSATION_EVENT = "quick_conversation";
     protected RecyclerView recyclerView = null;
-    protected ImageButton fabButton;
+    protected static ImageButton fabButton;
     protected TextView emptyTextView;
     protected Button startNewButton;
     protected SwipeRefreshLayout swipeLayout;
@@ -102,6 +104,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("weird", "Mobi create");
         String jsonString = FileUtils.loadSettingsJsonFile(getActivity().getApplicationContext());
         if (!TextUtils.isEmpty(jsonString)) {
             alCustomizationSettings = (AlCustomizationSettings) GsonUtils.getObjectFromJson(jsonString, AlCustomizationSettings.class);
@@ -128,6 +131,7 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View list = inflater.inflate(R.layout.mobicom_message_list, container, false);
+        setHasOptionsMenu(true);
 
         recyclerView = (RecyclerView) list.findViewById(R.id.messageList);
         recyclerView.setBackgroundColor(getResources().getColor(R.color.conversation_list_all_background));
@@ -147,8 +151,12 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(recyclerAdapter);
         //recyclerView.addItemDecoration(new FooterItemDecoration(getContext(), recyclerView, R.layout.mobicom_message_list_header_footer));
-        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
-        toolbar.setClickable(false);
+
+//        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+//        toolbar.setVisibility(View.GONE);
+//        toolbar.setClickable(false);
+
         fabButton = (ImageButton) list.findViewById(R.id.fab_start_new);
         loading = true;
         LinearLayout individualMessageSendLayout = (LinearLayout) list.findViewById(R.id.individual_message_send_layout);
@@ -175,7 +183,8 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
 
         //startNewButton = (Button) spinnerLayout.findViewById(R.id.start_new_conversation);
 
-        fabButton.setVisibility(alCustomizationSettings.isStartNewFloatingButton() ? View.VISIBLE : View.GONE);
+//        fabButton.setVisibility(alCustomizationSettings.isStartNewFloatingButton() ? View.VISIBLE : View.VISIBLE);
+        fabButton.setVisibility(View.VISIBLE);
 
         swipeLayout = (SwipeRefreshLayout) list.findViewById(R.id.swipe_container);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
@@ -198,32 +207,34 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
         };
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.mobicom_basic_menu_for_normal_message, menu);
 
 
-        if (alCustomizationSettings.isStartNewButton() || ApplozicSetting.getInstance(getContext()).isStartNewButtonVisible()) {
-            menu.findItem(R.id.start_new).setVisible(true);
-        }
-        if (alCustomizationSettings.isStartNewGroup() || ApplozicSetting.getInstance(getContext()).isStartNewGroupButtonVisible()) {
-            menu.findItem(R.id.conversations).setVisible(true);
-        }
-        if (alCustomizationSettings.isRefreshOption()) {
-            menu.findItem(R.id.refresh).setVisible(true);
-        }
-        if (alCustomizationSettings.isProfileOption()) {
-            menu.findItem(R.id.applozicUserProfile).setVisible(true);
-        }
-        if (alCustomizationSettings.isMessageSearchOption()) {
-            menu.findItem(R.id.menu_search).setVisible(true);
-        }
-        if (alCustomizationSettings.isBroadcastOption()) {
-            menu.findItem(R.id.broadcast).setVisible(true);
-        }
-        if (alCustomizationSettings.isLogoutOption()) {
-            menu.findItem(R.id.logout).setVisible(true);
-        }
+//        if (alCustomizationSettings.isStartNewButton() || ApplozicSetting.getInstance(getContext()).isStartNewButtonVisible()) {
+//            menu.findItem(R.id.start_new).setVisible(true);
+//        }
+//        if (alCustomizationSettings.isStartNewGroup() || ApplozicSetting.getInstance(getContext()).isStartNewGroupButtonVisible()) {
+//            menu.findItem(R.id.conversations).setVisible(true);
+//        }
+//        if (alCustomizationSettings.isRefreshOption()) {
+//            menu.findItem(R.id.refresh).setVisible(true);
+//        }
+//        if (alCustomizationSettings.isProfileOption()) {
+//            menu.findItem(R.id.applozicUserProfile).setVisible(true);
+//        }
+//        if (alCustomizationSettings.isMessageSearchOption()) {
+//            menu.findItem(R.id.menu_search).setVisible(true);
+//        }
+//        if (alCustomizationSettings.isBroadcastOption()) {
+//            menu.findItem(R.id.broadcast).setVisible(true);
+//        }
+//        if (alCustomizationSettings.isLogoutOption()) {
+//            menu.findItem(R.id.logout).setVisible(true);
+//        }
     }
 
     public void addMessage(final Message message) {
@@ -500,6 +511,8 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     @Override
     public void onPause() {
         super.onPause();
+        fabButton.setVisibility(View.GONE);
+        Log.d("weird", "Mobi pause");
         listIndex = linearLayoutManager.findFirstVisibleItemPosition();
         BroadcastService.currentUserId = null;
         if (recyclerView != null) {
@@ -514,8 +527,10 @@ public class MobiComQuickConversationFragment extends Fragment implements Search
     @Override
     public void onResume() {
         //Assigning to avoid notification in case if quick conversation fragment is opened....
-        toolbar.setTitle(getResources().getString(R.string.chats));
-        toolbar.setSubtitle("");
+//        toolbar.setTitle(getResources().getString(R.string.chats));
+//        toolbar.setSubtitle("");
+        fabButton.setVisibility(View.VISIBLE);
+        Log.d("weird", "Mobi Resume");
         BroadcastService.selectMobiComKitAll();
         super.onResume();
         if (recyclerView != null) {

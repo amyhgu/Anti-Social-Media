@@ -3,22 +3,31 @@ package com.example.arafatm.anti_socialmedia.Models;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
     private static final String KEY_SENDER = "sender";
+    private static final String KEY_PROPIC = "profileImage";
     private static final String KEY_RECIPIENT = "recipient";
     private static final String KEY_MESSAGE = "message";
     private static final String KEY_CREATEDAT = "createdAt";
     private static final String KEY_MEDIA = "media";
     private static final String KEY_COMMENTS = "comments";
+    private static final String KEY_COMMENT = "comment";
+
 
     public String getMessage() {
         return getString(KEY_MESSAGE);
+    }
+
+    public String getComment() {
+        return getString(KEY_COMMENT);
     }
 
     public void setMessage(String message) {
@@ -33,8 +42,11 @@ public class Post extends ParseObject {
         put(KEY_MEDIA, image);
     }
 
+
     public ParseUser getSender() {
+        if (getParseUser(KEY_SENDER) == null) return null;
         return getParseUser(KEY_SENDER);
+
     }
 
     public void setUser(ParseUser sender) {
@@ -53,9 +65,11 @@ public class Post extends ParseObject {
         return getDate(KEY_CREATEDAT);
     }
 
-    //Gets the list of comments from Parse
-    public List<ParseObject> getComments() {
-        return getList(KEY_COMMENTS);
+    public void initPost(String message, Group group) {
+        setMessage(message);
+        setUser(ParseUser.getCurrentUser());
+        setRecipient(group);
+        group.addPost(this);
     }
 
     /*Gets the Array of comments from Parse, updates it, and save it back to parse*/
@@ -63,5 +77,52 @@ public class Post extends ParseObject {
         List<ParseObject> comments = getList(KEY_COMMENTS);
         comments.add(comment);
         put(KEY_COMMENTS, comments);
+    }
+
+    public static class Query extends ParseQuery<Post> {
+        //Query of a post class
+
+        public Query(){
+            super(Post.class);
+        }
+
+        public Query getTop(){
+            whereNotEqualTo("message", null);
+            orderByDescending("createdAt");
+            setLimit(20);
+            return this;
+        }
+
+        public Query withUser(){
+            include("User");
+            return this;
+        }
+
+        public Query forGroup(Group group) {
+            whereEqualTo("recipient", group);
+            return this;
+        }
+
+    }
+
+    // Functions for commenting
+    public ArrayList<Post> getComments(){
+        List<Post> commentsList = getList("comments");
+        ArrayList<Post> comments = new ArrayList<Post>();
+        if(commentsList != null){
+            comments.addAll(commentsList);
+        }
+        return comments;
+    }
+    public void setComments(List<Post> comments){
+        put("comments", comments);
+        saveInBackground();
+    }
+
+    public void setCommentString(String parseFile){
+        put("comment", parseFile);
+    }
+    public int getCommentsCount(){
+        return getComments().size();
     }
 }

@@ -45,6 +45,7 @@ import com.applozic.mobicomkit.uiwidgets.R;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.MobiComAttachmentSelectorActivity;
+import com.applozic.mobicomkit.uiwidgets.conversation.fragment.ConversationFragment;
 import com.applozic.mobicomkit.uiwidgets.people.channel.ChannelFragment;
 import com.applozic.mobicomkit.uiwidgets.people.contact.AppContactFragment;
 import com.applozic.mobicommons.commons.core.utils.Utils;
@@ -352,6 +353,9 @@ public class MobiComKitPeopleActivity extends AppCompatActivity implements OnCon
         }
 
         setResult(RESULT_OK, intent);
+//        ConversationFragment conversationFragment = new ConversationFragment();
+//        String userId = intent.getStringExtra(USER_ID);
+//        addFragment();
         finish();
     }
 

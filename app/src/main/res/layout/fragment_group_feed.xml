@@ -21,49 +21,55 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/ivCoverPhoto"
         android:layout_alignParentStart="true"
-        android:text="Group Name"
-        android:textColor="@color/black"
+        android:text=""
         android:textSize="24sp" />
 
-    <EditText
-        android:id="@+id/etNewPost"
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ivStartChat">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPostsFeed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/ivStartChat"  />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/ivStartChat"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvGroupName"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:tint="?attr/colorAccent"
+        android:src="@drawable/ic_chat_empty" />
+
+    <ImageView
+        android:id="@+id/ivLaunchNewPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/ivCoverPhoto"
-        android:ems="10"
-        android:hint="What's been happening?"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/btAddPostImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/etNewPost"
-        android:text="Add Image" />
-
-    <Button
-        android:id="@+id/btShareFrom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etNewPost"
         android:layout_centerHorizontal="true"
-        android:text="Share From..." />
+        android:layout_marginTop="5dp"
+        android:tint="?attr/colorAccent"
+        android:src="@drawable/ic_create_post" />
 
-    <Button
-        android:id="@+id/btCreatePost"
+    <ImageView
+        android:id="@+id/ivThreeDots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/etNewPost"
-        android:text="Create Post" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/btAddPostImage"  />
+        android:layout_below="@+id/ivCoverPhoto"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="30dp"
+        android:tint="?attr/colorAccent"
+        android:src="@drawable/ic_three_dots" />
 
 </RelativeLayout>

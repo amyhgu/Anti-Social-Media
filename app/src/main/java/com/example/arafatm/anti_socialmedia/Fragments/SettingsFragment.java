@@ -3,12 +3,13 @@ package com.example.arafatm.anti_socialmedia.Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,19 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.arafatm.anti_socialmedia.LoginActivity;
+import com.bumptech.glide.Glide;
+import com.example.arafatm.anti_socialmedia.Authentification.LoginActivity;
+import com.example.arafatm.anti_socialmedia.Models.GroupRequestNotif;
 import com.example.arafatm.anti_socialmedia.R;
+import com.example.arafatm.anti_socialmedia.Util.NotifsAdapter;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +47,7 @@ public class SettingsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private Context mContext;
     private String mParam1;
     private String mParam2;
     private Button logOutBtn;
@@ -45,6 +55,9 @@ public class SettingsFragment extends Fragment {
     private TextView tvFullName;
     private TextView tvViewProfile;
     private RelativeLayout rlViewProfile;
+    private RecyclerView rvNotifs;
+    private ArrayList<GroupRequestNotif> requestList;
+    private NotifsAdapter requestAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -94,6 +107,7 @@ public class SettingsFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        mContext = context;
     }
 
     @Override
@@ -112,9 +126,17 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        rvNotifs = view.findViewById(R.id.rvNotifs);
 
+        requestList = new ArrayList<>();
+        getGroupRequests();
 
+        requestAdapter = new NotifsAdapter(requestList);
+        rvNotifs.setAdapter(requestAdapter);
+        rvNotifs.setLayoutManager(new LinearLayoutManager(container.getContext()));
+
+        return view;
     }
 
 
@@ -123,11 +145,22 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         logOutBtn = view.findViewById(R.id.log_out_button);
-        ivPropic = view.findViewById(R.id.ivPropic);
-        tvFullName = view.findViewById(R.id.tvFullName);
+        ivPropic = view.findViewById(R.id.ivGroupPic);
+        tvFullName = view.findViewById(R.id.tvGroupName);
         tvViewProfile = view.findViewById(R.id.tvViewProfile);
         rlViewProfile = view.findViewById(R.id.rlViewProfile);
 
+        ParseUser user = ParseUser.getCurrentUser();
+
+        // for Parse profile pictures
+        String propicUrl = user.getString("propicUrl");
+        if (propicUrl != null && !(propicUrl.equals("")))  {
+            Glide.with(mContext).load(propicUrl).into(ivPropic);
+        }
+        else if(user.getParseFile("profileImage") != null){
+            Glide.with(mContext).load(user.getParseFile("profileImage").getUrl()).into(ivPropic);
+        }
+        tvFullName.setText(user.getString("fullName"));
 
         logOutBtn.setOnClickListener( new View.OnClickListener(){
             @Override
@@ -159,7 +192,26 @@ public class SettingsFragment extends Fragment {
                 mListener.onViewProfileSelected();
             }
         });
+    }
 
+    public void getGroupRequests() {
+        GroupRequestNotif.Query query = new GroupRequestNotif.Query();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        query.getInvitesReceived(currentUser).withAll();
+
+        query.findInBackground(new FindCallback<GroupRequestNotif>() {
+            @Override
+            public void done(List<GroupRequestNotif> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        requestList.add(objects.get(i));
+                        requestAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void logout() {
@@ -176,14 +228,6 @@ public class SettingsFragment extends Fragment {
         Intent intent = new Intent(SettingsFragment.this.getContext(), LoginActivity.class);
         startActivity(intent);
     }
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-
 
 
     @Override

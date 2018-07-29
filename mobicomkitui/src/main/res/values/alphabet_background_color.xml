@@ -15,12 +15,12 @@
     <color name="alphabet_c">#FFBA68C8</color>
     <color name="alphabet_d">#FF9575CD</color>
     <color name="alphabet_e">#FF7986CB</color>
-    <color name="alphabet_f">#FF4FC3F7</color>
-    <color name="alphabet_g">#FFE06055</color>
+    <color name="alphabet_f">#4fc3f7</color>
+    <color name="alphabet_g">#e06055</color>
     <color name="alphabet_h">#FF4DD0E1</color>
     <color name="alphabet_i">#FF4DB6AC</color>
     <color name="alphabet_j">#FF57BB8A</color>
-    <color name="alphabet_k">#FF9CCC65</color>
+    <color name="alphabet_k">#9ccc65</color>
     <color name="alphabet_l">#FFD4E157</color>
     <color name="alphabet_m">#FFFDD835</color>
     <color name="alphabet_n">#FFF6BF26</color>
@@ -35,6 +35,6 @@
     <color name="alphabet_w">#FFC2C2C2</color>
     <color name="alphabet_x">#FF80DEEA</color>
     <color name="alphabet_y">#FFBCAAA4</color>
-    <color name="alphabet_z">#FFAED581</color>
+    <color name="alphabet_z">#aed581</color>
 
 </resources>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,27 +7,55 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/ivPropic"
+        android:id="@+id/ivProPicPost"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
         android:layout_alignParentTop="true"
-        app:srcCompat="@android:color/background_dark" />
+        app:srcCompat="@drawable/ic_prof_default" />
 
     <TextView
-        android:id="@+id/tvFullname"
+        android:id="@+id/tvFullNameFeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/ivPropic"
+        android:layout_toRightOf="@+id/ivProPicPost"
         android:text="Firstname Lastname" />
 
     <TextView
         android:id="@+id/tvPostBody"
-        android:layout_width="match_parent"
+        android:layout_width="324dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivPropic"
+        android:layout_below="@+id/tvFullNameFeed"
+        android:layout_toRightOf="@+id/ivProPicPost"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:text="This is the body of a post" />
 
+    <ImageButton
+        android:id="@+id/btCommentIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvPostBody"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/transparent"
+        app:srcCompat="@drawable/ic_comment" />
+
+    <TextView
+        android:id="@+id/tvNumberOfComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvPostBody"
+        android:text="xxx"
+        android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@+id/btCommentIcon" />
+
+
 </RelativeLayout>
+

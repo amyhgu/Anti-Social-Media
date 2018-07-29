@@ -6,6 +6,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ParseClassName("Group")
@@ -14,6 +15,9 @@ public class Group extends ParseObject {
     private static final String KEY_POSTS = "post"; //Name of post column in parse
     private static final String KEY_NAME = "groupName"; //Name of group name column in parse
     private static final String KEY_IMAGE = "groupImage"; //Name of group image column in parse
+    private static final String KEY_STORIES = "groupStory"; //Name of group story column in parse
+    private static final String KEY_PENDING = "pending";
+    private static final String KEY_THEME = "theme";
 
     public String getGroupName() {
         return getString(KEY_NAME);
@@ -32,25 +36,52 @@ public class Group extends ParseObject {
     }
 
     //gets list all users
-    public List<ParseUser> getUsers() {
-        return getList(KEY_USERS);
-    }
+    public List<String> getUsers() { return getList(KEY_USERS); }
 
     /*Gets the Array of users from Parse, updates it, and save it back to parse*/
-    public void addUsers( List<String> users) {
+    public void setUsers(List<String> users) {
         put(KEY_USERS, users);
     }
 
-    //gets list all posts
-    public List<ParseObject> getPosts() {
+    public List<String> getPending() {
+        return getList(KEY_PENDING);
+    }
+
+    public void setPending(List<String> requests) {
+        put(KEY_PENDING, requests);
+    }
+
+    public List<Post> getPosts() {
         return getList(KEY_POSTS);
     }
 
+    public String getTheme() { return getString(KEY_THEME); }
+
     /*Gets the Array of posts from Parse, updates it, and save it back to parse*/
-    public void addPosts(Post post) {
-        List<ParseObject> users = getList(KEY_POSTS);
-        users.add(post);
-        put(KEY_POSTS, users);
+    public void addPost(Post post) {
+        List<Post> posts = getPosts();
+        if (posts == null) {
+            posts = new ArrayList<Post>();
+        }
+        posts.add(post);
+        put(KEY_POSTS, posts);
+    }
+
+    public void approveUser(ParseUser user) {
+        String userId = user.getObjectId();
+        List<String> approved = getUsers();
+        List<String> pending = getPending();
+        approved.add(userId);
+        pending.remove(userId);
+    }
+
+    public void initGroup(String name, List<String> requests, ParseFile image) {
+        setGroupName(name);
+        setPending(requests);
+        setGroupImage(image);
+        ArrayList<String> approved = new ArrayList<String>();
+        approved.add(ParseUser.getCurrentUser().getObjectId());
+        setUsers(approved);
     }
 
     public static class Query extends ParseQuery {
@@ -58,19 +89,19 @@ public class Group extends ParseObject {
             super(Group.class);
         }
 
-//        public Query getTop() {
-//            setLimit(20);
-//            return this;
-//        }
+        public Query getTop() {
+            setLimit(20);
+            return this;
+        }
 
-//        public Query withUser() {
-//            include("user");
-//            return this;
-//        }
-//
-//        public Query getPostsForUser(ParseUser user) {
-//            whereEqualTo("user", user);
-//            return this;
-//        }
+        public Query withUser() {
+            include("user");
+            return this;
+        }
+
+        public Query getGroupForUser(ParseUser user) {
+            whereEqualTo("user", user);
+            return this;
+        }
     }
 }
